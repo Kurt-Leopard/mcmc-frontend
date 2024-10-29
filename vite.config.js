@@ -31,7 +31,7 @@ export default defineConfig({
         ],
         description: "Join us at the Minister Of Christian Mission Church for fellowship and community service.",
         lang: "en",
-        orientation: "any maskable",
+        orientation: "portrait",
         scope: "/",
         screenshots: [
           {

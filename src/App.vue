@@ -96,14 +96,14 @@ onBeforeUnmount(() => {
 
 
 
-const deferredPrompt = ref(null); // To store the beforeinstallprompt event
+const deferredPrompt = ref(null); // Store the beforeinstallprompt event
 
 // Function to trigger the PWA install prompt
 const installPWA = () => {
   if (deferredPrompt.value) {
     // Show the install prompt
     deferredPrompt.value.prompt();
-    
+
     // Wait for the user to respond to the prompt
     deferredPrompt.value.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
@@ -128,13 +128,18 @@ onMounted(() => {
 
 <template>
   <section>
-       <div class="h-[150px] w-[300px] bg-white text-center fixed bottom-0 right-0 border z-50 rounded-lg flex items-center justify-center" v-if="deferredPrompt">
-   <div>
-     <h1>Install Our PWA</h1>
-    <!-- Button to trigger PWA installation prompt -->
-    <button  @click="installPWA" class="bg-blue-500 text-white p-2 rounded">Download</button>
-   </div>
+      <div
+    v-if="deferredPrompt"
+    class="h-[150px] w-[300px] bg-white text-center fixed bottom-0 right-0 border z-50 rounded-lg flex items-center justify-center"
+  >
+    <div>
+      <h1>Install Our PWA</h1>
+      <!-- Button to trigger PWA installation prompt -->
+      <button @click="installPWA" class="bg-blue-500 text-white p-2 rounded">
+        Download
+      </button>
     </div>
+  </div>
     <main v-if="store.getRole().role === role[0]">
       <LoaderComponent />
       <HeaderComponent v-if="store.getRole().role !== undefined" />
