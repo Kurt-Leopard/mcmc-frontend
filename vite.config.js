@@ -66,13 +66,13 @@ export default defineConfig({
         scope: "/",
         screenshots: [
           {
-            src: "/public/image.png",
+            src: "public/image.png",
             sizes: "1280x720",
             type: "image/png",
             form_factor: "wide"
           },
           {
-            src: "/public/mobile.png",
+            src: "public/mobile.png",
             sizes: "640x360",
             type: "image/png"
           }
