@@ -17,42 +17,11 @@ export default defineConfig({
         theme_color: '#ffffff',
         icons: [
           {
-            "src": "/android/android-launchericon-512-512.png",
+            "src": "/android/logo.png",
             "sizes": "512x512",
             type: 'image/png',
             purpose: 'any maskable'
-          },
-          {
-            "src": "/android/android-launchericon-192-192.png",
-            "sizes": "192x192",
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-          {
-            "src": "/android/android-launchericon-144-144.png",
-            "sizes": "144x144",
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-          {
-            "src": "/android/android-launchericon-96-96.png",
-            "sizes": "96x96",
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-          {
-            "src": "/android/android-launchericon-72-72.png",
-            "sizes": "72x72",
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-          {
-            "src": "/android/android-launchericon-48-48.png",
-            "sizes": "48x48",
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-
+          }
         ],
         categories: [
           "church",
@@ -66,16 +35,16 @@ export default defineConfig({
         scope: "/",
         screenshots: [
           {
+            src: "/android/desktop1.png",
+            sizes: "1366x768",
+            type: "image/png"
+          },
+          {
             src: "/android/desktop.png",
-            sizes: "1280x720",
+            sizes: "720x1640",
             type: "image/png",
             form_factor: "wide"
           },
-          {
-            src: "/android/mobile.png",
-            sizes: "666x375",
-            type: "image/png"
-          }
         ],
         share_target: {
           action: "/?utm_medium=PWA&utm_source=share-target&share-target",
