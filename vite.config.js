@@ -18,7 +18,7 @@ export default defineConfig({
         icons: [
           {
             "src": "/android/android-launchericon-512-512.png",
-            "sizes": "500x500",
+            "sizes": "512x512",
             type: 'image/png',
             purpose: 'maskable'
           },
@@ -67,13 +67,13 @@ export default defineConfig({
         screenshots: [
           {
             src: "/android/desktop.png",
-            sizes: "1366x768",
+            sizes: "1280x720",
             type: "image/png",
             form_factor: "wide"
           },
           {
             src: "/android/mobile.png",
-            sizes: "720x1640",
+            sizes: "666x374",
             type: "image/png"
           }
         ],
