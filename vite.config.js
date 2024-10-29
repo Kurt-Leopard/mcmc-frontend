@@ -17,7 +17,7 @@ export default defineConfig({
         theme_color: '#ffffff',
         icons: [
           {
-            src: '/public/logo.png',
+            src: '/public/android-launchericon-144-144.png',
             sizes: '144x144',
             type: 'image/png',
             purpose: 'any maskable'
