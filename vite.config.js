@@ -83,7 +83,7 @@ export default defineConfig({
           params: {
             title: "Join Our Community!",
             text: "Discover the Minister Of Christian Mission Church.",
-            url: "https://yourwebsite.com"
+            url: "https://aquamarine-marshmallow-b4034f.netlify.app"
           }
         }
       }
