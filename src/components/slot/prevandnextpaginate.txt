@@ -1,0 +1,16 @@
+   <!-- <div class="w-full h-[350px] " v-if="devotional[0]=== 0">
+      <h1 class="text-9xl md:text-[100px] w-full select-none  text-center font-black  text-gray-400 mt-24">
+            404</h1>
+        <p class="text-1xl text-center font-bold capitalize">You’ve reached the end of the list.</p>    
+   </div> -->
+
+      <!-- <div class="w-full h-[350px]" v-if="galleries[0] === 0">
+      <h1
+        class="text-9xl md:text-[100px] w-full select-none text-center font-black text-gray-400 mt-24"
+      >
+        404
+      </h1>
+      <p class="text-1xl text-center font-bold capitalize">
+        You’ve reached the end of the list.
+      </p>
+    </div> -->

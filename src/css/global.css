@@ -1,0 +1,145 @@
+/* Target the horizontal scrollbar */
+.element-with-horizontal-scroll::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.element-with-horizontal-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.element-with-horizontal-scroll::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+.element-with-horizontal-scroll::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Optional: styling the corner */
+.element-with-horizontal-scroll::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
+
+/* The purpose of the -webkit- prefix is to provide support for older versions of browsers that required vendor-specific prefixes to enable certain CSS properties and features. */
+
+
+@keyframes top-bottom-animation-in {
+  0% {
+    -webkit-transform: translateY(-10%); 
+    transform: translateY(-10%); 
+    opacity: 0; 
+  }
+  60% {
+    -webkit-transform: translateY(5%); 
+    transform: translateY(5%); 
+    opacity: 1; 
+  }
+  100% {
+    -webkit-transform: translateY(0); 
+    transform: translateY(0); 
+    opacity: 1; 
+  }
+}
+
+.toast-top-bottom-animation-in {
+  -webkit-animation: top-bottom-animation-in 0.4s cubic-bezier(.36, -0.64, .34, 1.76); 
+  animation: top-bottom-animation-in 0.4s cubic-bezier(.36, -0.64, .34, 1.76); 
+}
+
+
+@keyframes top-bottom-animation-out {
+  from {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+
+  to {
+    -webkit-transform: translateX(1%);
+    transform: translateX(1%);
+  }
+}
+
+.toast-top-bottom-animation-out {
+  -webkit-animation: top-bottom-animation-out 0.5s ease-out;
+  animation: top-bottom-animation-out 0.5s ease-out;
+}
+
+
+
+@keyframes animation-in {
+  from {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+
+  to {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+
+@keyframes animation-out {
+  from {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+
+  to {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+}
+
+
+.toast-animation-in {
+  -webkit-animation: animation-in 0.5s forwards;
+  animation: animation-in 0.5s forwards;
+}
+
+.toast-animation-out {
+  -webkit-animation: animation-out 0.5s forwards;
+  animation: animation-out 0.5s forwards;
+}
+
+/* Shake invalid input */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.5s;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.5s forwards;
+}
+/* notification */
+.animate-slide-in-notificatication {
+  animation: slide-in-notificatication 0.5s forwards;
+}
+@keyframes slide-in-notificatication {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+

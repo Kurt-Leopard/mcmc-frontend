@@ -1,0 +1,151 @@
+<template>
+  <main class="py-3 px-4 lg:px-[50px] xl:px-32 mt-[60px] lg:mt-32 xl:mt-32">
+    <div class="flex flex-col justify-center items-center bg-gray-200 py-10">
+      <canvas
+        ref="canvas"
+        class="signature-pad border border-gray-300 rounded-lg"
+      ></canvas>
+      <div v-if="isEraserActive" class="flex items-center">
+        <button
+          @click="increaseEraserSize"
+          class="bg-gray-300 px-2 py-1 rounded"
+        >
+          +
+        </button>
+        <span class="mx-2">{{ eraserSize }} px</span>
+        <button
+          @click="decreaseEraserSize"
+          class="bg-gray-300 px-2 py-1 rounded"
+        >
+          -
+        </button>
+      </div>
+      <div class="mt-4 flex space-x-2">
+        <button
+          @click="setWriteMode"
+          class="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
+        >
+          <i class="fas fa-pencil-alt mr-2"></i> 
+        </button>
+        <button
+          @click="toggleEraser"
+          class="bg-red-500 text-white px-4 py-2 rounded flex items-center"
+        >
+          <i class="fas fa-eraser mr-2"></i> 
+        </button>
+        <button
+          @click="clearCanvas"
+          class="bg-gray-500 text-white px-4 py-2 rounded flex items-center"
+        >
+          <i class="fas fa-trash-alt mr-2"></i> 
+        </button>
+        <button
+          @click="submitSignature"
+          class="bg-green-500 text-white px-4 py-2 rounded flex items-center"
+        >
+          <i class="fas fa-paper-plane mr-2"></i> 
+        </button>
+      </div>
+      <img
+        v-if="signatureImage"
+        :src="signatureImage"
+        class="mt-4 max-w-full h-auto"
+      />
+    </div>
+  </main>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import SignaturePad from "signature_pad";
+
+const canvas = ref(null);
+const signatureImage = ref(null); // To hold the converted image
+let signaturePad;
+const defaultPenColor = "black";
+const isEraserActive = ref(false); // Track if eraser mode is active
+const eraserSize = ref(1); // Default eraser size
+const defaultEraserSize = 10; // Default value for eraser size
+
+onMounted(() => {
+  // Set up the canvas dimensions
+  canvas.value.width = 400; // Desired width
+  canvas.value.height = 300; // Desired height
+
+  // Initialize the SignaturePad
+  signaturePad = new SignaturePad(canvas.value, {
+    backgroundColor: "white",
+    penColor: defaultPenColor,
+  });
+});
+
+// Set pen color to write
+const setWriteMode = () => {
+  signaturePad.penColor = defaultPenColor; // Set pen color to black
+  isEraserActive.value = false; // Disable eraser mode
+  eraserSize.value = 1; // Reset eraser size to default
+  updateEraserSize(); // Update the signature pad with the default size
+};
+
+// Toggle eraser mode
+const toggleEraser = () => {
+  isEraserActive.value = !isEraserActive.value; // Toggle eraser active state
+  if (isEraserActive.value) {
+    erase(); // Activate erasing
+  } else {
+    setWriteMode(); // Deactivate erasing
+  }
+};
+
+// Clear the canvas
+const clearCanvas = () => {
+  signaturePad.clear();
+  signatureImage.value = null; // Clear the image when canvas is cleared
+};
+
+// Erase the signature
+const erase = () => {
+  signaturePad.penColor = "white"; // Set pen color to white to "erase"
+  updateEraserSize(); // Ensure the eraser size is applied
+};
+
+// Increase eraser size
+const increaseEraserSize = () => {
+  eraserSize.value += 5; // Increase size by 5 pixels
+  updateEraserSize();
+};
+
+// Decrease eraser size
+const decreaseEraserSize = () => {
+  if (eraserSize.value > 5) {
+    eraserSize.value -= 5; // Decrease size by 5 pixels
+    updateEraserSize();
+  }
+};
+
+// Update the eraser size
+const updateEraserSize = () => {
+  signaturePad.minWidth = eraserSize.value; // Update minimum width for erasing
+  signaturePad.maxWidth = eraserSize.value; // Update maximum width for erasing
+};
+
+// Submit the signature
+const submitSignature = () => {
+  if (!signaturePad.isEmpty()) {
+    const dataUrl = signaturePad.toDataURL(); // Convert canvas to image data URL
+    signatureImage.value = dataUrl; // Set the image data URL
+    alert(signatureImage.value);
+  } else {
+    alert("Please provide a signature before submitting.");
+  }
+};
+</script>
+
+<style>
+.signature-pad {
+  width: 100%; /* Responsive width */
+  max-width: 400px; /* Limit max width */
+  height: auto; /* Auto height for better responsiveness */
+  max-height: 300px; /* Limit max height */
+}
+</style>

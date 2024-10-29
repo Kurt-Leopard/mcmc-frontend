@@ -1,0 +1,354 @@
+<script setup>
+import { ref, onMounted } from "vue";
+import { useAuthStore } from "@/stores/store";
+import { fetchUser } from "../../composables/user";
+
+const store = useAuthStore();
+const showScrollButton = ref(false);
+const activeTab = ref("home");
+const cashFlowOpen = ref(false);
+
+const Closeswitching = () => {
+  localStorage.removeItem("access");
+  location.reload();
+};
+const openCasflow = () => {
+  activeTab.value = "";
+  cashFlowOpen.value = !cashFlowOpen.value;
+};
+
+const onScroll = () => {
+  showScrollButton.value = window.scrollY > 10;
+};
+onMounted(async () => {
+  await fetchUser();
+  window.addEventListener("scroll", onScroll);
+});
+
+// Function to handle tab click
+const setActiveTab = (tab) => {
+  activeTab.value = tab;
+  cashFlowOpen.value=false;
+};
+</script>
+
+<template>
+  <main>
+    <section
+      class="fixed top-0 left-0 z-30 bg-white py-3 px-4 lg:px-[50px] xl:px-32 w-full"
+    >
+      <header
+        :class="
+          showScrollButton
+            ? 'border-b shadow-b-sm lg:border-0 lg:border-b-0 lg:shadow-none'
+            : ''
+        "
+        class="flex items-center justify-center md:grid lg:grid xl:grid md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 pb-3"
+      >
+        <section class="flex items-center w-full">
+          <img
+            src="../../assets/cashflow.png"
+            alt="Company Logo"
+            loading="lazy"
+            class="block w-14 h-14"
+          />
+          <div class="px-6">
+            <h1
+              class="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold tracking-[7px]"
+            >
+              MCM-CHURCH
+            </h1>
+            <h3
+              class="text-xs text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+            >
+              Steward-Trust-Manage-Sustain
+            </h3>
+          </div>
+        </section>
+        <!-- Search bar and other icons -->
+        <div class="flex items-center w-full hidden md:flex lg:flex xl:flex">
+          <div class="flex items-center border w-full p-2 rounded-lg">
+            <i class="fas fa-search mx-1"></i>
+            <input
+              type="text"
+              class="w-full outline-none mx-2 w-full"
+              placeholder="Seach.."
+            />
+          </div>
+        </div>
+        <div class="flex items-center justify-end lg:w-full xl:w-full  lg:gap-x-3 xl:gap-x-3">
+          <svg
+            class="hidden md:block lg:block xl:block"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="M6.429 2.413a.75.75 0 0 0-1.13-.986l-1.292 1.48a4.75 4.75 0 0 0-1.17 3.024L2.78 8.65a.75.75 0 1 0 1.5.031l.056-2.718a3.25 3.25 0 0 1 .801-2.069z"
+            />
+            <path
+              fill="currentColor"
+              fill-rule="evenodd"
+              d="M6.237 7.7a4.214 4.214 0 0 1 4.206-3.95H11V3a1 1 0 1 1 2 0v.75h.557a4.214 4.214 0 0 1 4.206 3.95l.221 3.534a7.376 7.376 0 0 0 1.308 3.754a1.617 1.617 0 0 1-1.135 2.529l-3.407.408V19a2.75 2.75 0 1 1-5.5 0v-1.075l-3.407-.409a1.617 1.617 0 0 1-1.135-2.528a7.377 7.377 0 0 0 1.308-3.754zm4.206-2.45a2.714 2.714 0 0 0-2.709 2.544l-.22 3.534a8.877 8.877 0 0 1-1.574 4.516a.117.117 0 0 0 .082.183l3.737.449c1.489.178 2.993.178 4.482 0l3.737-.449a.117.117 0 0 0 .082-.183a8.876 8.876 0 0 1-1.573-4.516l-.221-3.534a2.714 2.714 0 0 0-2.709-2.544zm1.557 15c-.69 0-1.25-.56-1.25-1.25v-.75h2.5V19c0 .69-.56 1.25-1.25 1.25"
+              clip-rule="evenodd"
+            />
+            <path
+              fill="currentColor"
+              d="M17.643 1.355a.75.75 0 0 0-.072 1.058l1.292 1.48a3.25 3.25 0 0 1 .8 2.07l.057 2.717a.75.75 0 0 0 1.5-.031l-.057-2.718a4.75 4.75 0 0 0-1.17-3.024l-1.292-1.48a.75.75 0 0 0-1.058-.072"
+            />
+          </svg>
+          <svg
+            class="hidden md:block lg:block xl:block"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="black"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"
+            />
+            <path d="M8 10h8M8 14h8" />
+          </svg>
+
+          <svg
+            @click.prevent="Closeswitching"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6 hidden md:block lg:block xl:block"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+            />
+          </svg>
+          <RouterLink v-show="store.getToken()" to="/view/profile" class="mx-2">
+            <img
+              :src="`https://storage.googleapis.com/mcm-chuch.appspot.com/${store.user.profile}`"
+              loading="lazy"
+              role="presentation"
+              alt=""
+              class="h-[45px] w-[45px] rounded-full hidden md:block lg:block xl:block"
+            />
+          </RouterLink>
+           <a class="flex lg:hidden xl:hidden items-center justify-center">
+          <svg
+            @click="btnMenu"
+            v-if="!showbar"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-8 w-8 mb-1 md:mb-0 lg:mb-0 xl:mb-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16m-7 6h7"
+            ></path>
+          </svg>
+          <svg
+            v-show="showbar"
+            @click="closeMenu"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-8 w-8 mb-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </a>
+        </div>
+      </header>
+      <header
+        class="border-b mt-2 grid grid-cols-3 md:grid-cols-6 lg:grid-cols-6xl:grid-cols-6 text-sm text-gray-600"
+      >
+        <RouterLink
+          to="/view/page/home"
+          class="text-xs text-center font-semibold py-2 flex items-center justify-center"
+          active-class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+          exact-active-class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+          @click.prevent="setActiveTab('home')"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            :stroke="activeTab==='home'?'white':'black'"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="mr-2 "
+          >
+            <path d="M3 9l9-6 9 6v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" />
+            <path d="M9 22V12h6v10" />
+          </svg>
+          HOME
+        </RouterLink>
+
+        <!-- Cash Flow Dropdown -->
+        <div
+          class="relative flex items-center justify-center md:hidden lg:hidden xl:hidden"
+          :class="
+            cashFlowOpen
+              ? 'bg-gray-50 text-gray-500 border-b-2 border-[#10B981]'
+              : ''
+          "
+        >
+          <button
+            @click="openCasflow"
+            class="text-xs text-center font-semibold py-2 flex items-center justify-center lg:hidden"
+          >
+            Cash Flow
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </button>
+          <div
+            v-if="cashFlowOpen"
+            class="absolute left-0 top-8 bg-white shadow-lg rounded-lg mt-2"
+          >
+            <RouterLink
+              to="/view/page/inflow"
+              class="block px-4 py-2 text-sm hover:bg-gray-100"
+              @click.prevent="setActiveTab('inflow')"
+              >INFLOW</RouterLink
+            >
+            <RouterLink
+              to="/view/page/expense"
+              class="block px-4 py-2 text-sm hover:bg-gray-100"
+              @click.prevent="setActiveTab('expense')"
+              >EXPENSE</RouterLink
+            >
+            <RouterLink
+              to="/view/page/savings"
+              class="block px-4 py-2 text-sm hover:bg-gray-100"
+              @click.prevent="setActiveTab('savings')"
+              >SAVINGS</RouterLink
+            >
+            <RouterLink
+              to="/view/page/summary"
+              class="block px-4 py-2 text-sm hover:bg-gray-100"
+              @click.prevent="setActiveTab('summary')"
+              >SUMMARY</RouterLink
+            >
+          </div>
+        </div>
+
+        <!-- Other links for larger screens -->
+        <RouterLink
+          to="/view/page/inflow"
+          class="text-xs text-center font-semibold py-3 flex items-center justify-center hidden md:block lg:block xl:block"
+          active-class="bg-gray-50 text-gray-500 border-b-2 border-[#10B981]"
+          exact-active-class="bg-gray-50 text-gray-800 border-b-2 border-[#10B981]"
+          @click.prevent="setActiveTab('inflow')"
+        >
+          <i class="fas fa-coins mr-2"></i>INFLOW
+        </RouterLink>
+        <RouterLink
+          to="/view/page/expense"
+          class="text-xs text-center font-semibold py-2 flex items-center justify-center hidden md:flex lg:flex xl:flex"
+          active-class="bg-gray-50 text-gray-500 border-b-2 border-[#10B981]"
+          exact-active-class="bg-gray-50 text-gray-800 border-b-2 border-[#10B981]"
+          @click.prevent="setActiveTab('expense')"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="black"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="mr-2"
+          >
+            <path d="M3 7h18v10H3z" />
+            <path d="M3 10h18M3 14h18" />
+            <circle cx="8" cy="12" r="1" />
+            <circle cx="16" cy="12" r="1" />
+          </svg>
+          EXPENSE
+        </RouterLink>
+        <RouterLink
+          to="/view/page/savings"
+          class="text-xs text-center font-semibold py-2 flex items-center justify-center hidden md:flex lg:flex xl:flex"
+          active-class="bg-gray-50 text-gray-500 border-b-2 border-[#10B981]"
+          exact-active-class="bg-gray-50 text-gray-800 border-b-2 border-[#10B981]"
+          @click.prevent="setActiveTab('savings')"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="black"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="mr-2"
+          >
+            <path d="M3 9h18v6H3z" />
+            <path
+              d="M5 15a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5z"
+            />
+            <path d="M7 12v2m10-2v2" />
+            <path d="M8 5h0a4 4 0 0 1 4-4h0a4 4 0 0 1 4 4h0" />
+          </svg>
+          SAVINGS
+        </RouterLink>
+        <RouterLink
+          to="/view/page/summary"
+          class="text-xs text-center font-semibold py-3 flex items-center justify-center hidden md:block lg:block xl:block"
+          active-class="bg-gray-50 text-gray-500 border-b-2 border-[#10B981]"
+          exact-active-class="bg-gray-50 text-gray-800 border-b-2 border-[#10B981]"
+          @click.prevent="setActiveTab('summary')"
+        >
+          <i class="fas fa-receipt mr-2"></i>SUMMARY
+        </RouterLink>
+        <a class="text-end">
+          <i class="fas fa-plus p-3 bg-gray-50 rounded-md hover:bg-gray-100"></i>
+        </a>
+      </header>
+    </section>
+    <RouterView />
+  </main>
+</template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
