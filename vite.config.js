@@ -13,27 +13,46 @@ export default defineConfig({
         short_name: 'MCMC',
         start_url: '/',
         display: 'standalone',
-        background_color: '#ffffff', 
-        theme_color: '#68192F', 
+        background_color: '#ffffff',
+        theme_color: '#68192F',
         icons: [
           {
-            src: '/android-launchericon-144-144.png',
-            sizes: '144x144',
+            "src": "android/android-launchericon-512-512.png",
+            "sizes": "512x512",
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: '/favicon.ico', 
-            sizes: '144x144',
+            "src": "android/android-launchericon-192-192.png",
+            "sizes": "192x192",
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: '/mobile.png', 
-            sizes: '512x512',
+            "src": "android/android-launchericon-144-144.png",
+            "sizes": "144x144",
             type: 'image/png',
             purpose: 'any maskable'
-          }
+          },
+          {
+            "src": "android/android-launchericon-96-96.png",
+            "sizes": "96x96",
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
+          {
+            "src": "android/android-launchericon-72-72.png",
+            "sizes": "72x72",
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
+          {
+            "src": "android/android-launchericon-48-48.png",
+            "sizes": "48x48",
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
+
         ],
         categories: [
           "church",
@@ -47,13 +66,13 @@ export default defineConfig({
         scope: "/",
         screenshots: [
           {
-            src: "/image.png",
+            src: "/public/image.png",
             sizes: "1280x720",
             type: "image/png",
             form_factor: "wide"
           },
           {
-            src: "/mobile.png",
+            src: "/public/mobile.png",
             sizes: "640x360",
             type: "image/png"
           }
@@ -64,7 +83,7 @@ export default defineConfig({
           params: {
             title: "Join Our Community!",
             text: "Discover the Minister Of Christian Mission Church.",
-            url: "https://yourwebsite.com" 
+            url: "https://yourwebsite.com"
           }
         }
       }
