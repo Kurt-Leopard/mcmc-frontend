@@ -73,7 +73,7 @@ export default defineConfig({
           },
           {
             src: "/android/mobile.png",
-            sizes: "666x374",
+            sizes: "666x375",
             type: "image/png"
           }
         ],
