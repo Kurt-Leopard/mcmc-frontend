@@ -14,40 +14,40 @@ export default defineConfig({
         start_url: '/',
         display: 'standalone',
         background_color: '#ffffff',
-        theme_color: '#68192F',
+        theme_color: '#ffffff',
         icons: [
           {
-            "src": "android/android-launchericon-512-512.png",
+            "src": "/android/android-launchericon-512-512.png",
             "sizes": "512x512",
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            "src": "android/android-launchericon-192-192.png",
+            "src": "/android/android-launchericon-192-192.png",
             "sizes": "192x192",
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            "src": "android/android-launchericon-144-144.png",
+            "src": "/android/android-launchericon-144-144.png",
             "sizes": "144x144",
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            "src": "android/android-launchericon-96-96.png",
+            "src": "/android/android-launchericon-96-96.png",
             "sizes": "96x96",
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            "src": "android/android-launchericon-72-72.png",
+            "src": "/android/android-launchericon-72-72.png",
             "sizes": "72x72",
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            "src": "android/android-launchericon-48-48.png",
+            "src": "/android/android-launchericon-48-48.png",
             "sizes": "48x48",
             type: 'image/png',
             purpose: 'any maskable'
@@ -66,13 +66,13 @@ export default defineConfig({
         scope: "/",
         screenshots: [
           {
-            src: "public/image.png",
+            src: "/image.png",
             sizes: "1280x720",
             type: "image/png",
             form_factor: "wide"
           },
           {
-            src: "public/mobile.png",
+            src: "/mobile.png",
             sizes: "640x360",
             type: "image/png"
           }
