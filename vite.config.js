@@ -17,19 +17,19 @@ export default defineConfig({
         theme_color: '#68192F', 
         icons: [
           {
-            src: '/public/android-launchericon-144-144.png',
+            src: '/android-launchericon-144-144.png',
             sizes: '144x144',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: '/public/favicon.ico', 
+            src: '/favicon.ico', 
             sizes: '144x144',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: '/public/mobile.png', 
+            src: '/mobile.png', 
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
@@ -47,13 +47,13 @@ export default defineConfig({
         scope: "/",
         screenshots: [
           {
-            src: "/public/image.png",
+            src: "/image.png",
             sizes: "1280x720",
             type: "image/png",
             form_factor: "wide"
           },
           {
-            src: "/public/mobile.png",
+            src: "/mobile.png",
             sizes: "640x360",
             type: "image/png"
           }
