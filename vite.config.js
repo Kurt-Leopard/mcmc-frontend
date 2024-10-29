@@ -17,10 +17,24 @@ export default defineConfig({
         theme_color: '#ffffff',
         icons: [
           {
-            src: '/public/favicon.ico',
+            src: '/public/logo.png',
             sizes: '144x144',
             type: 'image/png',
             purpose: 'any maskable'
+          }
+        ],
+        "screenshots": [
+          {
+            "src": "/public/image.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide"
+          },
+          {
+            "src": "/public/mobile.png",
+            "sizes": "640x360",
+            "type": "image/png"
+           
           }
         ]
       }
