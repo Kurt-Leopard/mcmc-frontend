@@ -9,7 +9,7 @@ export default defineConfig({
     vue(),
     VitePWA({
       manifest: {
-        name: 'Minister Of Christian Mission Church',
+        name: 'MCM-CHURCH',
         short_name: 'MCMC',
         start_url: '/',
         display: 'standalone',
@@ -17,8 +17,8 @@ export default defineConfig({
         theme_color: '#ffffff',
         icons: [
           {
-            "src": "/android/logo.png",
-            "sizes": "512x512",
+            "src": "/android/mcmc.png",
+            "sizes": "500x500",
             type: 'image/png',
             purpose: 'any maskable'
           }
