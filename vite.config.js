@@ -37,13 +37,13 @@ export default defineConfig({
           {
             src: "/android/desktop.png",
             sizes: "720x1640",
-            type: "image/png",
-            form_factor: "wide"
+            type: "image/png"
           },
           {
             src: "/android/desktop1.png",
             sizes: "1366x768",
-            type: "image/png"
+            type: "image/png",
+            form_factor: "wide"
           },
         ],
         share_target: {
