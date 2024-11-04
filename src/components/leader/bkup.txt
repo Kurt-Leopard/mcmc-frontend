@@ -54,12 +54,12 @@ const setActiveTab = (tab) => {
           />
           <div class="px-6">
             <h1
-              class="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold tracking-[7px]"
+              class="text-sm text-gray-600 hover:text-gray-800   font-bold tracking-[7px]"
             >
               MCM-CHURCH
             </h1>
             <h3
-              class="text-xs text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+              class="text-xs text-gray-600 hover:text-gray-800  "
             >
               Steward-Trust-Manage-Sustain
             </h3>

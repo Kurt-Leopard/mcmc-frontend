@@ -95,7 +95,7 @@ onMounted(refreshData);
       </div>
       <!-- <div class="text-gray-600 flex items-center pb-2 uppercase">
         <a
-          class="text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold flex items-center cursor-pointer"
+          class="text-gray-600 hover:text-gray-800   font-bold flex items-center cursor-pointer"
           ><i class="fas fa-plus p-2 bg-gray-100 text-lg rounded-lg"></i
         ></a>
       </div> -->

@@ -271,13 +271,13 @@ onMounted(async () => {
         <!-- <div class="w-14 h-14 rounded-full bg-gray-200 animate-pulse"></div> -->
         <div class="px-6">
           <h1
-            class="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold tracking-[7px]"
+            class="text-sm text-gray-600 hover:text-gray-800   font-bold tracking-[7px]"
           >
             MCM-CHURCH
           </h1>
 
           <h3
-            class="text-xs text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+            class="text-xs text-gray-600 hover:text-gray-800  "
           >
             Glorify-Nurture-Equip-Expand
           </h3>
@@ -294,7 +294,7 @@ onMounted(async () => {
         >
         <RouterLink
           :to="store.getToken() ? '/view/about' : '/about'"
-          class="text-xs text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold"
+          class="text-xs text-gray-600 hover:text-gray-800   font-bold"
           >ABOUT US</RouterLink
         >
         <RouterLink
@@ -322,7 +322,7 @@ onMounted(async () => {
       >
         <a
           v-show="store.getToken()"
-          class="relative text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 group flex hidden md:flex lg:flex xl:flex"
+          class="relative text-gray-600 hover:text-gray-800   group flex hidden md:flex lg:flex xl:flex"
         >
           <svg
             class="hidden md:block lg:block xl:block"
@@ -396,7 +396,7 @@ onMounted(async () => {
         <!-- settings -->
         <a
           v-show="store.getToken()"
-          class="relative text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 group"
+          class="relative text-gray-600 hover:text-gray-800   group"
         >
           <svg
             class="hidden md:block lg:block xl:block"
@@ -429,7 +429,7 @@ onMounted(async () => {
         </a>
         <a
           v-if="canDisplayLink"
-          class="text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+          class="text-gray-600 hover:text-gray-800  "
         >
           <svg
             v-if="!isSwitch"

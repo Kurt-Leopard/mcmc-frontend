@@ -112,7 +112,7 @@ const notifyData = async () => {
 const goTo = async (type, notification_id) => {
   if (type === "events") {
     localStorage.removeItem("access");
-    window.location.href = "http://wnh5c088-3000.asse.devtunnels.ms:5173/view/events";
+    window.location.href = "http://localhost:5174/view/events";
 
     // router.push({ path: "/view/events" });
     try {
@@ -201,27 +201,27 @@ onMounted(async () => {
           />
           <div class="px-6">
             <h1
-              class="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold tracking-[7px]"
+              class="text-sm text-gray-600 hover:text-gray-800   font-bold tracking-[7px]"
             >
               MCM-CHURCH
             </h1>
             <h3
-              class="text-xs text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+              class="text-xs text-gray-600 hover:text-gray-800  "
             >
               Steward-Trust-Manage-Sustain
             </h3>
           </div>
         </section>
         <!-- Search bar and other icons -->
-        <div class="flex items-center w-full hidden md:flex lg:flex xl:flex">
+        <div class="flex items-center w-full  md:flex lg:flex xl:flex">
         
         </div>
         <div
-          class="flex items-center justify-end lg:w-full xl:w-full lg:gap-x-3 xl:gap-x-3 text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+          class="flex items-center justify-end lg:w-full xl:w-full lg:gap-x-3 xl:gap-x-3 text-gray-600 hover:text-gray-800  "
         >
           <a
             v-show="store.getToken()"
-            class="relative text-gray-600 hover:text-gray-800  dark:text-gray-200 dark:hover:text-gray-300 group flex hidden md:flex lg:flex xl:flex"
+            class="relative text-gray-600 hover:text-gray-800    group flex hidden md:flex lg:flex xl:flex"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -296,7 +296,7 @@ onMounted(async () => {
           </a>
           <a
             v-show="store.getToken()"
-            class="relative text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 group"
+            class="relative text-gray-600 hover:text-gray-800   group"
           >
             <svg
               class="hidden md:block lg:block xl:block"
@@ -334,7 +334,7 @@ onMounted(async () => {
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="size-6 hidden md:block lg:block xl:block text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+            class="size-6 hidden md:block lg:block xl:block text-gray-600 hover:text-gray-800  "
           >
             <path
               stroke-linecap="round"

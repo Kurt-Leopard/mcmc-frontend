@@ -30,13 +30,13 @@ const messageInput = ref("");
 const messages = ref([]);
 const isTyping = ref(false); // Track if the other user is typing
 const typingTimeout = ref(null); // Timer to handle typing stop
-const socket = io("http://wnh5c088-3000.asse.devtunnels.ms:4000");
+const socket = io("http://localhost:4000");
 
 const fetchMessages = async () => {
   if (id.value) {
     try {
       const response = await axios.get(
-        `http://wnh5c088-3000.asse.devtunnels.ms:4000/api/chats/${user.value.id}/${id.value}`
+        `http://localhost:4000/api/chats/${user.value.id}/${id.value}`
       );
       messages.value = response.data;
       scroolToBottom();
@@ -54,7 +54,7 @@ const sendMessage = async (user1, user2) => {
   };
   try {
     await axios.post(
-      "http://wnh5c088-3000.asse.devtunnels.ms:4000/api/chats",
+      "http://localhost:4000/api/chats",
       message
     );
     messageInput.value = "";

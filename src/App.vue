@@ -29,7 +29,7 @@ const store = useAuthStore();
 if (store) {
   user.value = decodeJWT(store.token);
 }
-const socket = io("http://wnh5c088-3000.asse.devtunnels.ms:4000");
+const socket = io("http://localhost:4000");
 const refresh = ref(false);
 onMounted(() => {
   socket.on("announcement", (announcement) => {
@@ -79,7 +79,7 @@ const updateSwitching = () => {
 onMounted(() => {
   refreshData();
   updateSwitching(); // Initial call to set switching
-  console.log(switching.value);
+  // console.log(switching.value);
   window.addEventListener("storage", updateSwitching);
 });
 

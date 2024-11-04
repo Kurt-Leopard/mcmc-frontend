@@ -449,7 +449,7 @@ const submitForm = async () => {
           Gallery
         </h1>
         <p
-          class="hidden max-w-screen-sm text-gray-500 dark:text-gray-300 md:block"
+          class="hidden max-w-screen-sm text-gray-500  md:block"
         >
           This section highlights key moments from the Christian Mission
           Church’s ministry. See images of our outreach, service events, and

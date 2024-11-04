@@ -256,12 +256,12 @@ onMounted(() => {
             />
             <textarea
               rows="1"
-              class="w-full h-12 resize-none truncate border border-gray-300 rounded-full p-[12px] text-left xs:text-sm sm:text-lg dark:bg-gray-700 dark:text-white dark:border-gray-500"
+              class="w-full h-12 resize-none truncate border border-gray-300 rounded-full p-[12px] text-left xs:text-sm sm:text-lg  dark:border-gray-500"
               placeholder="Search by Category"
             ></textarea>
             <div class="text-gray-600 flex items-center">
               <a
-                class="relative flex text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold flex items-center ursor-pointer"
+                class="relative flex text-gray-600 hover:text-gray-800   font-bold flex items-center ursor-pointer"
                 ><div class="relative group">
                   <i
                     class="fas fa-plus p-2 bg-gray-100 text-lg rounded-lg group-hover:block cursor-pointer"
@@ -277,7 +277,7 @@ onMounted(() => {
                     >
                       <i class="fas fa-images text-blue-400 p-2 rounded-lg"></i>
                       <h3
-                        class="text-sm font-semibold text-gray-600 dark:text-gray-300"
+                        class="text-sm font-semibold text-gray-600 "
                       >
                         Create post
                       </h3>
@@ -289,7 +289,7 @@ onMounted(() => {
                     >
                       <i class="fas fa-book text-red-500 p-2 rounded-lg"></i>
                       <h3
-                        class="text-sm font-semibold xs:truncate text-gray-600 dark:text-gray-300"
+                        class="text-sm font-semibold xs:truncate text-gray-600 "
                       >
                         Create devotional
                       </h3>
@@ -304,7 +304,7 @@ onMounted(() => {
             <div
               @click="toggleAllposts"
               :class="Allposts ? 'border-b-2 border-blue-400' : ''"
-              class="flex xl:hidden lg:hidden cursor-pointer items-center text-sm font-semibold text-gray-600 dark:text-gray-300"
+              class="flex xl:hidden lg:hidden cursor-pointer items-center text-sm font-semibold text-gray-600 "
             >
               <a href="#">
                 <i class="fas fa-image text-blue-400 mr-2"></i>
@@ -320,7 +320,7 @@ onMounted(() => {
               <a href="#" class="flex items-center justify-center">
                 <i class="fas fa-book text-red-500 mr-2"></i>
                 <h3
-                  class="text-sm font-semibold xs:truncate text-gray-600 dark:text-gray-300"
+                  class="text-sm font-semibold xs:truncate text-gray-600 "
                 >
                   Daily Devotions
                 </h3>
@@ -333,7 +333,7 @@ onMounted(() => {
               <i class="fas fa-sort-amount-down text-yellow-700"></i>
 
               <h3
-                class="text-sm font-semibold text-gray-600 dark:text-gray-300"
+                class="text-sm font-semibold text-gray-600 "
               >
                 Sort By
               </h3>

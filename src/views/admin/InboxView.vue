@@ -71,7 +71,7 @@
           ></textarea>
           
           <button
-            @click="sendReply"
+            @click="sendReply(selectedEmail.from,reply)"
             class="mt-4 bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition duration-200"
           >
             Send Reply
@@ -132,9 +132,18 @@ const formatDate = (date) => {
 };
 
 // Method to send reply
-const sendReply = () => {
-  console.log(`Replying to ${selectedEmail.value.from} with: ${reply.value}`);
-  reply.value = ''; // Clear the reply field after sending
+const sendReply = async () => {
+  try {
+    await axios.post("/api/reply",{
+      email: selectedEmail.value.from,
+      message: reply.value
+    })
+    console.log("Message Successfully sent!");
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+
+  reply.value = '';
 };
 
 // Method to fetch emails from the API

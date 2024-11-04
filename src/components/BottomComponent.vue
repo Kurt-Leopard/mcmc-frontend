@@ -122,7 +122,7 @@ const goTo = async (type, notification_id) => {
     }
   }
 };
-const socket = io("http://wnh5c088-3000.asse.devtunnels.ms:4000");
+const socket = io("http://localhost:4000");
 const refresh = ref(false);
 onMounted(() => {
   socket.on("announcement", (announcement) => {
@@ -162,7 +162,7 @@ onMounted(async () => {
       <a
         @click="buttonNotification"
         v-show="store.getToken()"
-        class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+        class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800  "
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -239,7 +239,7 @@ onMounted(async () => {
       </section>
       <a
         v-if="role.role === 'leader'"
-        class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+        class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800  "
       >
         <svg
           v-if="!isSwitch"
@@ -279,7 +279,7 @@ onMounted(async () => {
       <!-- parametre -->
       <a
         v-if="store.getToken()"
-        class="relative w-full flex items-center justify-center text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-30 group"
+        class="relative w-full flex items-center justify-center text-gray-600 hover:text-gray-800   group"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -310,7 +310,7 @@ onMounted(async () => {
         </section>
       </a>
       <a
-        class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+        class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800  "
       >
         <svg
           @click="scrollToTop"

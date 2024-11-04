@@ -86,7 +86,7 @@ onMounted(() => {
                     </svg>
                 </div>
                 <div class="px-4 text-gray-700">
-                    <h3 class="text-sm tracking-wider">Operational Income</h3>
+                    <h3 class="text-sm tracking-wider">Current Income</h3>
                     <p class="text-3xl">{{ formattedTotal }}</p>
                 </div>
             </div>
@@ -100,7 +100,7 @@ onMounted(() => {
                     </svg>
                 </div>
                 <div class="px-4 text-gray-700">
-                    <h3 class="text-sm tracking-wider">Total Inbox</h3>
+                    <h3 class="text-sm tracking-wider">Total Messages</h3>
                     <p class="text-3xl">{{totalInbox}}</p>
                 </div>
             </div>
