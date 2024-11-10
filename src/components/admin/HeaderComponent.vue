@@ -21,7 +21,7 @@
           <svg
             @click="btnMenu"
             v-if="!showbar"
-            xmlns="http://www.w3.org/2000/svg"
+            
             class="h-8 w-8 mb-1 md:mb-0 lg:mb-0 xl:mb-0"
             fill="none"
             viewBox="0 0 24 24"
@@ -37,7 +37,7 @@
           <svg
             v-show="showbar"
             @click="closeMenu"
-            xmlns="http://www.w3.org/2000/svg"
+            
             class="h-8 w-8 mb-1"
             fill="none"
             viewBox="0 0 24 24"

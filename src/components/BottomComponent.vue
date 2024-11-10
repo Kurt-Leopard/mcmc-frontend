@@ -165,7 +165,7 @@ onMounted(async () => {
         class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800  "
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          
           width="24"
           height="24"
           viewBox="0 0 24 24"
@@ -245,7 +245,7 @@ onMounted(async () => {
           v-if="!isSwitch"
           v-show="canDisplayLink"
           @click="switching"
-          xmlns="http://www.w3.org/2000/svg"
+          
           fill="none"
           viewBox="0 0 24 24"
           stroke-width="1.5"
@@ -262,7 +262,7 @@ onMounted(async () => {
           v-else
           v-show="canDisplayLink"
           @click="Closeswitching"
-          xmlns="http://www.w3.org/2000/svg"
+          
           fill="none"
           viewBox="0 0 24 24"
           stroke-width="1.5"
@@ -282,7 +282,7 @@ onMounted(async () => {
         class="relative w-full flex items-center justify-center text-gray-600 hover:text-gray-800   group"
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          
           width="24"
           height="24"
           viewBox="0 0 24 24"
@@ -314,7 +314,7 @@ onMounted(async () => {
       >
         <svg
           @click="scrollToTop"
-          xmlns="http://www.w3.org/2000/svg"
+          
           fill="none"
           viewBox="0 0 24 24"
           stroke-width="1.5"

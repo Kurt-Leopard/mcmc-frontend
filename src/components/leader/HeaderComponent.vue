@@ -224,7 +224,7 @@ onMounted(async () => {
             class="relative text-gray-600 hover:text-gray-800    group flex hidden md:flex lg:flex xl:flex"
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              
               width="24"
               height="24"
               viewBox="0 0 24 24"
@@ -300,7 +300,7 @@ onMounted(async () => {
           >
             <svg
               class="hidden md:block lg:block xl:block"
-              xmlns="http://www.w3.org/2000/svg"
+              
               width="24"
               height="24"
               viewBox="0 0 24 24"
@@ -329,7 +329,7 @@ onMounted(async () => {
           </a>
           <svg
             @click.prevent="Closeswitching"
-            xmlns="http://www.w3.org/2000/svg"
+            
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
@@ -358,7 +358,7 @@ onMounted(async () => {
           <a class="flex lg:hidden xl:hidden items-center justify-center">
             <svg
           
-              xmlns="http://www.w3.org/2000/svg"
+              
               class="h-8 w-8 mb-1 md:mb-0 lg:mb-0 xl:mb-0"
               fill="none"
               viewBox="0 0 24 24"
@@ -386,7 +386,7 @@ onMounted(async () => {
           @click.prevent="setActiveTab('home')"
         >
           <svg
-            xmlns="http://www.w3.org/2000/svg"
+            
             width="14"
             height="14"
             viewBox="0 0 24 24"
@@ -414,7 +414,7 @@ onMounted(async () => {
           >
             Cash Flow 
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              
               width="14"
               height="14"
               fill="none"
@@ -547,7 +547,7 @@ onMounted(async () => {
                 <svg
                   v-if="isDropdownVisible"
                   class="w-5 h-5"
-                  xmlns="http://www.w3.org/2000/svg"
+                  
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
@@ -559,7 +559,7 @@ onMounted(async () => {
                 <svg
                   v-else
                   class="w-5 h-5 ml-2"
-                  xmlns="http://www.w3.org/2000/svg"
+                  
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"

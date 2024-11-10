@@ -129,7 +129,7 @@ onMounted(()=>{
                 class="inline-block p-3 text-white rounded-lg bg-[#D98757] "
               >
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
+                  
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
@@ -164,7 +164,7 @@ onMounted(()=>{
                 class="inline-block p-3 text-white rounded-lg bg-[#D98757] "
               >
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
+                  
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
@@ -204,7 +204,7 @@ onMounted(()=>{
                 class="inline-block p-3 text-white rounded-lg bg-[#D98757] "
               >
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
+                  
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke-width="1.5"

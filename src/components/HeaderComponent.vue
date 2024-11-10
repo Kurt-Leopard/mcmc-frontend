@@ -326,7 +326,7 @@ onMounted(async () => {
         >
           <svg
             class="hidden md:block lg:block xl:block"
-            xmlns="http://www.w3.org/2000/svg"
+            
             width="24"
             height="24"
             viewBox="0 0 24 24"
@@ -400,7 +400,7 @@ onMounted(async () => {
         >
           <svg
             class="hidden md:block lg:block xl:block"
-            xmlns="http://www.w3.org/2000/svg"
+            
             width="24"
             height="24"
             viewBox="0 0 24 24"
@@ -435,7 +435,7 @@ onMounted(async () => {
             v-if="!isSwitch"
             v-show="canDisplayLink"
             @click="switching"
-            xmlns="http://www.w3.org/2000/svg"
+            
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
@@ -452,7 +452,7 @@ onMounted(async () => {
             v-else
             v-show="canDisplayLink"
             @click="Closeswitching"
-            xmlns="http://www.w3.org/2000/svg"
+            
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
@@ -479,7 +479,7 @@ onMounted(async () => {
           <svg
             @click="btnMenu"
             v-if="!showbar"
-            xmlns="http://www.w3.org/2000/svg"
+            
             class="h-8 w-8 mb-1 md:mb-0 lg:mb-0 xl:mb-0"
             fill="none"
             viewBox="0 0 24 24"
@@ -495,7 +495,7 @@ onMounted(async () => {
           <svg
             v-show="showbar"
             @click="closeMenu"
-            xmlns="http://www.w3.org/2000/svg"
+            
             class="h-8 w-8 mb-1"
             fill="none"
             viewBox="0 0 24 24"

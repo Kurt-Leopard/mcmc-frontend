@@ -142,7 +142,7 @@
       class="fixed bottom-4 right-4 bg-primary text-primary-foreground rounded-full p-3 shadow-md lg:hidden xl:hidden bg-white"
     >
       <svg
-        xmlns="http://www.w3.org/2000/svg"
+        
         class="h-6 w-6"
         fill="none"
         viewBox="0 0 24 24"
@@ -164,7 +164,7 @@ import { onMounted} from 'vue';
 import axios from "axios";
 
 const announce =()=>{
-  axios.post(`http://192.168.1.4:4000/api/announcements/14a02df2-0e57-4a8c-ac94-72423ed47a96`,{ title:'title', description:'description' });
+  axios.post(`http://192.168.1.11:4000/api/announcements/14a02df2-0e57-4a8c-ac94-72423ed47a96`,{ title:'title', description:'description' });
 }
 
 

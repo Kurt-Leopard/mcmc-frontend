@@ -11,7 +11,7 @@
     >
       <div class="flex items-center gap-2 text-red-800">
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          
           viewBox="0 0 24 24"
           fill="currentColor"
           class="h-5 w-5"
@@ -35,7 +35,7 @@
       <svg
         class="w-3 h-3"
         aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
+        
         fill="none"
         viewBox="0 0 14 14"
       >

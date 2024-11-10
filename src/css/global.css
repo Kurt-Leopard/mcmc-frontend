@@ -27,25 +27,27 @@
 
 @keyframes top-bottom-animation-in {
   0% {
-    -webkit-transform: translateY(-10%); 
-    transform: translateY(-10%); 
-    opacity: 0; 
+    -webkit-transform: translateY(-10%);
+    transform: translateY(-10%);
+    opacity: 0;
   }
+
   60% {
-    -webkit-transform: translateY(5%); 
-    transform: translateY(5%); 
-    opacity: 1; 
+    -webkit-transform: translateY(5%);
+    transform: translateY(5%);
+    opacity: 1;
   }
+
   100% {
-    -webkit-transform: translateY(0); 
-    transform: translateY(0); 
-    opacity: 1; 
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
 .toast-top-bottom-animation-in {
-  -webkit-animation: top-bottom-animation-in 0.4s cubic-bezier(.36, -0.64, .34, 1.76); 
-  animation: top-bottom-animation-in 0.4s cubic-bezier(.36, -0.64, .34, 1.76); 
+  -webkit-animation: top-bottom-animation-in 0.4s cubic-bezier(.36, -0.64, .34, 1.76);
+  animation: top-bottom-animation-in 0.4s cubic-bezier(.36, -0.64, .34, 1.76);
 }
 
 
@@ -105,11 +107,25 @@
 
 /* Shake invalid input */
 @keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
-  75% { transform: translateX(-5px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+
+  75% {
+    transform: translateX(-5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .shake {
@@ -129,10 +145,12 @@
 .animate-slide-in {
   animation: slide-in 0.5s forwards;
 }
+
 /* notification */
 .animate-slide-in-notificatication {
   animation: slide-in-notificatication 0.5s forwards;
 }
+
 @keyframes slide-in-notificatication {
   from {
     transform: translateY(100%);
@@ -143,3 +161,24 @@
   }
 }
 
+.button-green {
+  padding: 0.5rem;
+  background-color: #22c55e;
+  border-radius: 0.5rem;
+}
+
+.button-green:hover {
+  cursor: pointer;
+  background-color: #179244;
+}
+
+.button-red {
+  padding: 0.5rem;
+  background-color: #ef4444;
+  border-radius: 0.5rem;
+}
+
+.button-red:hover {
+  cursor: pointer;
+  background-color: #cc3434;
+}

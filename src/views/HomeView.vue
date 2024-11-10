@@ -250,7 +250,7 @@ const submitForm = async () => {
       >
         <i class="text-[#D98757] bg-orange-50 p-5 my-3 rounded-full">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
+            
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
@@ -291,7 +291,7 @@ const submitForm = async () => {
               <div class="modal-close cursor-pointer z-50">
                 <svg
                   class="fill-current text-black"
-                  xmlns="http://www.w3.org/2000/svg"
+                  
                   width="18"
                   height="18"
                   viewBox="0 0 18 18"
@@ -353,7 +353,7 @@ const submitForm = async () => {
               <div class="modal-close cursor-pointer z-50">
                 <svg
                   class="fill-current text-black"
-                  xmlns="http://www.w3.org/2000/svg"
+                  
                   width="18"
                   height="18"
                   viewBox="0 0 18 18"
@@ -416,7 +416,7 @@ const submitForm = async () => {
               <div class="modal-close cursor-pointer z-50">
                 <svg
                   class="fill-current text-black"
-                  xmlns="http://www.w3.org/2000/svg"
+                  
                   width="18"
                   height="18"
                   viewBox="0 0 18 18"
@@ -547,7 +547,7 @@ const submitForm = async () => {
           <p class="flex justify-end">
             <svg
               @click="hideImg(index)"
-              xmlns="http://www.w3.org/2000/svg"
+              
               class="h-8 w-8 my-4 text-white hover:text-gray-500"
               fill="none"
               viewBox="0 0 24 24"

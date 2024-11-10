@@ -29,7 +29,7 @@ const scrollToTop = () => {
     >
       <svg
         class=""
-        xmlns="http://www.w3.org/2000/svg"
+        
         width="24"
         height="24"
         viewBox="0 0 24 24"
@@ -54,7 +54,7 @@ const scrollToTop = () => {
       class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800  "
     >
       <svg
-        xmlns="http://www.w3.org/2000/svg"
+        
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"
@@ -74,7 +74,7 @@ const scrollToTop = () => {
     >
       <svg
         class=""
-        xmlns="http://www.w3.org/2000/svg"
+        
         width="24"
         height="24"
         viewBox="0 0 24 24"
@@ -90,7 +90,7 @@ const scrollToTop = () => {
     >
       <svg
         @click="scrollToTop"
-        xmlns="http://www.w3.org/2000/svg"
+        
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"

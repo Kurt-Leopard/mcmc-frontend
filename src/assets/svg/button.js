@@ -3,7 +3,7 @@ export const arrowRightButton = () => {
   return `
      <button class="border p-1 rounded-lg">
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      
       viewBox="0 0 320 512"
       class="w-9 h-9 p-2 rounded-lg text-gray-600"
     >
