@@ -164,11 +164,14 @@
       <!-- Flash and Instruction -->
       <div class="mt-8 flex flex-col items-center text-white">
         <button class="text-gray-700">
-          <i class="fas fa-bolt text-xl"></i>Please scan the QR code 
+          <i class="fas fa-bolt text-xl"></i>Please scan the QR code
         </button>
-        <p class="my-2 text-black">or </p>
-         <button class="text-gray-700 bg-blue-500 p-3 rounded-lg text-white" @click="sendRequest">
-           Send a confirmation request
+        <p class="my-2 text-black">or</p>
+        <button
+          class="text-gray-700 bg-blue-500 p-3 rounded-lg text-white"
+          @click="sendRequest"
+        >
+          Send a confirmation request
         </button>
       </div>
     </div>
@@ -184,9 +187,9 @@ const store = useAuthStore();
 const emit = defineEmits(["closeExpenseEntry"]);
 const typeOfExpense = inject("typeOfExpense");
 const expense = ref({
-  qrcode:"",
+  qrcode: "",
   typeOfExpense: typeOfExpense.value,
-  bookkeeper:store.user.id,
+  bookkeeper: store.user.id,
   reciever: "",
   amount: "",
   method: "Cash",
@@ -262,34 +265,35 @@ const scanQR = async () => {
       // Stop scanning when QR code is found
       clearInterval(scanInterval); // Stop the scanning interval
       videoStream.getTracks().forEach((track) => track.stop()); // Stop the video stream
-      expense.value.qrcode=code.data;
+      expense.value.qrcode = code.data;
       try {
         const response = await axios.post("/api/expense", expense.value);
         if (response.status === 200) {
-        acknowledgement.value=false;
+          acknowledgement.value = false;
         }
       } catch (error) {
         if (error.response) {
+         
           alert("Error submitting inflow:", error.response.message);
-          acknowledgement.value=false;
+          acknowledgement.value = false;
         }
       }
     }
   }
 };
-const sendRequest =async()=>{
+const sendRequest = async () => {
   try {
-        const response = await axios.post("/api/expense", expense.value);
-        if (response.status === 200) {
-        acknowledgement.value=false;
-        }
-      } catch (error) {
-        if (error.response) {
-          alert("Error submitting inflow:", error.response.message);
-          acknowledgement.value=false;
-        }
-      }
-}
+    const response = await axios.post("/api/expense", expense.value);
+    if (response.status === 200) {
+      acknowledgement.value = false;
+    }
+  } catch (error) {
+    if (error.response) {
+      alert("Error submitting inflow:", error.response.message);
+      acknowledgement.value = false;
+    }
+  }
+};
 // Setup the video stream when the component is mounted
 onMounted(() => {
   refreshData();

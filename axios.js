@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'https://wnh5c088-3000.asse.devtunnels.ms', 
-    // baseURL: 'http://192.168.1.6:3000',
+    baseURL: 'https://mcmc-backend-1.onrender.com', 
+    // baseURL: 'https://wnh5c088-3000.asse.devtunnels.ms',
     timeout: 5000,
     withCredentials: true
 });

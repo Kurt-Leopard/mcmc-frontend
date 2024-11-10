@@ -97,6 +97,7 @@ const submitForm = async () => {
     const response = await axios.post("/api/allocation", budget.value);
     if (response.status === 200) {
       alert("budget allocated submitted:", response.data.message);
+       emit("closeBudgetEntry");
     }
   } catch (error) {
     if (error.response) {

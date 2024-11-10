@@ -112,7 +112,7 @@ const notifyData = async () => {
 const goTo = async (type, notification_id) => {
   if (type === "events") {
     localStorage.removeItem("access");
-    window.location.href = "http://wnh5c088-3000.asse.devtunnels.ms:5173/view/events";
+    window.location.href = "https://wnh5c088.asse.devtunnels.ms:5173/view/events";
 
     // router.push({ path: "/view/events" });
     try {

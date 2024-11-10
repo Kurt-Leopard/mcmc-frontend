@@ -164,7 +164,7 @@ import { onMounted} from 'vue';
 import axios from "axios";
 
 const announce =()=>{
-  axios.post(`http://192.168.1.8:4000/api/announcements/14a02df2-0e57-4a8c-ac94-72423ed47a96`,{ title:'title', description:'description' });
+  axios.post(`https://mcmc-socket.onrender.com/api/announcements/14a02df2-0e57-4a8c-ac94-72423ed47a96`,{ title:'title', description:'description' });
 }
 
 

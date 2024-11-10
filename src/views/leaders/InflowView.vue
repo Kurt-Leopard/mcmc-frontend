@@ -13,7 +13,7 @@ const itemsPerPage = ref(10);
 const searchBy = ref("");
 const entries = ref([]); // Changed to entries
 const access_control = ref("");
-const searchByDate = ref(new Date().toISOString().slice(0, 7));
+const searchByDate = ref('');
 const errorResponse = ref(false);
 // Function to refresh data from the API
 const refreshData = async () => {

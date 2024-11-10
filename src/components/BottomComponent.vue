@@ -122,7 +122,7 @@ const goTo = async (type, notification_id) => {
     }
   }
 };
-const socket = io("http://wnh5c088-3000.asse.devtunnels.ms:4000");
+const socket = io("https://mcmc-socket.onrender.com");
 const refresh = ref(false);
 onMounted(() => {
   socket.on("announcement", (announcement) => {

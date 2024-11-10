@@ -193,7 +193,7 @@ const buttonSendComment = async (event_id, user_id) => {
         setTimeout(() => {
           scroolToBottom();
         }, 300);
-        fetch(`http://wnh5c088-3000.asse.devtunnels.ms:4000/api/announcements/${user_2.value}`, {
+        fetch(`https://mcmc-socket.onrender.com/api/announcements/${user_2.value}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json", // Specify the content type
