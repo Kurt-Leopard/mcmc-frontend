@@ -4,80 +4,77 @@ import { ref, onMounted, watch, computed } from "vue";
 import axios from "../../../axios";
 import Close from "@/assets/icons/close.vue";
 
-const verses = ref([]); // List of Bible verses for display
+const verses = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
 const searchBy = ref("");
 const hasMoreData = ref(true);
-const isModalOpen = ref(false); // Modal visibility state
-const selectedVerse = ref(null); // Currently selected verse for viewing details
+const isModalOpen = ref(false);
+const selectedVerse = ref(null);
 const referenceVerse = ref([]);
-const showConfirmationModal = ref(false); // Confirmation modal visibility state
+const showConfirmationModal = ref(false);
+const dataToDelete = ref(null);
 
-// Fetch Bible verses data
 const refreshData = async () => {
     try {
         const response = await axios.get(
             `/devotional?page=${currentPage.value}&limit=${itemsPerPage.value}&searchBy=${searchBy.value}`
         );
-
         verses.value = response.data.devotional || [];
-        if (verses.value.length > 0) {
-            referenceVerse.value = JSON.parse(verses.value[0].verses || "[]");
-        }
+        referenceVerse.value = verses.value.length > 0 ? JSON.parse(verses.value[0].verses || "[]") : [];
         hasMoreData.value = verses.value.length === itemsPerPage.value;
     } catch (error) {
         console.error("Error fetching verses data:", error);
     }
 };
 
-const confirmBlock = async (id) => {
+const deleteHandler = async () => {
     try {
-        const res = await axios.put(`/block/devotional/${id}`);
-        return res;
+        const response = await axios.put(`/devotional/${dataToDelete.value.id}/delete`);
+        if (response) console.log("done");
+        refreshData();
+        closeConfirmModal();
     } catch (error) {
-        console.error("Error blocking verse:", error);
+        console.error("Error deleting data:", error);
     }
+};
+
+const openModalDelete = (item) => {
+    dataToDelete.value = item;
+    showConfirmationModal.value = true;
 };
 
 const combinedData = computed(() =>
     referenceVerse.value.map((item, index) => ({
         ...item,
-        ...(verses.value[index] || {}) // Use empty object if index is out of bounds
+        ...(verses.value[index] || {})
     }))
 );
 
 const formatDate = (date) => {
-    if (!date) return ''; // Prevent errors if date is not available
+    if (!date) return '';
     const formattedDate = new Date(date).toLocaleDateString("en-US", {
         year: "numeric",
         month: "short",
         day: "numeric",
     });
-
     const formattedTime = new Date(date).toLocaleTimeString("en-US", {
         hour: "numeric",
         minute: "numeric",
         second: "numeric",
         hour12: true,
     });
-
     return `${formattedDate} at ${formattedTime}`;
 };
 
 const nextPage = () => {
-    if (hasMoreData.value) {
-        currentPage.value++;
-    }
+    if (hasMoreData.value) currentPage.value++;
 };
 
 const prevPage = () => {
-    if (currentPage.value > 1) {
-        currentPage.value--;
-    }
+    if (currentPage.value > 1) currentPage.value--;
 };
 
-// Open and close modal for verse details
 const openModal = (verse) => {
     selectedVerse.value = verse;
     isModalOpen.value = true;
@@ -88,25 +85,13 @@ const closeModal = () => {
     selectedVerse.value = null;
 };
 
-// Open the confirmation modal
-const openConfirmModal = (id) => {
-    selectedVerse.value = verses.value.find(verse => verse.id === id);
-    showConfirmationModal.value = true;
-};
-
-// Close the confirmation modal
 const closeConfirmModal = () => {
     showConfirmationModal.value = false;
 };
 
-onMounted(() => {
-    refreshData();
-});
-
-// Watch for changes in currentPage or searchBy and refresh data
+onMounted(refreshData);
 watch([currentPage, searchBy], refreshData);
 </script>
-
 <template>
     <main>
         <HeaderComponent />
@@ -114,25 +99,21 @@ watch([currentPage, searchBy], refreshData);
         <div class="pb-3 px-4">
             <h1 class="text-2xl font-semibold mb-4">Devotional / Bible Verses</h1>
 
-            <!-- Search Input -->
             <div class="mb-4">
                 <input v-model="searchBy" type="text" placeholder="Search by reference"
                     class="border border-gray-300 p-2 rounded w-full" />
             </div>
 
-            <!-- Bible Verses Table -->
             <table class="w-full divide-gray-200 max-h-[360px] overflow-y-auto element-with-horizontal-scroll">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Reference
                         </th>
-                        <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Verse
                         </th>
-                        <th scope="col"
+                        <th
                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider flex justify-center">
                             Status
                         </th>
@@ -140,31 +121,23 @@ watch([currentPage, searchBy], refreshData);
                 </thead>
 
                 <tbody class="bg-white divide-gray-200">
-                    <tr v-for="(item, index) in combinedData" :key="index"
-                        class="hover:bg-gray-100 hover:cursor-pointer" @click="openModal(item)">
-                        <td class="ellipsis">
-                            {{ item.reference }}
-                        </td>
-                        <td class="ellipsis">
-                            {{ item.text }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap flex gap-2 justify-center"
-                            @click.stop="openConfirmModal(item.id)">
-                            <span class="px-2 text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                                :class="!item.status ? 'inline-flex' : 'hidden'">
-                                Block
-                            </span>
+                    <tr v-for="(item, index) in combinedData" :key="index" class="hover:bg-gray-100">
+                        <td class="ellipsis">{{ item.reference }}</td>
+                        <td class="ellipsis">{{ item.text }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap flex gap-2 justify-center">
+                            <span class="text-sm text-blue-700 hover:underline font-medium cursor-pointer"
+                                @click="openModal(item)">View</span>
                             <span
-                                class="px-2 text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 flex items-center justify-center"
-                                :class="item.status ? 'inline-flex' : 'hidden'">
-                                Blocked
+                                class="px-2 text-xs leading-5 font-semibold rounded-full flex items-center justify-center hover:cursor-pointer"
+                                :class="{ 'bg-green-100 text-green-800': !item.status, 'bg-red-100 text-red-800': item.status }"
+                                @click="openModalDelete(item)">
+                                {{ item.status ? 'Blocked' : 'Block' }}
                             </span>
                         </td>
                     </tr>
                 </tbody>
             </table>
 
-            <!-- Pagination Controls -->
             <div class="mt-4 flex justify-center items-center border-t pt-4">
                 <button @click="prevPage" :disabled="currentPage.value === 1"
                     class="text-sm text-gray-500 hover:text-gray-900 px-4 py-2 rounded">
@@ -179,7 +152,7 @@ watch([currentPage, searchBy], refreshData);
                 </button>
             </div>
 
-            <!-- Modal for viewing verse details -->
+            <!-- Verse Details Modal -->
             <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <span class="fixed bg-black opacity-50 top-0 left-0 w-full h-full" @click="closeModal"></span>
                 <div class="bg-white p-6 rounded shadow-lg z-10">
@@ -200,12 +173,13 @@ watch([currentPage, searchBy], refreshData);
                 </div>
             </div>
 
-            <!-- Confirmation Modal -->
-            <div v-if="showConfirmationModal" id="confirmationModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+            <!-- Confirmation Modal for Deletion -->
+            <div v-if="showConfirmationModal" id="confirmationModal"
+                class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
                 <div class="bg-white p-4 rounded-lg">
-                    <h1 class="p-2 font-semibold">Are you sure?</h1>
+                    <h1 class="p-2 font-semibold py-4">Are you sure you want to delete this post?</h1>
                     <div class="flex gap-2 justify-center">
-                        <div class="button-green" @click="confirmBlock(selectedVerse.id)">YES</div>
+                        <div class="button-green" @click="deleteHandler">YES</div>
                         <div class="button-red" @click="closeConfirmModal">NO</div>
                     </div>
                 </div>
@@ -213,7 +187,6 @@ watch([currentPage, searchBy], refreshData);
         </div>
     </main>
 </template>
-
 <style scoped>
 .ellipsis {
     max-width: 350px;
