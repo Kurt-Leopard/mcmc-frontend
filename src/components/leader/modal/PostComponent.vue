@@ -9,19 +9,19 @@
       >
         <!-- Modal content -->
         <div
-          class="relative bg-white shadow dark:bg-gray-700 h-screen md:h-auto"
+          class="relative bg-white shadow  h-screen md:h-auto"
         >
           <!-- Modal header -->
           <div
-            class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600"
+            class="flex items-center justify-between p-4 border-b rounded-t "
           >
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 class="text-lg font-semibold text-gray-900 ">
               New Entry
             </h3>
             <button
               @click="closePostEntry"
               type="button"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center  "
             >
               <svg
                 class="w-3 h-3"
@@ -45,7 +45,7 @@
           <form @submit.prevent="submitForm">
             <div class="p-3">
               <h3
-                class="text-sm text-gray-900 dark:text-white bg-blue-100 p-3 rounded-md"
+                class="text-sm text-gray-900  bg-blue-100 p-3 rounded-md"
               >
                 <a class="font-semibold">Luke 16:10</a>
                 Whoever can be trusted with very little can also be trusted with
@@ -58,14 +58,14 @@
                 <div class="col-span-1">
                   <label
                     for="price"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    class="block mb-2 text-sm font-medium text-gray-900 "
                     >Amount</label
                   >
                   <input
                     v-model="data.amount"
                     type="number"
                     id="price"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   "
                     placeholder="₱ 2999"
                     required
                   />
@@ -73,13 +73,13 @@
                 <div class="col-span-1">
                   <label
                     for="category"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    class="block mb-2 text-sm font-medium text-gray-900 "
                     >Particular</label
                   >
                   <select
                     v-model="data.particular"
                     id="category"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5   "
                   >
                     <option value="">Thites & offerings</option>
                     <option value="Donation">Donation</option>
@@ -90,14 +90,14 @@
                 <div class="col-span-1">
                   <label
                     for="spent"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    class="block mb-2 text-sm font-medium text-gray-900 "
                     >Total Spent</label
                   >
                   <input
                     v-model="data.spent"
                     type="number"
                     id="spent"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   "
                     placeholder="₱ 2999"
                     required
                   />
@@ -105,14 +105,14 @@
                 <div class="col-span-1">
                   <label
                     for="change"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    class="block mb-2 text-sm font-medium text-gray-900 "
                     >Total Change</label
                   >
                   <input
                     v-model="data.change"
                     type="number"
                     id="change"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   "
                     placeholder="₱ 2999"
                     required
                   />
@@ -121,14 +121,14 @@
                 <div class="col-span-2">
                   <label
                     for="description"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    class="block mb-2 text-sm font-medium text-gray-900 "
                     >Description (optional)</label
                   >
                   <textarea
                     v-model="data.description"
                     id="description"
                     rows="3"
-                    class="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    class="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500   "
                     placeholder="Write description here"
                   ></textarea>
                 </div>
@@ -173,7 +173,7 @@
             <div class="p-4 border-t">
               <button
                 type="submit"
-                class="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm py-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                class="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm py-4"
               >
                 Save
               </button>

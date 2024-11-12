@@ -15,6 +15,7 @@ import {
   provide,
 } from "vue";
 import axios from "../axios";
+import { downloadIcons } from "../src/assets/svg/icons";
 
 const BottomComponent = defineAsyncComponent(() =>
   import("./components/BottomComponent.vue")
@@ -67,7 +68,7 @@ const refreshData = async () => {
       console.log(store.getToken());
     }
   } catch (error) {
-    console.error("Error refreshing data:", error);
+    console.log("Error refreshing data:", error);
   }
 };
 
@@ -79,7 +80,7 @@ const updateSwitching = () => {
 onMounted(() => {
   refreshData();
   updateSwitching(); // Initial call to set switching
-  console.log(switching.value);
+  
   window.addEventListener("storage", updateSwitching);
 });
 
@@ -126,28 +127,35 @@ onMounted(() => {
 
 <template>
   <section>
-    <div
-      v-if="deferredPrompt"
-      class="p-4 bg-white  md:w-1/3 xl:w-1/3 lg:w-1/3 border-t-orange-500 border-t-[5px] rounded-t-lg md:lg:rounded-r-lg lg:rounded-r-lg text-left fixed bottom-0 left-0  border z-50  flex items-center justify-center"
-    >
-      <div >
-        <div class="mb-4">
-          <h2 class="text-xl font-semibold text-gray-800">
-            Join Us on the Go!
-          </h2>
-          <p class="text-gray-600 text-sm ">
-            Install the Minister of Christian Mission Church app for easy access
-            to sermons, events, and community updates.
-          </p>
+    <!-- v-if="deferredPrompt" -->
+
+    <button v-if="deferredPrompt" class="fixed left-0 top-1/3 z-50 bg-white border">
+      <div class="relative group">
+        <nav
+          v-html="downloadIcons.closeDownload()"
+          class="w-[45px] h-[45px] flex items-center justify-center"
+        ></nav>
+        <div
+          class="absolute left-14 top-0 border p-2 bg-white rounded-lg w-[100px] hidden group-hover:block"
+        >
+          <button @click="deferredPrompt=true">Close</button>
         </div>
-        <button @click="installPWA" class="bg-[#D98757] text-white p-2 rounded py-2 mr-2">
-          Download
-        </button>
-        <button @click="installPWA" class="bg-gray-50 border text-black p-2 rounded py-2">
-          Close
-        </button>
       </div>
-    </div>
+      <div class="relative group">
+        <nav
+          v-html="downloadIcons.download()"
+          class="bg-[#D98757] w-[45px] h-[45px] text-white flex items-center justify-center"
+          @click="installPWA"
+        ></nav>
+        <div
+          class="absolute left-14 top-0 border p-2 bg-white rounded-lg w-[100px] hidden group-hover:block"
+        >
+          <button>Install PWA</button>
+        </div>
+      </div>
+      <nav class="w-[45px] h-[45px] flex items-center justify-center"></nav>
+    </button>
+
     <main v-if="store.getRole().role === role[0]">
       <LoaderComponent />
       <HeaderComponent v-if="store.getRole().role !== undefined" />

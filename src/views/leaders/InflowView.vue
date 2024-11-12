@@ -32,7 +32,7 @@ const refreshData = async () => {
       if (error.response.status === 404) {
         errorResponse.value = true;
       } else {
-        console.error("Error fetching data:", error);
+        console.log("Error fetching data:", error);
       }
     }
   }
@@ -92,7 +92,7 @@ onMounted(async () => {
     <HeaderComponent />
 
     <main class="pb-3 px-4 lg:px-12 xl:px-32 mt-16 lg:mt-24 xl:mt-24">
-      <div class="my-5 flex flex-col">
+      <div class="my-5 flex flex-col  mb-24 ">
         <div class="mb-4 lg:flex items-center justify-center gap-2 w-full ">
           <input
             v-model="searchBy"
@@ -110,7 +110,7 @@ onMounted(async () => {
           />
         </div>
         <div
-          class="max-h-[380px] overflow-y-auto element-with-horizontal-scroll"
+          class="max-h-[55vh] overflow-y-auto element-with-horizontal-scroll"
         >
           <div class="min-w-full inline-block align-middle">
             <div class="overflow-hidden">

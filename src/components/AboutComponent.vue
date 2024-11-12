@@ -24,7 +24,7 @@ onMounted(() => {
 <template>
   <main class="py-3 px-4 lg:px-[50px] xl:px-32 mt-24">
     <section>
-      <div class="mx-auto max-w-screen-xl">
+      <div class="w-full">
         <section>
           <div>
             <div>

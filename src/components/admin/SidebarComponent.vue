@@ -4,7 +4,7 @@
     <div
       v-if="isSidebarVisible"
       :class="[
-        'w-[350px] h-screen bg-white border-r border-gray-200  pb-10 overflow-y-auto transform transition-transform duration-300 dark:bg-neutral-800 dark:border-neutral-700',
+        'w-[350px] h-screen bg-white border-r border-gray-200  pb-10 overflow-y-auto transform transition-transform duration-300 ',
         isSidebarVisible ? 'translate-x-0' : '-translate-x-full',
         'lg:translate-x-0',
       ]"
@@ -29,7 +29,7 @@
         <!-- Dashboard Link -->
         <RouterLink
           to="/view/page/manage/home"
-          class="flex items-center gap-x-3.5 py-2 px-2.5 bg-gray-100 text-sm text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-neutral-700 dark:text-white"
+          class="flex items-center gap-x-3.5 py-2 px-2.5 bg-gray-100 text-sm text-gray-700 rounded-lg hover:bg-gray-200 "
         >
           <svg
             class="w-6 h-6"
@@ -49,7 +49,7 @@
         <!-- Users Accordion -->
         <div class="space-y-1.5">
           <button
-            class="flex items-center justify-between w-full py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700"
+            class="flex items-center justify-between w-full py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200  "
             @click="toggleUsersMenu"
           >
             <div class="flex items-center gap-x-3.5">
@@ -96,12 +96,12 @@
           <div v-show="isUsersMenuOpen" class="pl-6">
             <RouterLink
               to="/view/page/manage/member"
-              class="block py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700"
+              class="block py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200  "
               >Member</RouterLink
             >
             <RouterLink
               to="/view/page/manage/leader"
-              class="block py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700"
+              class="block py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200  "
               >Leader</RouterLink
             >
           </div>
@@ -109,7 +109,7 @@
         <!-- Casflow Accordion -->
         <div class="space-y-1.5">
           <button
-            class="flex items-center justify-between w-full py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700"
+            class="flex items-center justify-between w-full py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200  "
             @click="toggleCashflowMenu"
           >
             <div class="flex items-center gap-x-3.5">
@@ -156,12 +156,12 @@
           <div v-show="isCashflowMenuOpen" class="pl-6">
             <RouterLink
               to="/view/page/manage/inflow"
-              class="block py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700"
+              class="block py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200  "
               >Inflow</RouterLink
             >
             <RouterLink
               to="/view/page/manage/expense"
-              class="block py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700"
+              class="block py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200  "
               >Expenses</RouterLink
             >
           </div>
@@ -170,7 +170,7 @@
         <!-- Account Accordion -->
         <div class="space-y-1.5">
           <button
-            class="flex items-center justify-between w-full py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700"
+            class="flex items-center justify-between w-full py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200  "
             @click="toggleAccountMenu"
           >
             <div class="flex items-center gap-x-3.5">
@@ -217,12 +217,12 @@
           <div v-show="isAccountMenuOpen" class="pl-6">
             <a
               href="#"
-              class="block py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700"
+              class="block py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200  "
               >Profile</a
             >
             <a
               href="#"
-              class="block py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700"
+              class="block py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200  "
               >Settings</a
             >
           </div>
@@ -230,7 +230,7 @@
 
         <RouterLink
           to="/view/page/manage/inbox"
-          class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-neutral-700 dark:text-white"
+          class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-200 "
         >
           <svg
             class="w-6 h-6"

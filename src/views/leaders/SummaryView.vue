@@ -74,7 +74,7 @@ onMounted(() => {
       qrVideo.value.srcObject = stream;
       enableScanner(); // Start scanning when video is ready
     })
-    .catch((err) => console.error(err));
+    .catch((err) => console.log(err));
 });
 
 // Stop scanning when the component is unmounted

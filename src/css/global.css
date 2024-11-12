@@ -143,3 +143,22 @@
   }
 }
 
+
+.button-green {
+  padding: 0.5rem;
+  background-color: #22c55e;
+  border-radius: 0.5rem;
+}
+.button-green:hover {
+  cursor: pointer;
+  background-color: #179244;
+}
+.button-red {
+  padding: 0.5rem;
+  background-color: #ef4444;
+  border-radius: 0.5rem;
+}
+.button-red:hover {
+  cursor: pointer;
+  background-color: #cc3434;
+}

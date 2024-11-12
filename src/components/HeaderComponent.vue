@@ -10,6 +10,23 @@ import SwitchLoaderComponent from "./leader/LoaderComponent.vue";
 import { accessRole } from "../composables/user";
 import axios from "../../axios";
 import { relativeTime } from "../composables/relativeTime";
+
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const currentPath = ref(route.path);
+
+function pathRefresh() {
+  console.log(currentPath.value);
+}
+
+watch(
+  () => route.path,
+  (newPath) => {
+    currentPath.value = newPath;
+    pathRefresh();
+  }
+);
 const store = useAuthStore();
 const role = ref("");
 const router = useRouter();
@@ -29,7 +46,6 @@ const onScroll = () => {
 };
 
 const btnMenu = () => {
- 
   closebar.value = false;
   showbar.value = true;
 };
@@ -73,7 +89,7 @@ const logout = async () => {
   try {
     const response = await axios.put(`/api/logout/${store.user.id}`);
     if (response.status === 200) {
-       sessionStorage.removeItem("accessRole");
+      sessionStorage.removeItem("accessRole");
       location.reload();
     }
   } catch (error) {
@@ -131,7 +147,7 @@ const routeTo = (token, routeName) => {
 // listening to the chnages of value of store toast
 watchEffect(() => {
   let res = store.getToastSuccess();
-  console.log(store.getToastSuccess());
+
   if (res.length) {
     responseStatus.value = res[0].responseStatus;
     responseMessage.value = res[0].responseMessage;
@@ -150,7 +166,7 @@ const switchLoader = ref(false);
 
 const switching = async () => {
   switchLoader.value = true; // Start loader
-  console.log(switchLoader.value);
+
   try {
     const response = await axios.post(`/switching`, { role: role.value.role });
 
@@ -186,7 +202,7 @@ const refreshData = async () => {
     if (response.status === 200) {
       notify.value = response.data.data;
 
-      unreadCount.value = notify.value.filter(n => n.is_read === 0).length;
+      unreadCount.value = notify.value.filter((n) => n.is_read === 0).length;
     }
   } catch (error) {
     console.log(response.data.message);
@@ -196,14 +212,13 @@ const refreshData = async () => {
 const goTo = async (type, notification_id) => {
   if (type === "events") {
     localStorage.removeItem("access");
-     router.push({ path: "/view/events" });
+    router.push({ path: "/view/events" });
     try {
       const response = await axios.put(
         `/api/notification-update/${notification_id}`
       );
 
       if (response.status === 200) {
-        console.log("success");
         refreshData();
       }
     } catch (error) {
@@ -219,7 +234,7 @@ const refresh = inject("refresh");
 watch(refresh, async (newValue) => {
   if (newValue) {
     await refreshData();
-    refresh.value = false; 
+    refresh.value = false;
   }
 });
 // Ensure fetchUser is properly awaited
@@ -271,14 +286,12 @@ onMounted(async () => {
         <!-- <div class="w-14 h-14 rounded-full bg-gray-200 animate-pulse"></div> -->
         <div class="px-6">
           <h1
-            class="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold tracking-[7px]"
+            class="text-sm text-gray-600 hover:text-gray-800 font-bold tracking-[7px]"
           >
             MCM-CHURCH
           </h1>
 
-          <h3
-            class="text-xs text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
-          >
+          <h3 class="text-xs text-gray-600 hover:text-gray-800">
             Glorify-Nurture-Equip-Expand
           </h3>
         </div>
@@ -289,27 +302,39 @@ onMounted(async () => {
       >
         <RouterLink
           :to="store.getToken() ? '/view/home' : '/'"
-          class="text-xs font-bold text-[#D98757]"
+          :class="`text-xs font-bold ${currentPath === '/' || currentPath==='/view/home'? 'text-[#D98757]':'text-gray-600 hover:text-gray-800'}`"
           >HOME</RouterLink
         >
         <RouterLink
           :to="store.getToken() ? '/view/about' : '/about'"
-          class="text-xs text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold"
+          :class="`text-xs  font-bold ${currentPath === '/about' || currentPath==='/view/about'
+              ? 'text-[#D98757]'
+              : 'text-gray-600 hover:text-gray-800'
+          }`"
           >ABOUT US</RouterLink
         >
         <RouterLink
           :to="store.getToken() ? '/view/contact' : '/contact'"
-          class="text-xs text-gray-600 font-bold"
+           :class="`text-xs  font-bold ${currentPath === '/contact' || currentPath ==='/view/contact'
+              ? 'text-[#D98757]'
+              : 'text-gray-600 hover:text-gray-800'
+          }`"
           >CONTACT</RouterLink
         >
         <RouterLink
           :to="store.getToken() ? '/view/gallery' : '/gallery'"
-          class="text-xs text-gray-600 font-bold"
+           :class="`text-xs  font-bold ${currentPath === '/gallery' || currentPath === '/view/gallery'
+              ? 'text-[#D98757]'
+              : 'text-gray-600 hover:text-gray-800'
+          }`"
           >GALLERY</RouterLink
         >
         <RouterLink
           :to="store.getToken() ? '/view/events' : '/events'"
-          class="text-xs text-gray-600 font-bold"
+           :class="`text-xs  font-bold ${currentPath === '/events' || currentPath ==='/view/events'
+              ? 'text-[#D98757]'
+              : 'text-gray-600 hover:text-gray-800'
+          }`"
           >CHURCH EVENTS</RouterLink
         >
       </section>
@@ -322,7 +347,7 @@ onMounted(async () => {
       >
         <a
           v-show="store.getToken()"
-          class="relative text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 group flex hidden md:flex lg:flex xl:flex"
+          class="relative text-gray-600 hover:text-gray-800 group flex hidden md:flex lg:flex xl:flex"
         >
           <svg
             class="hidden md:block lg:block xl:block"
@@ -376,7 +401,10 @@ onMounted(async () => {
                   ><small class="italic text-xs text-gray-500">{{
                     relativeTime(notification.created_at)
                   }}</small>
-                  <small v-if="notification.is_read===0" class="p-1 bg-green-500 rounded-full"></small>
+                  <small
+                    v-if="notification.is_read === 0"
+                    class="p-1 bg-green-500 rounded-full"
+                  ></small>
                 </div>
               </div>
             </section>
@@ -396,7 +424,7 @@ onMounted(async () => {
         <!-- settings -->
         <a
           v-show="store.getToken()"
-          class="relative text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 group"
+          class="relative text-gray-600 hover:text-gray-800 group"
         >
           <svg
             class="hidden md:block lg:block xl:block"
@@ -416,7 +444,10 @@ onMounted(async () => {
             <h1 class="text-gray-700 border-b pb-2 text-center font-semibold">
               Settings
             </h1>
-            <RouterLink class="inline-block p-2 hover:bg-gray-50 cursor-pointer w-full"  to="/view/profile">
+            <RouterLink
+              class="inline-block p-2 hover:bg-gray-50 cursor-pointer w-full"
+              to="/view/profile"
+            >
               Profile
             </RouterLink>
             <section
@@ -427,10 +458,7 @@ onMounted(async () => {
             </section>
           </section>
         </a>
-        <a
-          v-if="canDisplayLink"
-          class="text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
-        >
+        <a v-if="canDisplayLink" class="text-gray-600 hover:text-gray-800">
           <svg
             v-if="!isSwitch"
             v-show="canDisplayLink"
@@ -466,14 +494,14 @@ onMounted(async () => {
             />
           </svg>
         </a>
-        <a v-show="store.getToken()"
+        <RouterLink v-show="store.getToken()" to="/view/profile"
           ><img
             :src="`https://storage.googleapis.com/mcm-chuch.appspot.com/${store.user.profile}`"
             loading="lazy"
             role="presentation"
             alt=""
             class="h-[45px] w-[45px] rounded-full hidden md:block lg:block xl:block"
-        /></a>
+        /></RouterLink>
 
         <a class="flex lg:hidden xl:hidden items-center justify-center">
           <svg
@@ -511,7 +539,7 @@ onMounted(async () => {
         </a>
       </div>
       <!-- sm side bar -->
-     
+
       <section
         class="block lg:hidden xl:hidden bg-white h-screen fixed top-0 left-0 shadow-lg z-50"
         v-show="showbar"

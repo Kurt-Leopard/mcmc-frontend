@@ -9,19 +9,19 @@
       >
         <!-- Modal content -->
         <div
-          class="relative bg-white md:rounded-lg lg:rounded-lg xl:rounded-lg shadow dark:bg-gray-700"
+          class="relative bg-white md:rounded-lg lg:rounded-lg xl:rounded-lg shadow "
         >
           <!-- Modal header -->
           <div
-            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
+            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t "
           >
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-              Budget Allocation Entry
+            <h3 class="text-lg font-semibold text-gray-900 ">
+              Change Log
             </h3>
             <button
               @click="closeExpenseLog"
               type="button"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  "
             >
               <svg
                 class="w-3 h-3"
@@ -47,7 +47,7 @@
               <div class="col-span-2 sm:col-span-1">
                 <label
                   for="price"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  class="block mb-2 text-sm font-medium text-gray-900 "
                   >Amount</label
                 >
                 <input
@@ -56,7 +56,7 @@
                   type="number"
                   name="price"
                   id="price"
-                  class="bg-gray-50 border border-gray-300 mr-1 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  class="bg-gray-50 border border-gray-300 mr-1 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                   placeholder="₱ 2999"
                   required
                 />
@@ -64,23 +64,26 @@
               <div class="col-span-2 sm:col-span-1">
                 <label
                   for="spent"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  class="block mb-2 text-sm font-medium text-gray-900 "
                   >Spent</label
                 >
                 <input
                   v-model="expense.spent"
+                    @input="
+                      expense.spent = expense.spent < 0 ? 0 : expense.spent
+                    "
                   type="number"
                   name="spent"
                   id="spent"
-                  class="bg-gray-50 border border-gray-300 mr-1 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                  placeholder="₱ 2999"
+                  class="bg-gray-50 border border-gray-300 mr-1 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
+                  placeholder="₱ 0.00"
                   required
                 />
               </div>
               <div class="col-span-2 sm:col-span-1">
                 <label
                   for="change"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  class="block mb-2 text-sm font-medium text-gray-900 "
                   >Change</label
                 >
                 <input
@@ -88,7 +91,7 @@
                   name="change"
                   id="change"
                   :value="calculatedChange"
-                  class="bg-gray-50 border border-gray-300 mr-1 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  class="bg-gray-50 border border-gray-300 mr-1 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                   placeholder="₱ 0.00"
                   disabled
                 />
@@ -96,7 +99,7 @@
             </div>
             <button
               type="submit"
-              class="text-white inline-flex items-center justify-center w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="text-white inline-flex items-center justify-center w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4"
             >
               Save
             </button>
@@ -112,6 +115,8 @@ import { ref, inject, computed } from "vue";
 import { useAuthStore } from "../../../stores/store";
 import axios from "../../../../axios";
 import { decodeJWT } from "../../../stores/token";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 const store = useAuthStore();
 const user = ref("");
@@ -156,15 +161,15 @@ const submitForm = async () => {
       const response = await axios.post("/api/expense/changelog", payload);
 
       if (response.status === 200) {
-        alert(response.data.message);
+        toast.success(response.data.message);
         emit("closeExpenseLog");
         emit("refreshData");
       }
     }else{
-      alert("Spent cannot be less than amount")
+      toast.error("Spent cannot be less than amount")
     }
   } catch (error) {
-    console.error("Error submitting the form", error);
+    toast.error("Error submitting the form", error);
   }
 };
 </script>

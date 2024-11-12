@@ -53,7 +53,7 @@ const refreshData = async () => {
 };
 
 const nextPage = () => {
-  console.log(events.value.length > 0);
+ 
   if (events.value.length > 1) {
     currentPage.value++;
     refreshData();
@@ -85,7 +85,7 @@ const buttonShowEventModal = (methodEvent, sendByEvent, event, eventID) => {
 
 const buttonHideModal = () => {
   isModalShow.value = false;
-  console.log(isModalShow.value);
+
 };
 
 // wiew event modal
@@ -150,7 +150,7 @@ onMounted(async () => {
       >
         <a
           @click="buttonShowEventModal('post', 'event')"
-          class="text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold flex items-center ursor-pointer"
+          class="text-gray-600 hover:text-gray-800  font-bold flex items-center ursor-pointer"
           ><i class="fas fa-plus p-2 bg-gray-100 text-lg rounded-lg"></i
         ></a>
       </div>

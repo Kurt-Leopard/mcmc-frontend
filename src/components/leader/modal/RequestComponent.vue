@@ -4,6 +4,10 @@ import { onMounted, ref, inject } from "vue";
 import { getDate } from "../../../composables/date";
 import { useAuthStore } from "../../../stores/store";
 import { decodeJWT } from "../../../stores/token";
+
+import { useToast } from "vue-toastification";
+const toast = useToast();
+
 const emit = defineEmits(["closeRequest"]);
 const store = useAuthStore();
 const user = ref("");
@@ -22,15 +26,14 @@ const acknowledge = async (id, amount, typeOfExpense) => {
       typeOfExpense: typeOfExpense,
     });
     if (response.status === 200) {
-      emit("closeRequest");
-      alert(response.data.message);
+      toast.success(response.data.message);
     }
   } catch (error) {
     if (error.response) {
       if (error.response.status === 400) {
-        alert(error.response.data.message, "Sdsadsad");
-      }else{
-       alert(error.response.message);
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(error.response.message);
       }
     }
   }

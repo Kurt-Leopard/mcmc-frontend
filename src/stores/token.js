@@ -10,7 +10,7 @@ export const decodeJWT = (token) => {
         const decoded = JSON.parse(atob(parts[1]));
         return decoded;
     } catch (error) {
-        console.error("Error decoding token:", error);
+        console.log("Error decoding token:", error);
         return null; 
     }
 };

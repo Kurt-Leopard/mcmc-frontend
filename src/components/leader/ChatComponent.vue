@@ -41,7 +41,7 @@ const fetchMessages = async () => {
       messages.value = response.data;
       scroolToBottom();
     } catch (error) {
-      console.error("Error fetching messages:", error);
+      console.log("Error fetching messages:", error);
     }
   }
 };

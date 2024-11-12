@@ -39,8 +39,7 @@ export async function fetchUser() {
             }
 
         } catch (error) {
-            // console.error("Error fetching user:", error);
-            // when no server response apply this
+    
             document.cookie = `accessToken=; Max-Age=-99999999; path=/;`;
             if(error.response.status===403){
 
@@ -72,8 +71,7 @@ export async function accessControl() {
             }
 
         } catch (error) {
-            // console.error("Error fetching user:", error);
-            // when no server response apply this
+          
             document.cookie = `accessToken=; Max-Age=-99999999; path=/;`;
             if(error.response.status===403){
                 
@@ -106,7 +104,7 @@ export async function accessRole() {
             }
 
         } catch (error) {
-            // console.error("Error fetching user:", error);
+            // console.log("Error fetching user:", error);
             // when no server response apply this
             document.cookie = `accessToken=; Max-Age=-99999999; path=/;`;
             if(error.response.status===403){

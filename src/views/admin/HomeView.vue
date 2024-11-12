@@ -13,7 +13,7 @@ const refreshData = async () => {
         usersCount.value = users.value.length;
         totalUsers.value = usersCount.value.toLocaleString();
     } catch (error) {
-        console.error("Error fetching user count:", error);
+        console.log("Error fetching user count:", error);
     }
 };
 
@@ -28,7 +28,7 @@ const refreshInbox = async () => {
         inboxCount.value = inbox.value.length;
         totalInbox.value = inboxCount.value.toLocaleString();
     } catch (error) {
-        console.error("Error fetching user count:", error);
+        console.log("Error fetching user count:", error);
     }
 };
 
@@ -46,7 +46,7 @@ const refreshOperational = async () => {
 
         formattedTotal.value = totalAmount.value.toLocaleString();
     } catch (error) {
-        console.error("Error fetching operational data:", error);
+        console.log("Error fetching operational data:", error);
     }
 };
 

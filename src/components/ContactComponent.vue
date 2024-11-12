@@ -65,7 +65,7 @@ onMounted(()=>{
           >
             <div class="w-full">
               <h1
-                class="my-6 text-2xl font-semibold text-gray-800 md:text-3xl dark:text-white"
+                class="my-6 text-2xl font-semibold text-gray-800 md:text-3xl "
               >
                 We’d love to hear from you!
               </h1>
@@ -123,10 +123,10 @@ onMounted(()=>{
             class="grid grid-cols-1 gap-12 mt-10 lg:grid-cols-3 sm:grid-cols-2"
           >
             <div
-              class="p-4 rounded-lg bg-white md:p-6 dark:bg-gray-800 border shadow-xl"
+              class="p-4 rounded-lg bg-white md:p-6  border shadow-xl"
             >
               <span
-                class="inline-block p-3 text-white rounded-lg bg-[#D98757] dark:bg-[#D98757]"
+                class="inline-block p-3 text-white rounded-lg bg-[#D98757] "
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -145,23 +145,23 @@ onMounted(()=>{
               </span>
 
               <h2
-                class="mt-4 text-base font-medium text-gray-800 dark:text-white"
+                class="mt-4 text-base font-medium text-gray-800 "
               >
                 Email us
               </h2>
-              <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <p class="mt-2 text-sm text-gray-500 ">
                 Reach out to our church.
               </p>
-              <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <p class="mt-2 text-sm text-gray-500 ">
                 mcmc.com
               </p>
             </div>
 
             <div
-              class="p-4 rounded-lg bg-white md:p-6 dark:bg-gray-800 border shadow-xl"
+              class="p-4 rounded-lg bg-white md:p-6  border shadow-xl"
             >
               <span
-                class="inline-block p-3 text-white rounded-lg bg-[#D98757] dark:bg-[#D98757]"
+                class="inline-block p-3 text-white rounded-lg bg-[#D98757] "
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -185,23 +185,23 @@ onMounted(()=>{
               </span>
 
               <h2
-                class="mt-4 text-base font-medium text-gray-800 dark:text-white"
+                class="mt-4 text-base font-medium text-gray-800 "
               >
                 Visit us
               </h2>
-              <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <p class="mt-2 text-sm text-gray-500 ">
                 Visit our church
               </p>
-              <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <p class="mt-2 text-sm text-gray-500 ">
                 100 Smith Street Collingwood VIC 3066 AU
               </p>
             </div>
 
             <div
-              class="p-4 rounded-lg bg-white md:p-6 dark:bg-gray-800 border shadow-xl"
+              class="p-4 rounded-lg bg-white md:p-6  border shadow-xl"
             >
               <span
-                class="inline-block p-3 text-white rounded-lg bg-[#D98757] dark:bg-[#D98757]"
+                class="inline-block p-3 text-white rounded-lg bg-[#D98757] "
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -220,14 +220,14 @@ onMounted(()=>{
               </span>
 
               <h2
-                class="mt-4 text-base font-medium text-gray-800 dark:text-white"
+                class="mt-4 text-base font-medium text-gray-800 "
               >
                 Call us
               </h2>
-              <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <p class="mt-2 text-sm text-gray-500 ">
                 Mon-Fri from 8am to 5pm.
               </p>
-              <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <p class="mt-2 text-sm text-gray-500 ">
                 +1 (555) 000-0000
               </p>
             </div>

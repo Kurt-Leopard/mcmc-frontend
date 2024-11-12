@@ -1,6 +1,5 @@
 <template>
-  <div class="dashboard mt-32">
-    <h2 class="text-lg font-bold">Church Cash Flow Dashboard</h2>
+  <div class="my-[150px] px-4 lg:px-[50px] xl:px-32">
     <div class="charts">
       <div class="chart-container">
         <Bar :data="combinedChartData" :options="chartOptions" />
@@ -91,9 +90,7 @@ onMounted(()=>{
 </script>
 
 <style scoped>
-.dashboard {
-  padding: 20px;
-}
+
 .charts {
   display: flex;
   justify-content: space-between;

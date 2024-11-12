@@ -15,7 +15,7 @@
         </button>
       </nav>
       <main
-        class="border h-[500px] overflow-y-auto overflow-x-hidden element-with-horizontal-scroll"
+        class="border h-[80vh] overflow-y-auto overflow-x-hidden element-with-horizontal-scroll"
         ref="scrollContainer"
       >
         <div
@@ -152,7 +152,7 @@ const mention = (name, user_id) => {
   user_1.value = store.user.id;
   user_2.value = user_id;
   notify_event_id.value = props.id;
-  console.log(store.user.id);
+
   comment.value = `@${name} `;
 };
 const highlightMentions = (text) => {
@@ -174,7 +174,7 @@ const cancelButtonShowDeleteModal = () => {
   isDeleteModalShow.value = false;
 };
 const buttonSendComment = async (event_id, user_id) => {
-  console.log(type.value);
+
   if (type.value !== "put") {
     const data = {
       event_id: props.id,
@@ -251,7 +251,7 @@ const refreshData = async () => {
     }
   } catch (error) {
     if (error.response.status === 404) {
-      console.log(error.response.data.message);
+
       comments.value = [];
     }
   }

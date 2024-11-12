@@ -4,10 +4,11 @@ export const useAuthStore = defineStore("auth", {
     state: () => ({
         token: getCookie('accessToken') || sessionStorage.getItem("accessRole"),
         user: '',
-        role:'',
-        accessControl:'',
+        role: '',
+        accessControl: '',
         login: false,
-        
+        triggerMethod: null,
+
         toast: []
     }),
     actions: {
@@ -38,7 +39,7 @@ export const useAuthStore = defineStore("auth", {
         getToken() {
             return this.token;
         },
-      
+
         setToastSuccess(data) {
             this.toast.push(data);
         },
@@ -47,6 +48,13 @@ export const useAuthStore = defineStore("auth", {
         },
         clearToast() {
             this.toast = [];
+        },
+
+        setMethod(data) {
+            this.triggerMethod = data;
+        },
+        getMethod() {
+            return this.triggerMethod;  // Return the stored function
         },
 
     },

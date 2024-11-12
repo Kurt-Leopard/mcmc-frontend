@@ -28,7 +28,7 @@ const refreshData = async () => {
     // Check if there's more data for pagination
     hasMoreData.value = response.data.data.length === itemsPerPage.value;
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    console.log("Error fetching user data:", error);
   }
 };
 
@@ -40,7 +40,7 @@ const refreshRole = async () => {
       roles.value = response.data.result; // Assume result is the list of roles
     }
   } catch (error) {
-    console.error("Error fetching roles:", error);
+    console.log("Error fetching roles:", error);
   }
 };
 
@@ -82,7 +82,7 @@ const saveRole = async () => {
     closeModal();
     refreshData(); // Refresh the user list after updating
   } catch (error) {
-    console.error("Error saving role:", error);
+    console.log("Error saving role:", error);
   }
 };
 

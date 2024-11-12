@@ -31,7 +31,7 @@ const caption = ref("");
 const images = ref([]);
 const imagePreviews = ref([]);
 const token = ref("");
-const profile = ref();
+const profile = ref(null);
 const scripture = ref("");
 const translation = ref("NIV");
 const passage = ref("");
@@ -72,8 +72,20 @@ let store = useAuthStore();
 if (store.token) {
   token.value = decodeJWT(store.token);
 }
+const fetchUserProfile = () => {
+  profile.value = store.getUser();
+};
 
-profile.value = store.getUser();
+watch(
+  () => props.isModalShow,
+  (newVal) => {
+    if (newVal) {
+      fetchUserProfile();
+    } else {
+      profile.value = null; // Clear profile data when modal is hidden
+    }
+  }
+);
 
 //  hide modal gallery
 const buttonHideModal = () => {
@@ -410,7 +422,7 @@ watch([scripture, translation], async ([newScripture, newTranslation]) => {
 
       passage.value = response.data.scriptures;
     } catch (error) {
-      console.error("Fetch error:", error);
+      console.log("Fetch error:", error);
     }
   } else {
     passage.value = "";
@@ -422,7 +434,7 @@ watch([scripture, translation], async ([newScripture, newTranslation]) => {
     v-show="isModalShow"
     class="fixed top-0 left-0 w-full h-screen flex items-center justify-center bg-white sm:bg-black sm:bg-opacity-50 md:bg-black md:bg-opacity-50 lg:bg-black lg:bg-opacity-50 xl:bg-black xl:bg-opacity-50 z-[101]"
   >
-    <form
+    <form v-if="profile" 
       @submit.prevent="submitForm"
       class="bg-white rounded-lg sm:shadow-lg md:shadow-lg lg:shadow-lg xl:shadow-lg w-full sm:w-[500px] h-screen sm:h-auto md:h-auto lg:h-auto xl:h-auto md:w-[500px] lg:w-[500px] xl:w-[500px]"
     >
@@ -453,9 +465,9 @@ watch([scripture, translation], async ([newScripture, newTranslation]) => {
         />
         <div class="max-h-[580px] overflow-y-auto w-full">
           <div class="flex items-center px-4" v-if="store.token">
-            <img
+            <img 
               :src="`https://storage.googleapis.com/mcm-chuch.appspot.com/${profile.profile}`"
-              class="rounded-full h-12 w-12 mr-4"
+              class="rounded-full h-[45px] w-[45px] mr-4"
               loading="lazy"
             />
             <div>
@@ -589,12 +601,8 @@ watch([scripture, translation], async ([newScripture, newTranslation]) => {
             <button
               :disabled="loaderText === '' ? false : true"
               type="submit"
-              :class="[
-                sendBy === 'gallery' || sendBy === 'event'
-                  ? 'bg-[#D98757] hover:bg-[#D98757]'
-                  : 'bg-red-500 hover:bg-red-500'
-              ]"
-              class="w-full flex items-center justify-center px-4 py-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D98757]"
+            
+              class="bg-[#D98757] hover:bg-[#D98757] w-full flex items-center justify-center px-4 py-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D98757]"
             >
               <svg
                 v-if="loaderText"
