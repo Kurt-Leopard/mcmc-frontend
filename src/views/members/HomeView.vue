@@ -17,10 +17,10 @@ import DevotionalContent from "../../components/slot/DevotionalContent.vue";
 import DevotionalPaginate from "../../components/slot/DevotionalPaginate.vue";
 import { fetchUser } from "../../composables/user";
 
-const store =useAuthStore();
+const store = useAuthStore();
 const storeID = ref();
-if(store.token){
- storeID.value= decodeJWT(store.token);
+if (store.token) {
+  storeID.value = decodeJWT(store.token);
 }
 const galleries = ref([]);
 const currentPage = ref(1);
@@ -41,7 +41,7 @@ const isModalShow = ref(false);
 const sendBy = ref("");
 const method = ref("");
 const setDefault = ref();
-const searchBy =ref("");
+const searchBy = ref("");
 
 const showFullCaption = ref([]);
 const animate = ref();
@@ -71,6 +71,10 @@ let id;
 watch(searchBy, (newVal, oldVal) => {
   if (newVal !== oldVal) {
     refreshData();
+      isLoading.value = false;
+    setTimeout(() => {
+      isLoading.value = true;
+    }, 2000);
   }
 });
 // fetch
@@ -85,7 +89,7 @@ const refreshData = async () => {
   }
 };
 
-const refreshDataDevotional =async()=>{
+const refreshDataDevotional = async () => {
   const responseDevitional = await axios.get(
     `/devotional?page=${devoCurrentPage.value}&limit=${devoItemsPerPage}`
   );
@@ -94,7 +98,7 @@ const refreshDataDevotional =async()=>{
   } else {
     console.log(response.data.message);
   }
-}
+};
 
 const toggleCaption = (index) => {
   showFullCaption.value[index] = !showFullCaption.value[index];
@@ -148,7 +152,6 @@ const buttonShowModal = (methodType, sentBy, data, modal_id) => {
     method.value = methodType;
     setDefault.value = data;
     id = modal_id;
-    console.log(data);
   }
 };
 
@@ -187,7 +190,6 @@ const buttonHideModal = (is_true) => {
   setTimeout(() => {
     animate.value = "";
   }, 300);
-  console.log(animate.value);
   // clear setdefualt from all edit
   setDefault.value = {};
   isModalShow.value = false;
@@ -229,7 +231,7 @@ const cancelButtonShowDeleteModal = (is_true) => {
 
 // paginate
 const nextPage = () => {
-  if (galleries.value.length-2 > currentPage.value) {
+  if (galleries.value.length - 2 > currentPage.value) {
     currentPage.value++;
     refreshData();
   } else {
@@ -252,7 +254,7 @@ const devoPrevPage = () => {
 };
 
 const devoNextPage = () => {
-  if (devotional.value.length-2> devoCurrentPage.value) {
+  if (devotional.value.length - 2 > devoCurrentPage.value) {
     devoCurrentPage.value++;
     refreshDataDevotional();
   } else {
@@ -263,16 +265,12 @@ const handleRefreshData = () => {
   refreshData();
   refreshDataDevotional();
 };
-const isLoading = ref(true); 
+const isLoading = ref(true);
 
-
-onMounted(async() => {
+onMounted(async () => {
   refreshData();
   refreshDataDevotional();
   await fetchUser();
-   setTimeout(() => {
-    isLoading.value = false; 
-  }, 1000); 
 });
 </script>
 
@@ -281,25 +279,25 @@ onMounted(async() => {
   <!-- container -->
   <div class="py-3 px-4 lg:px-[50px] xl:px-32 mt-[60px] lg:mt-24 xl:mt-24">
     <!-- main wrap -> contain L&R sidebar -->
-    <main class="flex w-full">
+    <main class="flex w-full mb-24">
       <Left-Sidebar>
         <Sub-Header>
           <div class="flex items-center gap-2 pt-2 pb-0 lg:pb-3 xl:pb-3">
             <img
               :src="`https://storage.googleapis.com/mcm-chuch.appspot.com/${store.user.profile}`"
               alt="User profile"
-              class="w-12 h-12 rounded-full"
+              class="w-[45px] h-[45px] rounded-full"
               loading="lazy"
             />
             <textarea
               v-model="searchBy"
               rows="1"
-              class="w-full h-12 resize-none truncate border border-gray-300 rounded-full p-[12px] text-left xs:text-sm sm:text-lg dark:bg-gray-700 dark:text-white dark:border-gray-500"
+              class="w-full h-12 resize-none truncate border border-gray-300 rounded-full p-[12px] text-left xs:text-sm sm:text-lg   "
               placeholder="Search the post"
             ></textarea>
             <div class="text-gray-600 flex items-center">
               <a
-                class="relative flex text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold flex items-center cursor-pointer"
+                class="relative flex text-gray-600 hover:text-gray-800  font-bold flex items-center cursor-pointer"
                 ><div class="relative group">
                   <i
                     class="fas fa-plus p-2 bg-gray-100 text-lg rounded-lg group-hover:block cursor-pointer"
@@ -311,11 +309,11 @@ onMounted(async() => {
                     <!-- Add post -->
                     <nav
                       @click="buttonShowModal('post', 'gallery')"
-                      class="flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                      class="flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-gray-100 "
                     >
                       <i class="fas fa-images text-blue-400 p-2 rounded-lg"></i>
                       <h3
-                        class="text-sm font-semibold text-gray-600 dark:text-gray-300"
+                        class="text-sm font-semibold text-gray-600 "
                       >
                         Create post
                       </h3>
@@ -323,11 +321,11 @@ onMounted(async() => {
                     <!-- Add devotional -->
                     <nav
                       @click="buttonShowModal('post', 'devotional')"
-                      class="flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                      class="flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-gray-100 "
                     >
                       <i class="fas fa-book text-red-500 p-2 rounded-lg"></i>
                       <h3
-                        class="text-sm font-semibold xs:truncate text-gray-600 dark:text-gray-300"
+                        class="text-sm font-semibold xs:truncate text-gray-600 "
                       >
                         Create devotional
                       </h3>
@@ -342,7 +340,7 @@ onMounted(async() => {
             <div
               @click="toggleAllposts"
               :class="Allposts ? 'border-b-2 border-blue-400' : ''"
-              class="flex xl:hidden lg:hidden cursor-pointer items-center text-sm font-semibold text-gray-600 dark:text-gray-300"
+              class="flex xl:hidden lg:hidden cursor-pointer items-center text-sm font-semibold text-gray-600 "
             >
               <a href="#">
                 <i class="fas fa-image text-blue-400 mr-2"></i>
@@ -358,7 +356,7 @@ onMounted(async() => {
               <a href="#" class="flex items-center justify-center">
                 <i class="fas fa-book text-red-500 mr-2"></i>
                 <h3
-                  class="text-sm font-semibold xs:truncate text-gray-600 dark:text-gray-300"
+                  class="text-sm font-semibold xs:truncate text-gray-600 "
                 >
                   Daily Devotions
                 </h3>
@@ -366,19 +364,19 @@ onMounted(async() => {
             </div>
 
             <div
-              class="flex items-center gap-2 p-2 rounded-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+              class="flex items-center gap-2 p-2 rounded-sm cursor-pointer hover:bg-gray-100 "
             >
               <i class="fas fa-sort-amount-down text-yellow-700"></i>
 
               <h3
-                class="text-sm font-semibold text-gray-600 dark:text-gray-300"
+                class="text-sm font-semibold text-gray-600 "
               >
                 Sort By
               </h3>
             </div>
           </div>
         </Sub-Header>
-        <Post-Content :showAllpost="showAllpost" v-if="galleries.length!==0 ">
+        <Post-Content :showAllpost="showAllpost" v-if="galleries.length !== 0">
           <tr
             v-for="(gallery, index) in galleries"
             :key="gallery.id"
@@ -398,17 +396,18 @@ onMounted(async() => {
                 <div class="flex items-center mb-4">
                   <img
                     :src="`https://storage.googleapis.com/mcm-chuch.appspot.com/${gallery.profile}`"
-                    class="rounded-full h-12 w-12 mr-4"
+                    class="rounded-full w-[45px] h-[45px] mr-4"
                     loading="lazy"
                   />
                   <div>
-                    <div class="font-semibold">{{ gallery.fullname  }}</div>
+                    <div class="font-semibold">{{ gallery.fullname }}</div>
                   </div>
                 </div>
 
                 <div class="relative flex items-center mb-4 text-gray-600">
                   <!-- option btn -->
-                  <i v-if="storeID.id===gallery.user_id"
+                  <i
+                    v-if="storeID.id === gallery.user_id"
                     @click="optionButtonShow(index)"
                     class="fa fa-ellipsis mr-1 hover:bg-gray-100 p-3 rounded-full"
                   >
@@ -508,14 +507,14 @@ onMounted(async() => {
             <!--The table data-2 contains an image slider-->
             <td
               v-if="parseImages(galleries[index].images).length !== 0"
-              class="block w-full relative dark:text-gray-900"
+              class="block w-full relative "
             >
               <div
                 class="flex items-center justify-start w-full h-full gap-6 py-4 overflow-auto lg:gap-8 element-with-horizontal-scroll"
               >
                 <div class="relative flex flex-shrink-0 w-full max-h-auto">
                   <img
-                    class="rounded-xl max-h-[650px] w-full"
+                    class="rounded-xl w-full"
                     :src="`https://storage.googleapis.com/mcm-chuch.appspot.com/${
                       index === indexParent[index]
                         ? parseImages(galleries[index].images)[
@@ -553,23 +552,27 @@ onMounted(async() => {
             </td>
           </tr>
         </Post-Content>
+        <!-- skeleton loader -->
         <section v-else v-show="!isLoading" class="w-full h-full">
-         <div class="py-4 rounded   animate-pulse  w-full">
-    <div class="flex p-4 space-x-4 sm:px-8">
-        <div class="flex-shrink-0 w-16 h-16 rounded-full bg-gray-300"></div>
-        <div class="flex-1 py-2 space-y-4">
-            <div class="w-full h-3 rounded bg-gray-300"></div>
-            <div class="w-5/6 h-3 rounded bg-gray-300"></div>
-        </div>
-    </div>
-    <div class="p-4 space-y-4 sm:px-8">
-        <div class="w-1/2 h-4 rounded bg-gray-300"></div>
-        <div class="w-2/3 h-4 rounded bg-gray-300"></div>
-        <div class="w-full h-[200px] rounded bg-gray-300"></div>
-    </div>
-</div>
+          <div class="py-4 rounded animate-pulse w-full">
+            <div class="flex p-4 space-x-4 sm:px-8">
+              <div
+                class="flex-shrink-0 w-16 h-16 rounded-full bg-gray-300"
+              ></div>
+              <div class="flex-1 py-2 space-y-4">
+                <div class="w-full h-3 rounded bg-gray-300"></div>
+                <div class="w-5/6 h-3 rounded bg-gray-300"></div>
+              </div>
+            </div>
+            <div class="p-4 space-y-4 sm:px-8">
+              <div class="w-1/2 h-4 rounded bg-gray-300"></div>
+              <div class="w-2/3 h-4 rounded bg-gray-300"></div>
+              <div class="w-full h-[200px] rounded bg-gray-300"></div>
+            </div>
+          </div>
         </section>
-        <Post-Paginate v-if="showAllpost"
+        <Post-Paginate
+          v-if="showAllpost"
           :galleries="[galleries.length, showAllpost, currentPage]"
           @prevPage="prevPage"
           @nextPage="nextPage"
@@ -594,7 +597,7 @@ onMounted(async() => {
                   <div class="flex items-center mb-4">
                     <img
                       :src="`https://storage.googleapis.com/mcm-chuch.appspot.com/${devotion.profile}`"
-                      class="rounded-full h-12 w-12 mr-4"
+                      class="rounded-full w-[45px] h-[45px] mr-4"
                       loading="lazy"
                     />
                     <div>
@@ -602,7 +605,8 @@ onMounted(async() => {
                     </div>
                   </div>
                   <div class="relative flex items-center mb-4 text-gray-600">
-                    <i   v-if="storeID.id===devotion.user_id"
+                    <i
+                      v-if="storeID.id === devotion.user_id"
                       @click="optionButtonShowDevo(index)"
                       class="fa fa-ellipsis mr-1 hover:bg-gray-100 p-3 rounded-full"
                     ></i>
@@ -744,7 +748,8 @@ onMounted(async() => {
                 </div>
               </div>
               <div class="relative flex items-center mb-4 text-gray-600">
-                <i  v-if="storeID.id===devotion.user_id"
+                <i
+                  v-if="storeID.id === devotion.user_id"
                   @click="optionButtonShowDevo(index)"
                   class="fa fa-ellipsis mr-1 hover:bg-gray-100 p-3 rounded-full"
                 ></i>

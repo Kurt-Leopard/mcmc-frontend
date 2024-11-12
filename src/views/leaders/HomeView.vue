@@ -1,6 +1,6 @@
 <template>
   <main
-    class="py-3 px-4 lg:px-[50px] xl:px-32 mb-12 mt-[115px] lg:mt-32 xl:mt-32"
+    class="py-8 px-4 lg:px-[50px] xl:px-32 mb-12 mt-[115px] lg:mt-32 xl:mt-32"
   >
     <div class="flex">
       <div

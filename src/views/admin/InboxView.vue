@@ -143,7 +143,7 @@ const fetchEmails = async () => {
     const response = await axios.get(`/api/contact?page=${currentPage.value}&limit=${itemsPerPage.value}&searchBy=${searchBy.value}&searchByDate=${searchByDate.value}`);
     emails.value = response.data.result; // Set the fetched emails
   } catch (error) {
-    console.error('Error fetching emails:', error);
+    console.log('Error fetching emails:', error);
   }
 };
 

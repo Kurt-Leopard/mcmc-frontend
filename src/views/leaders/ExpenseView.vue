@@ -1,6 +1,6 @@
 <script setup>
 import axios from "../../../axios";
-import { onMounted, ref, watch, provide } from "vue";
+import { onMounted, ref, watch, provide, watchEffect } from "vue";
 import PostComponent from "../../components/leader/modal/PostComponent.vue";
 import RequestComponent from "../../components/leader/modal/RequestComponent.vue";
 import ChangeLogComponent from "../../components/leader/modal/ChangeLogComponent.vue";
@@ -84,6 +84,14 @@ const refreshData = async () => {
     }
   }
 };
+
+watchEffect(() => {
+  const methodResult = store.getMethod(); // Get the method's value or effect
+  if (methodResult) {
+    refreshDataRequest();
+     store.setMethod(null)
+  }
+});
 watch([currentPage, searchBy, searchByDate, typeOfExpense], refreshData);
 const errorResponse = ref(false);
 const refreshDataRequest = async () => {
@@ -122,6 +130,7 @@ onMounted(async () => {
   await accessControl();
   access_control.value = store.getAccessControl().access_control;
   window.scrollTo(0, 0);
+  store.getMethod();
 });
 </script>
 
@@ -205,7 +214,7 @@ onMounted(async () => {
         >
           <select
             v-model="typeOfExpense"
-            class="py-3 px-4 pe-9 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+            class="py-3 px-4 pe-9 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
           >
             <option value="Bill">Bill</option>
             <option value="Ministry">Ministry</option>
@@ -275,11 +284,20 @@ onMounted(async () => {
             </div>
             <div class="flex justify-between mb-4">
               <span class="text-xs text-gray-700 font-mono">total Spent:</span>
-              <span class="text-xs font-mono">{{ expense.spent || '0.00' }}</span>
+              <span class="text-xs font-mono">{{
+                expense.spent || "0.00"
+              }}</span>
             </div>
-             <div class="flex justify-between mb-4">
+            <div class="flex justify-between mb-4">
               <span class="text-xs text-gray-700 font-mono">total Change:</span>
-              <span :class="expense.spent!==null? ' bg-green-100 rounded-md p-1 text-xs font-mono':'text-xs font-mono'" >{{ expense.total_change || '0.00' }}</span>
+              <span
+                :class="
+                  expense.spent !== null
+                    ? ' bg-green-100 rounded-md p-1 text-xs font-mono'
+                    : 'text-xs font-mono'
+                "
+                >{{ expense.total_change || "0.00" }}</span
+              >
             </div>
             <div class="border-t border-gray-300 my-3"></div>
             <div
@@ -326,7 +344,8 @@ onMounted(async () => {
     <RequestComponent v-if="request" @closeRequest="closeRequest" />
     <ChangeLogComponent
       v-if="isExpenseLog"
-      @closeExpenseLog="closeExpenseLog" @refreshData="refreshData"
+      @closeExpenseLog="closeExpenseLog"
+      @refreshData="refreshData"
     />
   </main>
 </template>

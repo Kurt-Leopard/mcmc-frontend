@@ -9,19 +9,19 @@
       >
         <!-- Modal content -->
         <div
-          class="relative bg-white md:rounded-lg lg:rounded-lg xl:rounded-lg shadow dark:bg-gray-700"
+          class="relative bg-white md:rounded-lg lg:rounded-lg xl:rounded-lg shadow"
         >
           <!-- Modal header -->
           <div
-            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
+            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t"
           >
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 class="text-lg font-semibold text-gray-900">
               Budget Allocation Entry
             </h3>
             <button
               @click="closeBudgetEntry"
               type="button"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
             >
               <svg
                 class="w-3 h-3"
@@ -47,24 +47,27 @@
               <div class="col-span-2 sm:col-span-1">
                 <label
                   for="price"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  class="block mb-2 text-sm font-medium text-gray-900"
                   >Amount</label
                 >
 
                 <input
                   v-model="budget.amount"
+                  @input="
+                    budget.amount = budget.amount < 0 ? 0 : budget.amount
+                  "
                   type="number"
                   name="price"
                   id="price"
-                  class="bg-gray-50 border border-gray-300 mr-1 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                  placeholder="₱ 2999"
+                  class="bg-gray-50 border border-gray-300 mr-1 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  placeholder="₱ 0.00"
                   required
                 />
               </div>
             </div>
             <button
               type="submit"
-              class="text-white inline-flex items-center justify-center w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="text-white inline-flex items-center justify-center w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4"
             >
               Save
             </button>
@@ -81,6 +84,8 @@ import { onMounted, ref } from "vue";
 import { fetchUser } from "../../../composables/user";
 import { useAuthStore } from "../../../stores/store";
 const store = useAuthStore();
+import { useToast } from "vue-toastification";
+const toast = useToast();
 const emit = defineEmits(["closeBudgetEntry"]);
 const budget = ref({
   user_id: "",
@@ -96,12 +101,12 @@ const submitForm = async () => {
   try {
     const response = await axios.post("/api/allocation", budget.value);
     if (response.status === 200) {
-      alert("budget allocated submitted:", response.data.message);
-       emit("closeBudgetEntry");
+      toast.success(response.data.message);
+      emit("closeBudgetEntry");
     }
   } catch (error) {
     if (error.response) {
-      alert(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   }
 };

@@ -45,7 +45,7 @@ const refreshData = async () => {
     }
   } catch (error) {
     if (error.response) {
-      console.error(error.response.data.message);
+      console.log(error.response.data.message);
     }
   }
 };
@@ -64,7 +64,7 @@ const showPrevImage = () => {
 };
 
 const nextPage = () => {
-  console.log(galleries.value.length > 0);
+
   if (galleries.value.length > 1) {
     page.value++;
     refreshData();
@@ -93,12 +93,7 @@ onMounted(refreshData);
           store.token ? "Your Gallery" : "Church Gallery"
         }}</a>
       </div>
-      <!-- <div class="text-gray-600 flex items-center pb-2 uppercase">
-        <a
-          class="text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold flex items-center cursor-pointer"
-          ><i class="fas fa-plus p-2 bg-gray-100 text-lg rounded-lg"></i
-        ></a>
-      </div> -->
+  
     </div>
     <div class="grid grid-cols-2 md:grid-cols-3 gap-5">
       <div

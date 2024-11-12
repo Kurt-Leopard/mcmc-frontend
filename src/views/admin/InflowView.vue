@@ -27,7 +27,7 @@ const refreshData = async () => {
       console.log(response.data.message);
     }
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.log("Error fetching data:", error);
   }
 };
 

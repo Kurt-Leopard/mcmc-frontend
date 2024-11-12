@@ -122,7 +122,7 @@ const buttonShowModal = (methodType, sentBy, data, modal_id) => {
     method.value = methodType;
     setDefault.value = data;
     id = modal_id;
-    console.log(data);
+
   }
 };
 
@@ -161,7 +161,7 @@ const buttonHideModal = (is_true) => {
   setTimeout(() => {
     animate.value = "";
   }, 300);
-  console.log(animate.value);
+
   // clear setdefualt from all edit
   setDefault.value = {};
   isModalShow.value = false;
@@ -187,7 +187,7 @@ const buttonShowDeleteModal = (sendTo, deleteid, indexDelete) => {
 // close modal from the child component
 const cancelButtonShowDeleteModal = (is_true) => {
   animate.value = is_true;
-  console.log(is_true);
+
   setTimeout(() => {
     animate.value = "";
   }, 300);
@@ -256,12 +256,12 @@ onMounted(() => {
             />
             <textarea
               rows="1"
-              class="w-full h-12 resize-none truncate border border-gray-300 rounded-full p-[12px] text-left xs:text-sm sm:text-lg dark:bg-gray-700 dark:text-white dark:border-gray-500"
+              class="w-full h-12 resize-none truncate border border-gray-300 rounded-full p-[12px] text-left xs:text-sm sm:text-lg   "
               placeholder="Search by Category"
             ></textarea>
             <div class="text-gray-600 flex items-center">
               <a
-                class="relative flex text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold flex items-center ursor-pointer"
+                class="relative flex text-gray-600 hover:text-gray-800  font-bold flex items-center ursor-pointer"
                 ><div class="relative group">
                   <i
                     class="fas fa-plus p-2 bg-gray-100 text-lg rounded-lg group-hover:block cursor-pointer"
@@ -273,11 +273,11 @@ onMounted(() => {
                     <!-- Add post -->
                     <nav
                       @click="buttonShowModal('post', 'gallery')"
-                      class="flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                      class="flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-gray-100 "
                     >
                       <i class="fas fa-images text-blue-400 p-2 rounded-lg"></i>
                       <h3
-                        class="text-sm font-semibold text-gray-600 dark:text-gray-300"
+                        class="text-sm font-semibold text-gray-600 "
                       >
                         Create post
                       </h3>
@@ -285,11 +285,11 @@ onMounted(() => {
                     <!-- Add devotional -->
                     <nav
                       @click="buttonShowModal('post', 'devotional')"
-                      class="flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                      class="flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-gray-100 "
                     >
                       <i class="fas fa-book text-red-500 p-2 rounded-lg"></i>
                       <h3
-                        class="text-sm font-semibold xs:truncate text-gray-600 dark:text-gray-300"
+                        class="text-sm font-semibold xs:truncate text-gray-600 "
                       >
                         Create devotional
                       </h3>
@@ -304,7 +304,7 @@ onMounted(() => {
             <div
               @click="toggleAllposts"
               :class="Allposts ? 'border-b-2 border-blue-400' : ''"
-              class="flex xl:hidden lg:hidden cursor-pointer items-center text-sm font-semibold text-gray-600 dark:text-gray-300"
+              class="flex xl:hidden lg:hidden cursor-pointer items-center text-sm font-semibold text-gray-600 "
             >
               <a href="#">
                 <i class="fas fa-image text-blue-400 mr-2"></i>
@@ -320,7 +320,7 @@ onMounted(() => {
               <a href="#" class="flex items-center justify-center">
                 <i class="fas fa-book text-red-500 mr-2"></i>
                 <h3
-                  class="text-sm font-semibold xs:truncate text-gray-600 dark:text-gray-300"
+                  class="text-sm font-semibold xs:truncate text-gray-600 "
                 >
                   Daily Devotions
                 </h3>
@@ -328,12 +328,12 @@ onMounted(() => {
             </div>
 
             <div
-              class="flex items-center gap-2 p-2 rounded-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+              class="flex items-center gap-2 p-2 rounded-sm cursor-pointer hover:bg-gray-100 "
             >
               <i class="fas fa-sort-amount-down text-yellow-700"></i>
 
               <h3
-                class="text-sm font-semibold text-gray-600 dark:text-gray-300"
+                class="text-sm font-semibold text-gray-600 "
               >
                 Sort By
               </h3>
@@ -469,7 +469,7 @@ onMounted(() => {
 
             <!--The table data-2 contains an image slider-->
             <td
-              class="block w-full relative dark:text-gray-900"
+              class="block w-full relative "
               @click="
                 viewImagesGallery(index, parseImages(gallery.images).length)
               "

@@ -25,7 +25,7 @@ const scrollToTop = () => {
         loading="lazy"
     /></RouterLink>
     <a
-      class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+      class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800 "
     >
       <svg
         class=""
@@ -51,7 +51,7 @@ const scrollToTop = () => {
       </svg>
     </a>
     <a
-      class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+      class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800 "
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +70,7 @@ const scrollToTop = () => {
     </a>
     <!-- parametre -->
     <a
-      class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+      class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800 "
     >
       <svg
         class=""
@@ -86,7 +86,7 @@ const scrollToTop = () => {
       </svg>
     </a>
     <a
-      class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+      class="w-full flex items-center justify-center text-gray-600 hover:text-gray-800 "
     >
       <svg
         @click="scrollToTop"

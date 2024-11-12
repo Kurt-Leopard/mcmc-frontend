@@ -246,7 +246,7 @@ const submitForm = async () => {
     >
       <div
         @click="buttonMission"
-        class="flex flex-col items-center p-4 bg-white my-8 rounded-lg shadow-lg border lg:border-0 lg:shadow-none xl:border-0 xl:shadow-none"
+        class="flex flex-col items-center p-4 bg-white my-8 rounded-lg shadow-lg border lg:border-0 lg:shadow-none xl:border-0 xl:shadow-none cursor-pointer"
       >
         <i class="text-[#D98757] bg-orange-50 p-5 my-3 rounded-full">
           <svg
@@ -274,7 +274,7 @@ const submitForm = async () => {
       </div>
       <div
         v-if="mission"
-        class="modal hidden fixed w-full h-full top-0 left-0 flex items-center justify-center z-30 lg:flex xl:flex"
+        class="modal hidden fixed w-full h-full top-0 left-0 flex items-center justify-center z-30 lg:flex xl:flex cursor-pointer"
       >
         <!-- hoverlay  -->
         <div
@@ -308,7 +308,7 @@ const submitForm = async () => {
             <div class="mt-4 flex justify-end">
               <button
                 @click="closeMission"
-                class="modal-close px-4 bg-gray-100 p-3 rounded-lg text-black hover:bg-gray-200"
+                class="modal-close px-4 bg-gray-100 p-3 rounded-lg text-black hover:bg-gray-200 cursor-pointer"
               >
                 Cancel
               </button>
@@ -319,7 +319,7 @@ const submitForm = async () => {
       <!-- vission -->
       <div
         @click="buttonVision"
-        class="flex flex-col items-center p-4 my-8 bg-white rounded-lg shadow-lg border lg:border-0 lg:shadow-none xl:border-0 xl:shadow-none"
+        class="flex flex-col items-center p-4 my-8 bg-white rounded-lg shadow-lg border lg:border-0 lg:shadow-none xl:border-0 xl:shadow-none cursor-pointer"
       >
         <i
           class="fas fa-eye text-[#D98757] bg-orange-50 p-6 my-3 rounded-full"
@@ -336,7 +336,7 @@ const submitForm = async () => {
 
       <div
         v-if="vision"
-        class="modal hidden fixed w-full h-full top-0 left-0 flex items-center justify-center z-30 lg:flex xl:flex"
+        class="modal hidden fixed w-full h-full top-0 left-0 flex items-center justify-center z-30 lg:flex xl:flex cursor-pointer"
       >
         <!-- hoverlay  -->
         <div
@@ -370,7 +370,7 @@ const submitForm = async () => {
             <div class="mt-4 flex justify-end">
               <button
                 @click="closeVision"
-                class="modal-close px-4 bg-gray-100 p-3 rounded-lg text-black hover:bg-gray-200"
+                class="modal-close px-4 bg-gray-100 p-3 rounded-lg text-black hover:bg-gray-200 cursor-pointer "
               >
                 Cancel
               </button>
@@ -381,7 +381,7 @@ const submitForm = async () => {
       <!-- Goal -->
       <div
         @click="buttonGoal"
-        class="flex flex-col items-center p-4 my-8 bg-white rounded-lg shadow-lg border lg:border-0 lg:shadow-none xl:border-0 xl:shadow-none"
+        class="flex flex-col items-center p-4 my-8 bg-white rounded-lg shadow-lg border lg:border-0 lg:shadow-none xl:border-0 xl:shadow-none cursor-pointer"
       >
         <i
           class="fas fa-flag text-[#D98757] bg-orange-50 p-6 my-3 rounded-full"
@@ -399,7 +399,7 @@ const submitForm = async () => {
 
       <div
         v-if="goal"
-        class="modal hidden fixed w-full h-full top-0 left-0 flex items-center justify-center z-30 lg:flex xl:flex"
+        class="modal hidden fixed w-full h-full top-0 left-0 flex items-center justify-center z-30 lg:flex xl:flex cursor-pointer"
       >
         <!-- hoverlay  -->
         <div
@@ -434,7 +434,7 @@ const submitForm = async () => {
             <div class="mt-4 flex justify-end">
               <button
                 @click="closeGoal"
-                class="modal-close px-4 bg-gray-100 p-3 rounded-lg text-black hover:bg-gray-200"
+                class="modal-close px-4 bg-gray-100 p-3 rounded-lg text-black hover:bg-gray-200 cursor-pointer"
               >
                 Cancel
               </button>
@@ -449,7 +449,7 @@ const submitForm = async () => {
           Gallery
         </h1>
         <p
-          class="hidden max-w-screen-sm text-gray-500 dark:text-gray-300 md:block"
+          class="hidden max-w-screen-sm text-gray-500  md:block"
         >
           This section highlights key moments from the Christian Mission
           Church’s ministry. See images of our outreach, service events, and
@@ -462,8 +462,8 @@ const submitForm = async () => {
           <i class="fas fa-images mr-2"></i> View more
         </RouterLink>
       </div>
-      <section class="bg-white">
-        <div class="py-4 mx-auto max-w-screen-xl sm:py-4">
+      <section class="bg-white bg-white">
+        <div class="py-4  sm:py-4">
           <div
             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 h-full"
           >
@@ -472,12 +472,12 @@ const submitForm = async () => {
             >
               <a
                 @click="btnimg(1)"
-                class="group relative flex flex-col overflow-hidden rounded-lg px-4 pb-4 pt-40 flex-grow"
+                class="group relative flex flex-col overflow-hidden rounded-lg px-4 pb-4 pt-40 flex-grow cursor-pointer"
               >
                 <img
                   src="../assets/gallery1.png"
                   alt=""
-                  class="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
+                  class="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out "
                 />
                 <div
                   class="absolute inset-0 bg-gradient-to-b from-gray-900/25 to-gray-900/5"
@@ -488,7 +488,7 @@ const submitForm = async () => {
             <div class="col-span-2 sm:col-span-1 md:col-span-2 bg-stone-50">
               <a
                 @click="btnimg(2)"
-                class="group relative flex flex-col overflow-hidden rounded-lg px-4 pb-4 pt-40 mb-4"
+                class="group relative flex flex-col overflow-hidden rounded-lg px-4 pb-4 pt-40 mb-4 cursor-pointer"
               >
                 <img
                   src="../assets/gallery2.png"
@@ -503,7 +503,7 @@ const submitForm = async () => {
               <div class="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-2">
                 <a
                   @click="btnimg(3)"
-                  class="group relative flex flex-col overflow-hidden rounded-lg px-4 pb-4 pt-40"
+                  class="group relative flex flex-col overflow-hidden rounded-lg px-4 pb-4 pt-40 cursor-pointer"
                 >
                   <img
                     src="../assets/gallery3.png"
@@ -517,7 +517,7 @@ const submitForm = async () => {
                 </a>
                 <a
                   @click="btnimg(4)"
-                  class="group relative flex flex-col overflow-hidden rounded-lg px-4 pb-4 pt-40"
+                  class="group relative flex flex-col overflow-hidden rounded-lg px-4 pb-4 pt-40 cursor-pointer"
                 >
                   <img
                     src="../assets/gallery4.png"
@@ -564,7 +564,7 @@ const submitForm = async () => {
           <img
             :src="'../src/assets/gallery' + (index + 1) + '.png'"
             :alt="'gallery' + (index + 1)"
-            class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px]"
+            class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px] object-cover"
             loading="lazy"
           />
         </div>

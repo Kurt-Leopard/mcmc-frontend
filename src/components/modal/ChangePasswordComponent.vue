@@ -4,8 +4,9 @@
       v-if="!success"
       class="min-h-screen bg-gray-100 flex items-center justify-center fixed top-0 left-0 border w-full z-30"
     >
+    <span class="w-screen h-screen fixed top-0 left-0 bg-gray-100" @click="cancel"></span>
       <div
-        class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-md w-full"
+        class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-md w-full z-40"
       >
         <h1 class="text-center text-2xl font-bold mb-6">Change Password</h1>
         <form @submit.prevent="submitChangePassword">
@@ -219,6 +220,11 @@ import axios from "../../../axios";
 import { useAuthStore } from "../../stores/store";
 import DangerComponent from "../toast/DangerComponent.vue";
 import { fetchUser } from "../../composables/user";
+import { routerKey } from "vue-router";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 const access = localStorage.getItem("access");
 
 const emit = defineEmits(["closePasswordModal"]);
@@ -339,6 +345,10 @@ const submitChange = async () => {
     }
   }
 };
+
+const cancel =()=>{
+    router.push("/");
+}
 onMounted(async () => {
   await fetchUser();
 });

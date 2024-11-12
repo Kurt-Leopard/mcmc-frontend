@@ -9,6 +9,8 @@ import ExpenseComponent from "../../components/leader/modal/ExpenseComponent.vue
 import BudgetComponent from "../../components/leader/modal/BudgetComponent.vue";
 import { useRoute, useRouter } from "vue-router";
 import { relativeTime } from "../../composables/relativeTime";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 const store = useAuthStore();
 const router = useRouter();
@@ -89,7 +91,7 @@ const logout = async () => {
     }
   } catch (error) {
     if (error.response) {
-      alert(error.response.data.data);
+      toast.error(error.response.data.data);
     }
   }
 };
@@ -121,14 +123,13 @@ const goTo = async (type, notification_id) => {
       );
 
       if (response.status === 200) {
-        console.log("success");
         notifyData();
       }
     } catch (error) {
       if (error.response) {
-        console.log(error.response.data.message);
+        toast.error(error.response.data.message);
       } else {
-        console.log("Error:", error.message);
+        toast.error("Error:", error.message);
       }
     }
   }
@@ -201,12 +202,12 @@ onMounted(async () => {
           />
           <div class="px-6">
             <h1
-              class="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 font-bold tracking-[7px]"
+              class="text-sm text-gray-600 hover:text-gray-800  font-bold tracking-[7px]"
             >
               MCM-CHURCH
             </h1>
             <h3
-              class="text-xs text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+              class="text-xs text-gray-600 hover:text-gray-800 "
             >
               Steward-Trust-Manage-Sustain
             </h3>
@@ -217,11 +218,11 @@ onMounted(async () => {
         
         </div>
         <div
-          class="flex items-center justify-end lg:w-full xl:w-full lg:gap-x-3 xl:gap-x-3 text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+          class="flex items-center justify-end lg:w-full xl:w-full lg:gap-x-3 xl:gap-x-3 text-gray-600 hover:text-gray-800 "
         >
           <a
             v-show="store.getToken()"
-            class="relative text-gray-600 hover:text-gray-800  dark:text-gray-200 dark:hover:text-gray-300 group flex hidden md:flex lg:flex xl:flex"
+            class="relative text-gray-600 hover:text-gray-800   group flex hidden md:flex lg:flex xl:flex"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -296,7 +297,7 @@ onMounted(async () => {
           </a>
           <a
             v-show="store.getToken()"
-            class="relative text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300 group"
+            class="relative text-gray-600 hover:text-gray-800  group"
           >
             <svg
               class="hidden md:block lg:block xl:block"
@@ -334,7 +335,7 @@ onMounted(async () => {
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="size-6 hidden md:block lg:block xl:block text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+            class="size-6 hidden md:block lg:block xl:block text-gray-600 hover:text-gray-800 "
           >
             <path
               stroke-linecap="round"
@@ -342,7 +343,7 @@ onMounted(async () => {
               d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
             />
           </svg>
-          <a
+          <RouterLink to="/view/page/profile"
             v-show="store.getToken()"
           
             class="mx-2"
@@ -354,7 +355,7 @@ onMounted(async () => {
               alt=""
               class="h-[45px] w-[45px] rounded-full hidden md:block lg:block xl:block"
             />
-          </a>
+          </RouterLink>
           <a class="flex lg:hidden xl:hidden items-center justify-center">
             <svg
           

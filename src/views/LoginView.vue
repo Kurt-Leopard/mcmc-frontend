@@ -45,6 +45,7 @@ const loginUser = async () => {
       "/user/login",
       { ...data.value },
       {
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

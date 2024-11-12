@@ -75,7 +75,7 @@ const registerUser = async () => {
           msgRequired.value.push(element.msg.msgRequired);
           msgRow.value.push(element.msg.type);
         });
-        console.log(msgRow.value);
+   
       } else if (error.response.status === 409) {
         duplicate.value = error.response.data.message;
       } else {
