@@ -124,7 +124,7 @@ const loginUser = async () => {
             <div
               :class="
                 errorResponseMessage === 'Invalid email format' ||
-                errorResponseMessage === 'Username is required'
+                errorResponseMessage === 'Email is required'
                   ? 'border border-red-500 shake'
                   : ''
               "
@@ -137,7 +137,7 @@ const loginUser = async () => {
                 class="h-9 w-9 px-2 text-[#D98757] rounded-md"
                 :class="
                   errorResponseMessage === 'Invalid email format' ||
-                  errorResponseMessage === 'Username is required'
+                  errorResponseMessage === 'Email is required'
                     ? 'text-red-400 shake'
                     : ''
                 "
@@ -172,7 +172,7 @@ const loginUser = async () => {
                 autocomplete="email"
                 required
                 class="block w-full py-3 px-2 m-1 ml-2 outline-none rounded-sm bg-gray-50"
-                placeholder="Username"
+                placeholder="Email"
                 v-model="data.username"
               />
             </div>
@@ -180,7 +180,7 @@ const loginUser = async () => {
           <small
             v-if="
               errorResponseMessage === 'Invalid email format' ||
-              errorResponseMessage === 'Username is required'
+              errorResponseMessage === 'Email is required'
             "
             class="text-red-400"
             >{{ errorResponseMessage }}</small

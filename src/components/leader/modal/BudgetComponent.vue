@@ -102,6 +102,7 @@ const submitForm = async () => {
     const response = await axios.post("/api/allocation", budget.value);
     if (response.status === 200) {
       toast.success(response.data.message);
+      store.setMethod(true);
       emit("closeBudgetEntry");
     }
   } catch (error) {

@@ -27,13 +27,16 @@ const acknowledge = async (id, amount, typeOfExpense) => {
     });
     if (response.status === 200) {
       toast.success(response.data.message);
+       emit("closeRequest");
     }
   } catch (error) {
     if (error.response) {
       if (error.response.status === 400) {
         toast.error(error.response.data.message);
+         emit("closeRequest");
       } else {
         toast.error(error.response.message);
+         emit("closeRequest");
       }
     }
   }
@@ -47,7 +50,7 @@ const acknowledge = async (id, amount, typeOfExpense) => {
     <div
       class="w-full lg:w-1/2 xl:w-1/2 h-full bg-white p-6 border max-h-full overflow-y-auto element-with-horizontal-scroll"
     >
-      <button @click="closeRequest" class="underline">Close</button>
+      <button @click="closeRequest" class="border px-3.5 py-2 rounded-lg"><i class="fas fa-arrow-left"></i></button>
       <div
         class="w-full h-full flex items-center justify-center"
         v-if="expensesRequest.length === 0"
@@ -92,7 +95,7 @@ const acknowledge = async (id, amount, typeOfExpense) => {
           <div class="border-t border-gray-300 my-3"></div>
           <div class="flex justify-center items-center w-full">
             <button
-              class="bg-green-700 py-2 px-3 text-white rounded-lg"
+              class="bg-green-700 py-2 px-3 text-white"
               @click="
                 acknowledge(
                   expense.expenseId,
