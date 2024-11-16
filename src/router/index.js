@@ -150,6 +150,25 @@ const router = createRouter({
       name: 'AdminInbox',
       component: () => import('../views/admin/InboxView.vue'),
       meta: { requiresAuth: 'admin' }
+    },
+
+    {
+      path: '/view/page/manage/inbox',
+      name: 'AdminInbox',
+      component: () => import('../views/admin/InboxView.vue'),
+      meta: { requiresAuth: 'admin' }
+    },
+    {
+      path: '/view/page/manage/gallery',
+      name: 'AdminGallery',
+      component: () => import('../views/admin/GalleryView.vue'),
+      meta: { requiresAuth: 'admin' }
+    },
+    {
+      path: '/view/page/manage/devotional',
+      name: 'AdminDevotional',
+      component: () => import('../views/admin/DevotionalView.vue'),
+      meta: { requiresAuth: 'admin' }
     }
   ]
 })

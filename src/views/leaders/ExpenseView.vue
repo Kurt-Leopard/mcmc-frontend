@@ -18,6 +18,19 @@ const request = ref(false);
 const expensesRequest = ref([]);
 const typeOfExpense = ref("Ministry");
 const store = useAuthStore();
+const isBoxShow = ref(true);
+
+const filterType = ref("Filter");
+const isDropdownOpen = ref(false);
+const toggleDropdown = () => {
+  isDropdownOpen.value = !isDropdownOpen.value;
+};
+const setFilterType = (type) => {
+  filterType.value = type;
+  isDropdownOpen.value = false;
+  refreshData();
+};
+
 const user = ref("");
 if (store) {
   user.value = decodeJWT(store.token);
@@ -27,7 +40,14 @@ const viewRequest = () => {
 };
 const closeRequest = () => {
   request.value = false;
+  refreshDataRequest();
+  getBalance();
 };
+// store.getMethod().then(() => {
+//    alert("ahah");
+//    refreshAllocation();
+// });
+
 const expenseLog = ref([]);
 const isExpenseLog = ref(false);
 const changeLog = (expense) => {
@@ -85,11 +105,13 @@ const refreshData = async () => {
   }
 };
 
-watchEffect(() => {
+watch(() => {
   const methodResult = store.getMethod(); // Get the method's value or effect
   if (methodResult) {
+    getBalance();
+    refreshAllocation();
     refreshDataRequest();
-     store.setMethod(null)
+    store.setMethod(null);
   }
 });
 watch([currentPage, searchBy, searchByDate, typeOfExpense], refreshData);
@@ -123,10 +145,25 @@ const nextPage = () => {
   currentPage.value++;
   refreshData();
 };
+
+// allocation balance
+const allocation_balance = ref([]);
+const getBalance = async () => {
+  try {
+    const response = await axios.get("/api/allocation-balance");
+    if (response.status === 200) {
+      allocation_balance.value = response.data.results;
+    }
+  } catch (error) {
+    console.error(error.response);
+  }
+};
+
 onMounted(async () => {
   refreshAllocation();
   refreshData();
   refreshDataRequest();
+  getBalance();
   await accessControl();
   access_control.value = store.getAccessControl().access_control;
   window.scrollTo(0, 0);
@@ -141,18 +178,45 @@ onMounted(async () => {
   >
     <div class="my-6 w-full">
       <!--  -->
+
       <div
-        class="md:p-6 lg:p-6 xl:p-6 bg-background rounded-lg md:shadow-md lg:shadow-md xl:shadow-md"
+        class="font-tenor text-primary flex justify-between items-center py-[20px] bg-white px-[15px]"
+        :class="isBoxShow ? 'border-t' : 'border-y'"
       >
+        <span class="text-gray-500 font-semibold">Expense Allocation</span>
+        <span :class="!isBoxShow ? 'rotate-180' : ''"
+          ><svg
+            @click="isBoxShow = !isBoxShow"
+            xmlns="http://www.w3.org/2000/svg"
+            width="17.543"
+            height="10"
+            viewBox="0 0 17.543 10"
+            class="fill-primary"
+          >
+            <g
+              id="arrow-down-sign-to-navigate"
+              transform="translate(-0.001 -97.141)"
+            >
+              <path
+                id="Path_200"
+                data-name="Path 200"
+                d="M8.772,107.141a1.225,1.225,0,0,1-.868-.36L.361,99.238A1.229,1.229,0,0,1,2.1,97.5l6.674,6.675L15.446,97.5a1.228,1.228,0,0,1,1.737,1.737l-7.543,7.543A1.225,1.225,0,0,1,8.772,107.141Z"
+                fill="#555"
+                class="fill-current"
+              ></path>
+            </g></svg
+        ></span>
+      </div>
+      <div v-if="isBoxShow">
         <div>
-          <div class="w-full hidden md:grid lg:grid xl:grid grid-cols-3 gap-4">
+          <div
+            class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4"
+          >
             <div
-              class="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-6 rounded-xl mb-2 shadow-lg md:block lg:block xl:block"
+              class="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-6 rounded-xl mb-2 shadow-lg"
             >
               <div class="flex justify-between items-center mb-4">
-                <span class="text-sm uppercase tracking-wide">
-                  Allocated Budget
-                </span>
+                <span class="text-sm uppercase tracking-wide"> Allocated </span>
                 <div class="text-xs">MCMC</div>
               </div>
               <div
@@ -160,12 +224,12 @@ onMounted(async () => {
                 v-for="(allocated, index) in allocation"
                 :key="index"
               >
-                {{ allocated.amount }}
+                {{ allocated.amount.toFixed(2) }}
               </div>
             </div>
 
             <div
-              class="bg-gradient-to-r from-green-500 to-green-700 text-white p-6 rounded-xl mb-2 shadow-lg md:block lg:block xl:block hidden"
+              class="bg-gradient-to-r from-green-500 to-green-700 text-white p-6 rounded-xl mb-2 shadow-lg"
             >
               <div class="flex justify-between items-center mb-4">
                 <span class="text-sm uppercase tracking-wide"
@@ -173,11 +237,17 @@ onMounted(async () => {
                 >
                 <div class="text-xs">MCMC</div>
               </div>
-              <div class="text-right text-3xl font-semibold">25,000</div>
+              <div
+                class="text-right text-3xl font-semibold"
+                v-for="(balance, index) in allocation_balance"
+                :key="index"
+              >
+                {{ balance.balance.toFixed(2) }}
+              </div>
             </div>
 
             <div
-              class="bg-gradient-to-r from-orange-500 to-orange-700 text-white p-6 rounded-xl mb-2 shadow-lg md:block lg:block xl:block hidden"
+              class="bg-gradient-to-r from-orange-500 to-orange-700 text-white p-6 rounded-xl mb-2 shadow-lg"
             >
               <div class="flex justify-between items-center mb-4">
                 <span class="text-sm uppercase tracking-wide"
@@ -193,26 +263,25 @@ onMounted(async () => {
       <!--  -->
       <PostComponent v-if="buttonPost" @closePostEntry="closePostEntry" />
       <div class="w-full lg:flex xl:flex items-center justify-between">
-        <section class="md:flex lg:flex xl:flex items-center gap-2 w-full">
+        <section class="flex justify-end items-center gap-2 w-full my-5">
           <input
+            v-if="filterType === 'Search' || filterType === 'Filter'"
             v-model="searchBy"
             @input="refreshData"
             type="text"
             placeholder="Search by particular or amount"
-            class="p-2 my-5 border rounded w-full"
+            class="p-2 border rounded w-full"
           />
           <input
+            v-if="filterType === 'Month'"
             v-model="searchByDate"
             @input="refreshData"
             type="month"
             placeholder="Search by month and year"
-            class="border border-gray-300 p-2 rounded lg:w-1/2 xl:w-1/2 w-full"
+            class="border border-gray-300 p-2 rounded w-full"
           />
-        </section>
-        <section
-          class="lg:w-1/3 xl:w-1/3 flex items-center my-2 lg:justify-even xl:justify-even lg:px-6 xl:px-6 gap-6"
-        >
           <select
+            v-if="filterType === 'Type'"
             v-model="typeOfExpense"
             class="py-3 px-4 pe-9 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
           >
@@ -221,10 +290,65 @@ onMounted(async () => {
             <option value="Honorarium">Honorarium</option>
             <option value="Others">Others</option>
           </select>
-          <a
-            class="text-gray-500 flex items-center justify-center px-3.5 hover:text-gray-700 relative"
+
+          <div class="relative rounded-lg">
+            <button
+              @click="toggleDropdown"
+              class="flex items-center gap-2 py-3 px-4 block w-[90px] text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              {{ filterType === "Filter" ? "Filter" : filterType }}  <svg
+         :class="isDropdownOpen ? 'rotate-180' : ''"
+            xmlns="http://www.w3.org/2000/svg"
+            width="17.543"
+            height="10"
+            viewBox="0 0 17.543 10"
+            class="fill-primary"
           >
-            <button @click="viewRequest">
+            <g
+              id="arrow-down-sign-to-navigate"
+              transform="translate(-0.001 -97.141)"
+            >
+              <path
+                id="Path_200"
+                data-name="Path 200"
+                d="M8.772,107.141a1.225,1.225,0,0,1-.868-.36L.361,99.238A1.229,1.229,0,0,1,2.1,97.5l6.674,6.675L15.446,97.5a1.228,1.228,0,0,1,1.737,1.737l-7.543,7.543A1.225,1.225,0,0,1,8.772,107.141Z"
+                fill="#555"
+                class="fill-current"
+              ></path>
+            </g></svg
+        >
+            </button>
+            <div
+              v-if="isDropdownOpen"
+              class="absolute bg-white border border-gray-200 rounded-lg w-full z-10 mt-1"
+            >
+              <div
+                @click="setFilterType('Search')"
+                class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-[14px]"
+              >
+                Keyword
+              </div>
+              <div
+                @click="setFilterType('Month')"
+                class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-[14px]"
+              >
+                Month
+              </div>
+              <div
+                @click="setFilterType('Type')"
+                class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-[14px]"
+              >
+                Type
+              </div>
+            </div>
+          </div>
+          <a
+            class="text-gray-500 flex items-center justify-center hover:text-gray-700 relative"
+          >
+            <button
+              @click="viewRequest"
+              class="py-2.5 px-4 rounded-lg bg-gray-100"
+            >
               <i class="fas fa-clipboard"></i></button
             ><small
               v-if="expensesRequest.length !== 0"
@@ -247,7 +371,9 @@ onMounted(async () => {
         >
           <div class="text-center">
             <i class="fas fa-database text-[100px] text-gray-200"></i>
-            <h1 class="py-3">No data available yet.</h1>
+            <h1 class="py-3 text-gray-500 font-semibold">
+              No data available yet.
+            </h1>
           </div>
         </div>
         <div
@@ -276,7 +402,9 @@ onMounted(async () => {
             </div>
             <div class="flex justify-between mb-4">
               <span class="text-xs text-gray-700 font-mono">Amount:</span>
-              <span class="text-xs font-mono">{{ expense.amount }}</span>
+              <span class="text-xs font-mono">{{
+                expense.amount.toFixed(2)
+              }}</span>
             </div>
             <div class="flex justify-between mb-4">
               <span class="text-xs text-gray-700 font-mono">Particular:</span>

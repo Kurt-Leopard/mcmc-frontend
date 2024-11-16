@@ -1,0 +1,77 @@
+
+
+
+<template>
+  <div>
+    <div v-if="loading" class="text-center text-lg text-gray-500">Loading...</div>
+    
+    <div v-else class="flex justify-around gap-5 p-5  min-h-screen items-center">
+      <div class="p-6 border border-gray-300 rounded-lg text-center bg-white shadow-lg w-1/4">
+
+        <h3 class="text-lg font-semibold text-gray-700 mb-1">Operational Income</h3>
+        <p class="text-2xl font-bold text-blue-300">{{ income.toFixed(2) }}</p>
+      </div>
+
+      <div class="p-6 border border-gray-300 rounded-lg text-center bg-white shadow-lg w-1/4">
+        <h3 class="text-lg font-semibold text-gray-700 mb-1">Restricted Funds</h3>
+        <p class="text-2xl font-bold text-green-600">{{ totalRestrictedFunds.toFixed(2) }}</p>
+      </div>
+
+      <div class="p-6 border border-gray-300 rounded-lg text-center bg-white shadow-lg w-1/4">
+     
+        <h3 class="text-lg font-semibold text-gray-700 mb-1">Tithes of Tithes</h3>
+        <p class="text-2xl font-bold text-orange-600">{{ totalTithesOfTithes.toFixed(2) }}</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from '../../../axios';
+
+// State variables
+const income = ref(null);
+const totalRestrictedFunds = ref(null);
+const totalTithesOfTithes = ref(null);
+const loading = ref(true);
+
+// Fetch data on component mount
+onMounted(async () => {
+  try {
+    // Fetch income data
+    const incomeResponse = await axios.get("/api/saving-income");
+    income.value = incomeResponse.data.result[0]?.amount || 0;
+
+    // Fetch savings data
+    const savingsResponse = await axios.get("/api/savings");
+    totalRestrictedFunds.value = savingsResponse.data.result[0]?.total_restricted_funds || 0;
+    totalTithesOfTithes.value = savingsResponse.data.result[0]?.total_tithes_of_tithes || 0;
+
+    // Set loading to false after data is fetched
+    loading.value = false;
+  } catch (error) {
+    console.error("Error fetching data", error);
+    loading.value = false;
+  }
+});
+</script>
+
+
+
+SELECT 
+    s.*, -- All columns from savings
+    adl.balance AS deduction_balance, 
+    adl.created_at AS deduction_created_at,
+    a.amount AS allocation_amount,
+    a.created_at AS allocation_created_at
+FROM 
+    savings AS s
+LEFT JOIN 
+    allocation_deduction_log AS adl
+ON 
+    s.allocation_deduction_id = adl.id -- Join savings with allocation_deduction_log
+LEFT JOIN 
+    allocation AS a
+ON 
+    adl.allocation_id = a.id; -- Join allocation_deduction_log with allocation

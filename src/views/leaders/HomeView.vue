@@ -8,7 +8,9 @@
       >
 
        <div>
-    <h2 class="text-lg font-bold">Church Cash Flow <button @click="announce">announce</button></h2>
+    <h2 class="text-lg font-bold">Church Cash Flow 
+      <!-- <button @click="announce">announce</button> -->
+      </h2>
     <div class="chart-container">
       <Bar :data="chartData" :options="chartOptions" />
     </div>
