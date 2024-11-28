@@ -20,7 +20,7 @@
       <nav class="p-6 space-y-1.5">
         <!-- Dashboard Link -->
         <RouterLink to="/view/page/manage/home"
-          class="flex items-center gap-x-3.5 py-2 px-2.5 bg-gray-100 text-sm text-gray-700 rounded-lg hover:bg-gray-200 ">
+          class="flex items-center gap-x-3.5 py-2 px-2.5 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 text-sm text-gray-700 rounded-lg hover:bg-gray-200 ">
           <svg class="w-6 h-6"  fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" />

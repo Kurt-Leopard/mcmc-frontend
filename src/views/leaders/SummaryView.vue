@@ -1,109 +1,399 @@
-<template>
-  <div class="relative min-h-screen bg-white flex flex-col items-center justify-center z-30">
-    <!-- Header -->
-    <div class="absolute top-10 left-4 text-white text-lg font-semibold">
-      <i class="fas fa-arrow-left"></i> Scan QR code
-    </div>
-
-    <!-- QR Code Scanner Area -->
-    <div class="relative w-72 h-72 border-4 border-blue-500 rounded-md overflow-hidden">
-      <!-- Video element for the QR scanner -->
-      <video
-        id="qr-video"
-        ref="qrVideo"
-        @canplay="enableScanner"
-        autoplay
-        class="absolute inset-0 w-full h-full object-cover"
-      ></video>
-
-      <!-- Scanning Line -->
-      <div class="absolute w-full h-20 bg-green-500  scanning-line" style="opacity: 0.2;"></div>
-    </div>
-
-    <!-- Flash and Instruction -->
-    <div class="mt-8 flex flex-col items-center text-white">
-      <button class="text-gray-700">
-        <i class="fas fa-bolt text-xl"></i> Scan QR Code
-      </button>
-      <p class="mt-4 text-black">Scan QR code for budget acknowledgment</p>
-    </div>
-  </div>
-</template>
-
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
-import jsQR from "jsqr";
+import axios from "../../../axios";
+import { onMounted, ref } from "vue";
+import { getDate } from "../../composables/date";
+import html2pdf from "html2pdf.js";
+import * as XLSX from "xlsx";
+const allocation = ref([]);
+const refreshAllocation = async () => {
+  try {
+    const response = await axios.get("/api/allocation");
 
-const qrVideo = ref(null);
-let videoStream = null;
-let scanInterval = null;
-
-// Start scanning for QR codes
-const enableScanner = () => {
-  scanInterval = setInterval(scanQR, 100); // Scan every 100ms
-};
-
-// Scan for QR codes in the video feed
-const scanQR = () => {
-  if (qrVideo.value && qrVideo.value.readyState === qrVideo.value.HAVE_ENOUGH_DATA) {
-    const video = qrVideo.value;
-    const canvasElement = document.createElement("canvas");
-    canvasElement.width = video.videoWidth;
-    canvasElement.height = video.videoHeight;
-    const canvas = canvasElement.getContext("2d");
-
-    canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-    const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-    const code = jsQR(imageData.data, imageData.width, imageData.height, {
-      inversionAttempts: "dontInvert",
-    });
-
-    if (code.data) {
-        alert("QR Code Found: " + code.data);
-      console.log("QR Code Found:", code.data);
+    if (response.status === 200) {
+      allocation.value = response.data.results;
+    }
+  } catch (error) {
+    allocation.value = { amount: 0.0 };
+    if (error.response) {
+      console.log(error.response.message);
     }
   }
 };
 
-// Setup the video stream when the component is mounted
-onMounted(() => {
-  navigator.mediaDevices
-    .getUserMedia({ video: { facingMode: "environment" } })
-    .then(function (stream) {
-      videoStream = stream;
-      qrVideo.value.srcObject = stream;
-      enableScanner(); // Start scanning when video is ready
-    })
-    .catch((err) => console.log(err));
-});
+const allocation_balance = ref([]);
+const getBalance = async () => {
+  try {
+    const response = await axios.get("/api/allocation-balance");
+    if (response.status === 200) {
+      allocation_balance.value = response.data.results;
+    }
+  } catch (error) {
+    allocation_balance.value = { balance: 0.0 };
+    console.error(error.response);
+  }
+};
+const totalChange = ref([]);
+const getChange = async () => {
+  try {
+    const response = await axios.get("/api/total-change");
+    if (response.status === 200) {
+      totalChange.value = response.data.results;
+    }
+  } catch (error) {
+    totalChange.value = { total_change_sum: 0.0 };
+    console.error(error.response);
+  }
+};
 
-// Stop scanning when the component is unmounted
-onUnmounted(() => {
-  if (videoStream) {
-    videoStream.getTracks().forEach((track) => track.stop());
+const expenses = ref([]);
+const getExpenses = async () => {
+  try {
+    const response = await axios.get("/api/get-expense-summary");
+    if (response.status === 200) {
+      expenses.value = response.data.results;
+    }
+  } catch (error) {
+    totalChange.value = { total_change_sum: 0.0 };
+    console.error(error.response);
   }
-  if (scanInterval) {
-    clearInterval(scanInterval);
+};
+
+const otherExpenses = ref([]);
+const getOtherExpenses = async () => {
+  try {
+    const response = await axios.get("/api/other-expense");
+    if (response.status === 200) {
+      otherExpenses.value = response.data.results;
+    }
+  } catch (error) {
+    totalChange.value = { total_change_sum: 0.0 };
+    console.error(error.response);
   }
+};
+
+const summaryIncome = ref([]);
+const getsummaryIncome = async () => {
+  try {
+    const response = await axios.get("/api/summary-savings-income");
+    if (response.status === 200) {
+      summaryIncome.value = response.data.results;
+    }
+  } catch (error) {
+    totalChange.value = { total_change_sum: 0.0 };
+    console.error(error.response);
+  }
+};
+const hideSearch = ref(true);
+
+// Export functions (PDF, Excel, Word)
+const exportPDF = () => {
+  hideSearch.value = false;
+  setTimeout(() => {
+    const element = document.getElementById("exportContent");
+    html2pdf()
+      .set({ filename: `mcmc.pdf`, html2canvas: { scale: 2 } })
+      .from(element)
+      .save();
+    hideSearch.value = true;
+  }, 0);
+};
+
+const exportExcel = () => {
+  hideSearch.value = false;
+  setTimeout(() => {
+    const worksheet = XLSX.utils.table_to_sheet(
+      document.querySelector(`#exportContent table`)
+    );
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, activeTab.value);
+    XLSX.writeFile(workbook, `mcmc.xlsx`);
+    hideSearch.value = true;
+  }, 0);
+};
+
+const exportWord = () => {
+  hideSearch.value = false;
+  setTimeout(() => {
+    const content = document.getElementById("exportContent").innerHTML;
+    const header =
+      "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>" +
+      "<head><meta charset='utf-8'><title>Export HTML to Word</title></head><body>";
+    const footer = "</body></html>";
+    const sourceHTML = header + content + footer;
+    const blob = new Blob(["\ufeff", sourceHTML], {
+      type: "application/msword",
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `mcmc.doc`;
+    link.click();
+    hideSearch.value = true;
+  }, 0);
+};
+
+onMounted(() => {
+  refreshAllocation();
+  getBalance();
+  getExpenses();
+  getOtherExpenses();
+  getsummaryIncome();
 });
 </script>
+<template>
+  <div
+    :class="{
+      'py-3 px-4 lg:px-[50px] xl:px-32 mb-12 mt-[115px] lg:mt-32 xl:mt-32': true,
+      'text-[12px]': !hideSearch,
+      'text-sm': hideSearch,
+    }"
+  >
+    <div
+      :class="{
+        'bg-white rounded-lg px-8 py-10 my-6': true,
+        'shadow-lg border': hideSearch,
+      }"
+      id="exportContent"
+    >
+      <div class="lg:flex xl:flex items-center justify-between mb-8">
+        <div class="flex items-center">
+          <section class="flex items-center w-full">
+            <img
+              src="/src/assets/logo.png"
+              alt="Company Logo"
+              loading="lazy"
+              class="block w-10 h-10 lg:w-14 lg:h-14"
+            />
+            <div class="px-6">
+              <h1
+                class="lg:text-sm text-gray-600 hover:text-gray-800 font-bold tracking-[7px]"
+              >
+                MCM-CHURCH
+              </h1>
+              <h3 class="text-xs text-gray-600 hover:text-gray-800">
+                Steward-Trust-Manage-Sustain
+              </h3>
+            </div>
+          </section>
+        </div>
+        <div class="text-gray-700 mt-5">
+          <div>Date: 01/05/2023</div>
+          <div>Invoice #: INV12345</div>
+        </div>
+      </div>
+      <div class="border-b-2 border-gray-300">
+        <h2 class="lg:text-2xl font-bold mb-4">Expense Summary</h2>
+        <div class="text-gray-700 mb-2 pb-8">
+          As of
+          <span v-for="(allocated, index) in allocation" :key="index">
+            {{ getDate(allocated.created_at) }}
+            <span
+              v-if="
+                getDate(allocated.created_at) !==
+                getDate(new Date().toISOString())
+              "
+              >to {{ getDate(new Date().toISOString()) }}</span
+            >
+          </span>
+        </div>
+      </div>
+      <div class="uppercase py-2">Allocation</div>
+      <table class="w-full text-left mb-8">
+        <thead>
+          <tr class="text-xs">
+            <th class="text-gray-700 font-bold uppercase py-2">Date</th>
+            <th class="text-gray-700 font-bold uppercase py-2">Name</th>
+            <th class="text-gray-700 font-bold uppercase py-2">Method</th>
+            <th class="text-gray-700 font-bold uppercase py-2">Particular</th>
+            <th class="text-gray-700 font-bold uppercase py-2">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(expense, index) in expenses" :key="index">
+            <td class="py-4 text-gray-700">
+              {{ getDate(expense.expense_created_at) }}
+            </td>
+            <td class="py-4 text-gray-700">{{ expense.receiver_name }}</td>
+            <td class="py-4 text-gray-700">{{ expense.method }}</td>
+            <td class="py-4 text-gray-700">{{ expense.particular }}</td>
+            <td class="py-4 text-gray-700">
+              {{
+                (expense.amount ?? 0).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
+            </td>
+          </tr>
+          <tr>
+            <td v-for="(item, index) in 4" :key="index"></td>
 
-<style scoped>
-.scanning-line {
-  position: absolute;
-  top: 0;
-  animation: scanning 2s infinite;
-}
+            <div class="mb-4 text-gray-700">
+              Total:
+              {{
+                (
+                  expenses.reduce((sum, item) => sum + item.amount, 0) ?? 0
+                ).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
+            </div>
+          </tr>
+        </tbody>
+      </table>
 
-@keyframes scanning {
-  0% {
-    top: 0;
-  }
-  50% {
-    top: 100%;
-  }
-  100% {
-    top: 0;
-  }
-}
-</style>
+      <div class="grid grid-cols-2 border-b pb-5">
+        <div class="text-gray-700 mb-2">
+          <div>
+            Allocated:
+            <span v-for="(allocated, index) in allocation" :key="index">
+              {{
+                (allocated.amount ?? 0).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
+            </span>
+          </div>
+          <div>
+            Remaining Balance:
+            <span v-for="(balance, index) in allocation_balance" :key="index">
+              {{
+                (balance.balance ?? 0).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
+            </span>
+          </div>
+          <div>
+            Total Change:
+            <span v-for="(change, index) in totalChange" :key="index">
+              {{
+                (change.total_change_sum ?? 0).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2">
+          <div class="text-gray-700 mb-2">
+            <div class="font-semibold">Savings Deduction (10%)</div>
+            <div class="">
+              Tithes of Thites:
+              <span v-for="(balance, index) in allocation_balance" :key="index">
+                {{
+                  (
+                    (balance.balance ?? 0).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }) * 0.1
+                  ).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
+              </span>
+            </div>
+            <div>
+              Restricted Funds:
+              <span v-for="(balance, index) in allocation_balance" :key="index">
+                {{
+                  (balance.balance -
+                    (
+                      (balance.balance ?? 0).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) * 0.1
+                    ).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })) *
+                  0.1
+                }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="uppercase py-2">Contingency</div>
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-xs">
+            <th class="text-gray-700 font-bold uppercase py-2">Date</th>
+            <th class="text-gray-700 font-bold uppercase py-2">Name</th>
+            <th class="text-gray-700 font-bold uppercase py-2">Method</th>
+            <th class="text-gray-700 font-bold uppercase py-2">Particular</th>
+            <th class="text-gray-700 font-bold uppercase py-2">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(expense, index) in otherExpenses" :key="index">
+            <td class="py-4 text-gray-700">
+              {{ getDate(expense.created_at) }}
+            </td>
+            <td class="py-4 text-gray-700">{{ expense.fullname }}</td>
+            <td class="py-4 text-gray-700">{{ expense.method }}</td>
+            <td class="py-4 text-gray-700">{{ expense.particular }}</td>
+            <td class="py-4 text-gray-700">
+              {{
+                (expense.amount ?? 0).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
+            </td>
+          </tr>
+          <tr>
+            <td v-for="(item, index) in 4" :key="index"></td>
+            <div class="mb-4 text-gray-700">
+              Total:
+              {{
+                (
+                  otherExpenses.reduce((sum, item) => sum + item.amount, 0) ?? 0
+                ).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
+            </div>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="border-t-2 border-gray-300 pt-8 mb-8">
+        <div class="text-gray-700 mb-2">
+          This report provides a detailed summary of the church’s expenses
+        </div>
+        <div class="text-gray-700 mb-2">
+          and corresponding savings allocations for the specified period.
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex justify-center gap-1 mt-6 border-b pb-12 text-[10px] md:text-lg lg:text-[14px]"
+    >
+      <button
+        @click="exportPDF"
+        class="px-4 py-2 bg-green-900 text-white flex items-center gap-2"
+      >
+        Export as PDF
+      </button>
+      <button
+        @click="exportExcel"
+        class="px-4 py-2 hover:bg-gray-100 text-gray-600"
+      >
+        Export as Excel
+      </button>
+      <button
+        @click="exportWord"
+        class="px-4 py-2 hover:bg-gray-100 text-gray-600"
+      >
+        Export as Word
+      </button>
+    </div>
+  </div>
+</template>

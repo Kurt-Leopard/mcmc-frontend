@@ -1,7 +1,7 @@
 <script setup>
 import HeaderComponent from "../../components/admin/HeaderComponent.vue";
 import EntryComponent from "../../components/leader/modal/EntryComponent.vue";
-import DeleteComponent from "../../components/leader/modal/RemoveComponent.vue";
+// import DeleteComponent from "../../components/leader/modal/RemoveComponent.vue";
 import { provide, ref, watch, onMounted } from "vue";
 import axios from "../../../axios";
 import { getDate } from "../../composables/date";
@@ -80,6 +80,13 @@ const closeShowDelete = () => {
   showDelete.value = false;
 };
 
+watch(() => {
+  const methodResult = store.getMethod(); // Get the method's value or effect
+  if (methodResult) {
+    refreshData();
+    store.setMethod(null);
+  }
+});
 onMounted(async () => {
   window.scrollTo(0, 0);
   await accessControl();
@@ -139,7 +146,7 @@ onMounted(async () => {
                       scope="col"
                       class="p-2 sm:p-5 md:p-5 lg:p-5 xl:p-5 text-left text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-semibold text-gray-900 capitalize"
                     >
-                      Method {{ access_control }}
+                      Method
                     </th>
                     <th
                       v-if="access_control === 'Bookkeeper'"
@@ -165,7 +172,7 @@ onMounted(async () => {
                     <td
                       class="p-2 sm:p-5 md:p-5 lg:p-5 xl:p-5 whitespace-nowrap text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-medium text-gray-900"
                     >
-                      {{ entry.amount.toLocaleString() }}
+                     {{ (entry.amount ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                     </td>
                     <td
                       class="p-2 sm:p-5 md:p-5 lg:p-5 xl:p-5 whitespace-nowrap text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-medium text-gray-900"
@@ -201,7 +208,7 @@ onMounted(async () => {
                             ></path>
                           </svg>
                         </button>
-                        <button
+                        <!-- <button
                           @click="deleteEntry(entry.id)"
                           class="p-2 rounded-full group transition-all duration-500 flex item-center"
                         >
@@ -219,7 +226,7 @@ onMounted(async () => {
                               fill="#F87171"
                             ></path>
                           </svg>
-                        </button>
+                        </button> -->
                       </div>
                     </td>
                   </tr>
@@ -262,11 +269,11 @@ onMounted(async () => {
         @closeCashEntry="closeCashEntry"
         @refreshData="refreshData"
       />
-      <DeleteComponent
+      <!-- <DeleteComponent
         v-if="showDelete"
         @closeShowDelete="closeShowDelete"
         @refreshData="refreshData"
-      />
+      /> -->
     </main>
   </main>
 </template>

@@ -104,7 +104,7 @@ const notifyData = async () => {
     if (response.status === 200) {
       notify.value = response.data.data;
 
-      unreadCount.value = notify.value.filter((n) => n.is_read === 0).length;
+      unreadCount.value = notify.value.filter((n) => n.is_read === 0 && n.statusRead!==1).length;
     }
   } catch (error) {
     console.log(response.data.message);
@@ -114,7 +114,7 @@ const notifyData = async () => {
 const goTo = async (type, notification_id) => {
   if (type === "events") {
     localStorage.removeItem("access");
-    window.location.href = "https://wnh5c088.asse.devtunnels.ms:5173/view/events";
+    window.location.href = "/view/events";
 
     // router.push({ path: "/view/events" });
     try {
@@ -130,6 +130,24 @@ const goTo = async (type, notification_id) => {
         toast.error(error.response.data.message);
       } else {
         toast.error("Error:", error.message);
+      }
+    }
+  } else if(type==='event announcement'){
+      localStorage.removeItem("access");
+     window.location.href = "/view/events";
+     try {
+      const response = await axios.post(
+        `/api/notification-read/${notification_id}`,{userId:store.user.id}
+      );
+
+      if (response.status === 200) {
+        notifyData();
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data.message);
+      } else {
+        console.log("Error:", error.message);
       }
     }
   }
@@ -268,16 +286,16 @@ onMounted(async () => {
                 />
                 <div class="w-full">
                   <div class="italic text-gray-500 text-xs">
-                    {{ notification.user_2_username }} replied to your comment.
+                    {{ notification.user_2_username }}  {{ notification.type==='event announcement'? 'posted a new event schedule':'replied to your comment.'}}
                   </div>
                   <div class="flex items-center justify-between">
                     <small class="italic"
-                      >{{ notification.heading }} Events</small
+                      >{{ notification.heading }} {{ notification.type==='event announcement'? 'posted a new event schedule':'Events.'}}</small
                     ><small class="italic text-xs text-gray-500">{{
                       relativeTime(notification.created_at)
                     }}</small>
                     <small
-                      v-if="notification.is_read === 0"
+                      v-if="notification.is_read === 0  && notification.statusRead!==1"
                       class="p-1 bg-green-500 rounded-full"
                     ></small>
                   </div>

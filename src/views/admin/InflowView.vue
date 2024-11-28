@@ -114,25 +114,25 @@ onMounted(async () => {
                   <tr class="bg-gray-50  border-b">
                     <th
                       scope="col"
-                      class="p-2 sm:p-5 md:p-5 lg:p-5 xl:p-5 text-left text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-semibold text-gray-900 capitalize"
+                      class="p-2  text-left text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-semibold text-gray-900 capitalize"
                     >
                       Date
                     </th>
                     <th
                       scope="col"
-                      class="p-2 sm:p-5 md:p-5 lg:p-5 xl:p-5 text-left text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-semibold text-gray-900 capitalize"
+                      class="p-2  text-left text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-semibold text-gray-900 capitalize"
                     >
                       Amount
                     </th>
                     <th
                       scope="col"
-                      class="p-2 sm:p-5 md:p-5 lg:p-5 xl:p-5 text-left text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-semibold text-gray-900 capitalize"
+                      class="p-2  text-left text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-semibold text-gray-900 capitalize"
                     >
                       Particular
                     </th>
                     <th
                       scope="col"
-                      class="p-2 sm:p-5 md:p-5 lg:p-5 xl:p-5 text-left text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-semibold text-gray-900 capitalize"
+                      class="p-2  text-left text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-semibold text-gray-900 capitalize"
                     >
                       Method {{ access_control }}
                     </th>

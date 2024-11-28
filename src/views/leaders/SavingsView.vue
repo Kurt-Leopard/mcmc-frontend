@@ -3,7 +3,35 @@
     <div v-if="loading" class="text-center text-lg text-gray-500">
       Loading...
     </div>
-    <div class="-mx-4 flex flex-wrap" v-else>
+    <div
+      class="w-full border-b grid grid-cols-3 text-center pt-5 text-[10px] font-semibold text-gray-700 md:hidden lg:hidden xl:hidden"
+    >
+      <div
+        :class="`py-3 cursor-pointer ${
+          activeTab === tabs[0] ? 'bg-gray-100' : ''
+        }`"
+        @click="activeTab = tabs[0]"
+      >
+        Operational Income
+      </div>
+      <div
+        :class="`py-3 cursor-pointer ${
+          activeTab === tabs[1] ? 'bg-gray-100' : ''
+        }`"
+        @click="activeTab = tabs[1]"
+      >
+        Restricted funds
+      </div>
+      <div
+        :class="`py-3 cursor-pointer ${
+          activeTab === tabs[2] ? 'bg-gray-100' : ''
+        }`"
+        @click="activeTab = tabs[2]"
+      >
+        Thites of thites
+      </div>
+    </div>
+    <div class="-mx-4 flex-wrap hidden md:flex lg:flex xl:flex">
       <div class="w-full px-4 md:w-1/2 xl:w-1/3 mt-12">
         <div class="relative">
           <div class="overflow-hidden rounded-[10px]">
@@ -17,7 +45,13 @@
             class="relative z-10 mx-7 -mt-20 rounded-lg bg-white dark:bg-dark-2 py-[10px] px-3 text-center shadow-portfolio dark:shadow-box-dark border"
           >
             <span class="text-primary mb-2 block text-lg font-medium">
-              ₱ {{ income.toFixed(2) }}
+              ₱
+              {{
+                (income ?? 0).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
             </span>
             <h3 class="text-dark dark:text-white mb-5 text-xl font-bold">
               {{ tabs[0] }}
@@ -38,7 +72,7 @@
           </div>
         </div>
       </div>
-      <!-- 2 -->
+
       <div class="w-full px-4 md:w-1/2 xl:w-1/3 mt-12">
         <div class="relative">
           <div class="overflow-hidden rounded-[10px]">
@@ -52,7 +86,13 @@
             class="relative z-10 mx-7 -mt-20 rounded-lg bg-white dark:bg-dark-2 py-[10px] px-3 text-center shadow-portfolio dark:shadow-box-dark border"
           >
             <span class="text-primary mb-2 block text-lg font-medium">
-              ₱ {{ totalRestrictedFunds.toFixed(2) }}
+              ₱
+              {{
+                (totalRestrictedFunds ?? 0).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
             </span>
             <h3 class="text-dark dark:text-white mb-5 text-xl font-bold">
               {{ tabs[1] }}
@@ -74,7 +114,7 @@
           </div>
         </div>
       </div>
-      <!-- 3 -->
+
       <div class="w-full px-4 md:w-1/2 xl:w-1/3 mt-12">
         <div class="relative">
           <div class="overflow-hidden rounded-[10px]">
@@ -88,7 +128,13 @@
             class="relative z-10 mx-7 -mt-20 rounded-lg bg-white dark:bg-dark-2 py-[10px] px-3 text-center shadow-portfolio dark:shadow-box-dark border"
           >
             <span class="text-primary mb-2 block text-lg font-medium">
-              ₱ {{ totalTithesOfTithes.toFixed(2) }}
+              ₱
+              {{
+                (totalTithesOfTithes ?? 0).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
             </span>
             <h3 class="text-dark dark:text-white mb-5 text-xl font-bold">
               {{ tabs[2] }}
@@ -115,14 +161,20 @@
     <div id="exportContent" class="my-10">
       <div
         v-if="activeTab === 'Operational Income'"
-        class="bg-white p-6 rounded-lg shadow-lg border"
+        :class="{
+          'bg-white p-6 rounded-lg shadow-lg': true,
+          border: hideSearch,
+        }"
       >
-          <div class="flex items-center justify-between my-3">
-          <h3 class="text-lg font-semibold text-gray-700">
-            Operational income Details
+        <div class="md:flex lg:flex xl:flex items-center justify-between my-3">
+          <h3
+            class="text-[12px] md:text-lg lg:text-lg xl:text-lg font-semibold text-gray-700 my-2"
+          >
+            Operational income
           </h3>
+
           <!-- Export Buttons -->
-          <form class="flex items-center">
+          <form class="flex items-center my-2" v-if="hideSearch">
             <label for="simple-search" class="sr-only">Search</label>
             <div class="relative w-full">
               <div
@@ -170,19 +222,41 @@
             </button>
           </form>
         </div>
-        <table class="w-full text-left table-auto">
+        <table
+          class="w-full text-left table-auto text-[10px] md:txet-[14px] lg:text-[14px] xl:text-[14px]"
+        >
           <thead>
             <tr class="bg-gray-100 text-gray-600 border-y">
               <th class="p-3">Date</th>
-              <th class="p-3">Description</th>
               <th class="p-3">Amount</th>
+              <th class="p-3">Particular</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="border-b text-gray-500" v-for="(item, index) in operationalIncomeData" :key="index">
-              <td class="p-3">{{ item.date }}</td>
-              <td class="p-3">₱ {{ item.allocation_amount.toFixed(2) }}</td>
-              <td class="p-3 ">₱ {{ item.amount.toFixed(2) }}</td>
+            <tr
+              class="border-b text-gray-500"
+              v-for="(item, index) in operationalIncomeData"
+              :key="index"
+            >
+              <td class="p-3">{{ getDate(item.created_at) }}</td>
+              <td class="p-3">
+                ₱
+                {{
+                  (item.operational_amount ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
+              </td>
+              <td class="p-3">
+                {{
+                  item?.combined_particular
+                    ? item?.combined_particular
+                    : item?.source_table !== "unknown"
+                    ? item?.source_table
+                    : "Allocation Balance"
+                }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -192,12 +266,15 @@
         v-if="activeTab === 'Restricted Funds'"
         class="bg-white p-6 rounded-lg shadow-lg border"
       >
-        <div class="flex items-center justify-between my-3">
-          <h3 class="text-lg font-semibold text-gray-700">
-            Restricted funds Details
+        <div class="md:flex lg:flex xl:flex items-center justify-between my-3">
+          <h3
+            class="text-[12px] md:text-lg lg:text-lg xl:text-lg font-semibold text-gray-700 my-2"
+          >
+            Restricted funds
           </h3>
+
           <!-- Export Buttons -->
-          <form class="flex items-center">
+          <form class="flex items-center my-2">
             <label for="simple-search" class="sr-only">Search</label>
             <div class="relative w-full">
               <div
@@ -245,7 +322,9 @@
             </button>
           </form>
         </div>
-        <table class="w-full text-left table-auto">
+        <table
+          class="w-full text-left table-auto text-[10px] md:txet-[14px] lg:text-[14px] xl:text-[14px]"
+        >
           <thead>
             <tr class="bg-gray-100 text-gray-600 border-y">
               <th class="p-3">Date</th>
@@ -254,11 +333,29 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="border-b text-gray-500" v-for="(item, index) in restrictedFundsData" :key="index">
+            <tr
+              class="border-b text-gray-500"
+              v-for="(item, index) in restrictedFundsData"
+              :key="index"
+            >
               <td class="p-3">{{ getDate(item.allocation_created_at) }}</td>
-              <td class="p-3">₱ {{ item.allocation_amount.toFixed(2) }}</td>
               <td class="p-3">
-                ₱ {{ item.restricted_funds.toFixed(2) }}
+                ₱
+                {{
+                  (item.allocation_amount ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
+              </td>
+              <td class="p-3">
+                ₱
+                {{
+                  (item.restricted_funds ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
               </td>
             </tr>
           </tbody>
@@ -269,12 +366,15 @@
         v-if="activeTab === 'Tithes of Tithes'"
         class="bg-white p-6 rounded-lg shadow-lg border"
       >
-        <div class="flex items-center justify-between my-3">
-          <h3 class="text-lg font-semibold text-gray-700">
-            Tithes of Tithes Details
+        <div class="md:flex lg:flex xl:flex items-center justify-between my-3">
+          <h3
+            class="text-[12px] md:text-lg lg:text-lg xl:text-lg font-semibold text-gray-700 my-2"
+          >
+            Tithe of thites
           </h3>
+
           <!-- Export Buttons -->
-          <form class="flex items-center">
+          <form class="flex items-center my-2">
             <label for="simple-search" class="sr-only">Search</label>
             <div class="relative w-full">
               <div
@@ -322,7 +422,9 @@
             </button>
           </form>
         </div>
-        <table class="w-full text-left table-auto">
+        <table
+          class="w-full text-left table-auto text-[10px] md:txet-[14px] lg:text-[14px] xl:text-[14px]"
+        >
           <thead>
             <tr class="bg-gray-100 text-gray-600 border-y">
               <th class="p-3">Date</th>
@@ -337,14 +439,32 @@
               :key="index"
             >
               <td class="p-3">{{ getDate(item.allocation_created_at) }}</td>
-              <td class="p-3">₱ {{ item.allocation_amount.toFixed(2) }}</td>
-              <td class="p-3">₱ {{ item.tithes_of_tithes.toFixed(2) }}</td>
+              <td class="p-3">
+                ₱
+                {{
+                  (item.allocation_amount ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
+              </td>
+              <td class="p-3">
+                ₱
+                {{
+                  (item.tithes_of_tithes ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div class="flex justify-end gap-1 mt-6 border-b pb-12">
+    <div
+      class="flex justify-center gap-1 mt-6 border-b pb-12 text-[10px] md:text-lg lg:text-[14px]"
+    >
       <button
         @click="exportPDF"
         class="px-4 py-2 bg-green-900 text-white flex items-center gap-2"
@@ -368,19 +488,34 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import axios from "../../../axios";
 import html2pdf from "html2pdf.js";
 import * as XLSX from "xlsx";
 import { getDate } from "../../composables/date";
+import { useAuthStore } from "../../stores/store";
+const store = useAuthStore();
 // Data and loading state
 const operationalIncomeData = ref([]);
 
 const restrictedFundsData = ref([]);
 
 const tithesOfTithesData = ref([]);
+const hideSearch = ref(true);
+watch(
+  () => store.getMethod(), // Source: the reactive data or function to watch
+  (methodResult) => {
+    // Callback: triggered when the value changes
+    if (methodResult) {
+      refreshSavings();
+      refreshOperational();
+      savingDetails();
+      store.setMethod(null);
+    }
+  }
+);
 
-onMounted(async () => {
+const savingDetails = async () => {
   try {
     const response = await axios.get("/api/savings/details");
     if (response.status === 200) {
@@ -390,7 +525,7 @@ onMounted(async () => {
   } catch (error) {
     console.error("Error fetching data", error);
   }
-});
+};
 
 const income = ref(null);
 const totalRestrictedFunds = ref(null);
@@ -398,7 +533,7 @@ const totalTithesOfTithes = ref(null);
 const loading = ref(true);
 
 // Fetch data on component mount
-onMounted(async () => {
+const refreshSavings = async () => {
   try {
     // Fetch income data
     const incomeResponse = await axios.get("/api/saving-income");
@@ -417,7 +552,7 @@ onMounted(async () => {
     console.error("Error fetching data", error);
     loading.value = false;
   }
-});
+};
 const activeTab = ref("Operational Income");
 const tabs = ["Operational Income", "Restricted Funds", "Tithes of Tithes"];
 
@@ -430,37 +565,65 @@ onMounted(async () => {
     loading.value = false;
   }
 });
-
+const refreshOperational = async () => {
+  try {
+    const response = await axios.get("/api/savings/operational-details");
+    if (response.status === 200) {
+      operationalIncomeData.value = response.data.result;
+    }
+  } catch (error) {
+    console.error("Error fetching data", error);
+  }
+};
+onMounted(async () => {
+  refreshSavings();
+  refreshOperational();
+  savingDetails();
+});
 // Export functions (PDF, Excel, Word)
 const exportPDF = () => {
-  const element = document.getElementById("exportContent");
-  html2pdf()
-    .set({ filename: `${activeTab.value}.pdf`, html2canvas: { scale: 2 } })
-    .from(element)
-    .save();
+  hideSearch.value = false;
+  setTimeout(() => {
+    const element = document.getElementById("exportContent");
+    html2pdf()
+      .set({ filename: `${activeTab.value}.pdf`, html2canvas: { scale: 2 } })
+      .from(element)
+      .save();
+    hideSearch.value = true;
+  }, 0);
 };
 
 const exportExcel = () => {
-  const worksheet = XLSX.utils.table_to_sheet(
-    document.querySelector(`#exportContent table`)
-  );
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, activeTab.value);
-  XLSX.writeFile(workbook, `${activeTab.value}.xlsx`);
+  hideSearch.value = false;
+  setTimeout(() => {
+    const worksheet = XLSX.utils.table_to_sheet(
+      document.querySelector(`#exportContent table`)
+    );
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, activeTab.value);
+    XLSX.writeFile(workbook, `${activeTab.value}.xlsx`);
+    hideSearch.value = true;
+  }, 0);
 };
 
 const exportWord = () => {
-  const content = document.getElementById("exportContent").innerHTML;
-  const header =
-    "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>" +
-    "<head><meta charset='utf-8'><title>Export HTML to Word</title></head><body>";
-  const footer = "</body></html>";
-  const sourceHTML = header + content + footer;
-  const blob = new Blob(["\ufeff", sourceHTML], { type: "application/msword" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = `${activeTab.value}.doc`;
-  link.click();
+  hideSearch.value = false;
+  setTimeout(() => {
+    const content = document.getElementById("exportContent").innerHTML;
+    const header =
+      "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>" +
+      "<head><meta charset='utf-8'><title>Export HTML to Word</title></head><body>";
+    const footer = "</body></html>";
+    const sourceHTML = header + content + footer;
+    const blob = new Blob(["\ufeff", sourceHTML], {
+      type: "application/msword",
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `${activeTab.value}.doc`;
+    link.click();
+    hideSearch.value = true;
+  }, 0);
 };
 </script>
 

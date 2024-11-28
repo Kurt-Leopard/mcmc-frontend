@@ -164,6 +164,8 @@ const submitForm = async () => {
         toast.success(response.data.message);
         emit("refreshData");
         emit("closeCashEntry");
+        store.setMethod(true);
+    
       }
     } catch (error) {
       if (error.response) {

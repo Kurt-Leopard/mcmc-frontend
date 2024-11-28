@@ -8,7 +8,7 @@ export const useAuthStore = defineStore("auth", {
         accessControl: '',
         login: false,
         triggerMethod: null,
-
+        allocation:null,
         toast: []
     }),
     actions: {
@@ -56,6 +56,13 @@ export const useAuthStore = defineStore("auth", {
         getMethod() {
             return this.triggerMethod;  // Return the stored function
         },
+        setAllocation(data) {
+            this.allocation = data;
+        },
+        getAllocation() {
+            return this.allocation;  // Return the stored function
+        },
+
 
     },
 });

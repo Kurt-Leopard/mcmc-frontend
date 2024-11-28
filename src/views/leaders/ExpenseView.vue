@@ -42,6 +42,7 @@ const closeRequest = () => {
   request.value = false;
   refreshDataRequest();
   getBalance();
+  getChange();
 };
 // store.getMethod().then(() => {
 //    alert("ahah");
@@ -57,6 +58,7 @@ const changeLog = (expense) => {
 
 const closeExpenseLog = () => {
   isExpenseLog.value = false;
+  getChange();
 };
 provide("request", request);
 provide("expenseLog", expenseLog);
@@ -78,6 +80,7 @@ const refreshAllocation = async () => {
       allocation.value = response.data.results;
     }
   } catch (error) {
+    allocation.value = { amount: 0.0 };
     if (error.response) {
       console.log(error.response.message);
     }
@@ -105,15 +108,20 @@ const refreshData = async () => {
   }
 };
 
-watch(() => {
-  const methodResult = store.getMethod(); // Get the method's value or effect
-  if (methodResult) {
-    getBalance();
-    refreshAllocation();
-    refreshDataRequest();
-    store.setMethod(null);
+watch(
+  () => store.getMethod(), // Source: the reactive data or function to watch
+  (methodResult) => {
+    // Callback: triggered when the value changes
+    if (methodResult) {
+      getBalance();
+      getChange();
+      refreshAllocation();
+      refreshDataRequest();
+      store.setMethod(null);
+    }
   }
-});
+);
+
 watch([currentPage, searchBy, searchByDate, typeOfExpense], refreshData);
 const errorResponse = ref(false);
 const refreshDataRequest = async () => {
@@ -155,6 +163,21 @@ const getBalance = async () => {
       allocation_balance.value = response.data.results;
     }
   } catch (error) {
+    allocation_balance.value = { balance: 0.0 };
+    console.error(error.response);
+  }
+};
+
+
+const totalChange = ref([]);
+const getChange = async () => {
+  try {
+    const response = await axios.get("/api/total-change");
+    if (response.status === 200) {
+      totalChange.value = response.data.results;
+    }
+  } catch (error) {
+    totalChange.value = { total_change_sum: 0.0 };
     console.error(error.response);
   }
 };
@@ -164,6 +187,7 @@ onMounted(async () => {
   refreshData();
   refreshDataRequest();
   getBalance();
+  getChange();
   await accessControl();
   access_control.value = store.getAccessControl().access_control;
   window.scrollTo(0, 0);
@@ -224,7 +248,12 @@ onMounted(async () => {
                 v-for="(allocated, index) in allocation"
                 :key="index"
               >
-                {{ allocated.amount.toFixed(2) }}
+                {{
+                  (allocated.amount ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
               </div>
             </div>
 
@@ -242,7 +271,12 @@ onMounted(async () => {
                 v-for="(balance, index) in allocation_balance"
                 :key="index"
               >
-                {{ balance.balance.toFixed(2) }}
+                {{
+                  (balance.balance ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
               </div>
             </div>
 
@@ -255,7 +289,21 @@ onMounted(async () => {
                 >
                 <div class="text-xs">MCMC</div>
               </div>
-              <div class="text-right text-3xl font-semibold">1,000</div>
+              <div
+                class="text-right text-3xl font-semibold"
+                v-for="(totalChange, index) in totalChange"
+                :key="index"
+              >
+                {{
+                  (totalChange.total_change_sum ?? 0).toLocaleString(
+                    undefined,
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  )
+                }}
+              </div>
             </div>
           </div>
         </div>
@@ -272,6 +320,7 @@ onMounted(async () => {
             placeholder="Search by particular or amount"
             class="p-2 border rounded w-full"
           />
+
           <input
             v-if="filterType === 'Month'"
             v-model="searchByDate"
@@ -296,27 +345,28 @@ onMounted(async () => {
               @click="toggleDropdown"
               class="flex items-center gap-2 py-3 px-4 block w-[90px] text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
-              {{ filterType === "Filter" ? "Filter" : filterType }}  <svg
-         :class="isDropdownOpen ? 'rotate-180' : ''"
-            xmlns="http://www.w3.org/2000/svg"
-            width="17.543"
-            height="10"
-            viewBox="0 0 17.543 10"
-            class="fill-primary"
-          >
-            <g
-              id="arrow-down-sign-to-navigate"
-              transform="translate(-0.001 -97.141)"
-            >
-              <path
-                id="Path_200"
-                data-name="Path 200"
-                d="M8.772,107.141a1.225,1.225,0,0,1-.868-.36L.361,99.238A1.229,1.229,0,0,1,2.1,97.5l6.674,6.675L15.446,97.5a1.228,1.228,0,0,1,1.737,1.737l-7.543,7.543A1.225,1.225,0,0,1,8.772,107.141Z"
-                fill="#555"
-                class="fill-current"
-              ></path>
-            </g></svg
-        >
+              {{ filterType === "Filter" ? "Filter" : filterType }}
+              <svg
+                :class="isDropdownOpen ? 'rotate-180' : ''"
+                xmlns="http://www.w3.org/2000/svg"
+                width="17.543"
+                height="10"
+                viewBox="0 0 17.543 10"
+                class="fill-primary"
+              >
+                <g
+                  id="arrow-down-sign-to-navigate"
+                  transform="translate(-0.001 -97.141)"
+                >
+                  <path
+                    id="Path_200"
+                    data-name="Path 200"
+                    d="M8.772,107.141a1.225,1.225,0,0,1-.868-.36L.361,99.238A1.229,1.229,0,0,1,2.1,97.5l6.674,6.675L15.446,97.5a1.228,1.228,0,0,1,1.737,1.737l-7.543,7.543A1.225,1.225,0,0,1,8.772,107.141Z"
+                    fill="#555"
+                    class="fill-current"
+                  ></path>
+                </g>
+              </svg>
             </button>
             <div
               v-if="isDropdownOpen"
@@ -403,7 +453,10 @@ onMounted(async () => {
             <div class="flex justify-between mb-4">
               <span class="text-xs text-gray-700 font-mono">Amount:</span>
               <span class="text-xs font-mono">{{
-                expense.amount.toFixed(2)
+                (expense.amount ?? 0).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
               }}</span>
             </div>
             <div class="flex justify-between mb-4">
@@ -412,9 +465,14 @@ onMounted(async () => {
             </div>
             <div class="flex justify-between mb-4">
               <span class="text-xs text-gray-700 font-mono">total Spent:</span>
-              <span class="text-xs font-mono">{{
-                expense.spent || "0.00"
-              }}</span>
+              <span class="text-xs font-mono">
+                {{
+                  (expense.spent ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}</span
+              >
             </div>
             <div class="flex justify-between mb-4">
               <span class="text-xs text-gray-700 font-mono">total Change:</span>
@@ -424,7 +482,12 @@ onMounted(async () => {
                     ? ' bg-green-100 rounded-md p-1 text-xs font-mono'
                     : 'text-xs font-mono'
                 "
-                >{{ expense.total_change || "0.00" }}</span
+                >{{
+                  (expense.total_change ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }) || "0.00"
+                }}</span
               >
             </div>
             <div class="border-t border-gray-300 my-3"></div>
