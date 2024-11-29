@@ -562,7 +562,7 @@ const submitForm = async () => {
             </svg>
           </p>
           <img
-            :src="'../../assets/gallery' + (index + 1) + '.png'"
+            :src="'../../gallery' + (index + 1) + '.png'"
             :alt="'gallery' + (index + 1)"
             class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px] object-cover"
             loading="lazy"
