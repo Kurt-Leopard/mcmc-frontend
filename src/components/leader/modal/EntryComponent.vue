@@ -121,7 +121,20 @@
               type="submit"
               class="text-white inline-flex items-center justify-center w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4"
             >
-              Save
+              <svg
+                v-if="buttonText==='Saving...'"
+                width="20"
+                height="20"
+                fill="currentColor"
+                class="mr-2 animate-spin"
+                viewBox="0 0 1792 1792"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z"
+                ></path>
+              </svg>
+              {{ buttonText }}
             </button>
           </form>
         </div>
@@ -139,6 +152,7 @@ const emit = defineEmits(["closeCashEntry", "refreshData"]);
 const typeEntry = inject("typeEntry", false);
 import { useToast } from "vue-toastification";
 const toast = useToast();
+const buttonText=ref("Save");
 const updateEntry = inject("updateEntry", () => {
   console.warn("updateEntry not provided");
 });
@@ -156,6 +170,7 @@ const closeCashEntry = () => {
 };
 
 const submitForm = async () => {
+  buttonText.value = "Saving...";
   if (typeEntry.value !== "update") {
     inflow.value.user_id = store.user.id;
     try {
@@ -164,11 +179,20 @@ const submitForm = async () => {
         toast.success(response.data.message);
         emit("refreshData");
         emit("closeCashEntry");
+        store.setMethod(true);
+        buttonText.value = "Save";
       }
     } catch (error) {
       if (error.response) {
         toast.error("Error submitting inflow:", error.response.message);
-      }
+      }else if (error.request) {
+    
+      toast.error('No Response:', error.request);
+    } else {
+   
+      toast.error('Error:', error.message);
+    }
+       buttonText.value = "Save";
     }
   } else {
     try {
@@ -185,11 +209,13 @@ const submitForm = async () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         emit("refreshData");
+          buttonText.value = "Save";
       }
     } catch (error) {
       if (error.response) {
         toast.error("Error submitting inflow:", error.response.message);
       }
+        buttonText.value = "Save";
     }
   }
 };

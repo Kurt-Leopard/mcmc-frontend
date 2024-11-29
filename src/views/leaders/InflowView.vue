@@ -1,7 +1,7 @@
 <script setup>
 import HeaderComponent from "../../components/admin/HeaderComponent.vue";
 import EntryComponent from "../../components/leader/modal/EntryComponent.vue";
-import DeleteComponent from "../../components/leader/modal/RemoveComponent.vue";
+// import DeleteComponent from "../../components/leader/modal/RemoveComponent.vue";
 import { provide, ref, watch, onMounted } from "vue";
 import axios from "../../../axios";
 import { getDate } from "../../composables/date";
@@ -13,7 +13,7 @@ const itemsPerPage = ref(10);
 const searchBy = ref("");
 const entries = ref([]); // Changed to entries
 const access_control = ref("");
-const searchByDate = ref('');
+const searchByDate = ref("");
 const errorResponse = ref(false);
 // Function to refresh data from the API
 const refreshData = async () => {
@@ -80,6 +80,19 @@ const closeShowDelete = () => {
   showDelete.value = false;
 };
 
+watch(() => {
+  const methodResult = store.getMethod(); // Get the method's value or effect
+  if (methodResult) {
+    refreshData();
+    store.setMethod(null);
+  }
+});
+const setEntry = ref(null);
+const viewEntry = ref(false);
+const viewMore = (entry) => {
+  viewEntry.value = true;
+  setEntry.value = entry;
+};
 onMounted(async () => {
   window.scrollTo(0, 0);
   await accessControl();
@@ -89,11 +102,17 @@ onMounted(async () => {
 </script>
 <template>
   <main>
-    <HeaderComponent />
+    <!-- <HeaderComponent /> -->
 
-    <main class="pb-3 px-4 lg:px-12 xl:px-32 mt-16 lg:mt-24 xl:mt-24">
-      <div class="my-5 flex flex-col  mb-24 ">
-        <div class="mb-4 lg:flex items-center justify-center gap-2 w-full ">
+    <main
+      :class="
+        store.getRole().role !== 'admin'
+          ? 'pb-3 px-4 lg:px-12 xl:px-32 mt-[150px]'
+          : 'px-4'
+      "
+    >
+      <div class="my-5 flex flex-col mb-24">
+        <div class="mb-4 lg:flex items-center justify-center gap-2 w-full">
           <input
             v-model="searchBy"
             @input="refreshData"
@@ -110,7 +129,7 @@ onMounted(async () => {
           />
         </div>
         <div
-          class="max-h-[55vh] overflow-y-auto element-with-horizontal-scroll"
+          class="max-h-[55vh] overflow-y-auto element-with-horizontal-scroll lg:px-2 xl:px-2"
         >
           <div class="min-w-full inline-block align-middle">
             <div class="overflow-hidden">
@@ -139,10 +158,9 @@ onMounted(async () => {
                       scope="col"
                       class="p-2 sm:p-5 md:p-5 lg:p-5 xl:p-5 text-left text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-semibold text-gray-900 capitalize"
                     >
-                      Method {{ access_control }}
+                      Method
                     </th>
                     <th
-                      v-if="access_control === 'Bookkeeper'"
                       scope="col"
                       class="p-2 sm:p-5 md:p-5 lg:p-5 xl:p-5 text-left text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-semibold text-gray-900 capitalize rounded-t-xl"
                     >
@@ -165,7 +183,12 @@ onMounted(async () => {
                     <td
                       class="p-2 sm:p-5 md:p-5 lg:p-5 xl:p-5 whitespace-nowrap text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-medium text-gray-900"
                     >
-                      {{ entry.amount.toLocaleString() }}
+                      {{
+                        (entry.amount ?? 0).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })
+                      }}
                     </td>
                     <td
                       class="p-2 sm:p-5 md:p-5 lg:p-5 xl:p-5 whitespace-nowrap text-xs md:text-sm lg:text-sm xl:text-sm leading-6 font-medium text-gray-900"
@@ -182,6 +205,27 @@ onMounted(async () => {
                       v-if="access_control === 'Bookkeeper'"
                     >
                       <div class="flex items-center gap-1">
+                          <button @click="viewMore(entry)">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="green"
+                            class="size-6"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                            />
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                            />
+                          </svg>
+                        </button>
                         <button
                           @click="editEntry('update', entry)"
                           class="p-2 rounded-full group transition-all duration-500 flex item-center"
@@ -201,7 +245,7 @@ onMounted(async () => {
                             ></path>
                           </svg>
                         </button>
-                        <button
+                        <!-- <button
                           @click="deleteEntry(entry.id)"
                           class="p-2 rounded-full group transition-all duration-500 flex item-center"
                         >
@@ -219,9 +263,78 @@ onMounted(async () => {
                               fill="#F87171"
                             ></path>
                           </svg>
-                        </button>
+                        </button> -->
+                      
                       </div>
                     </td>
+                    <td
+                      v-else
+                      class="p-2 sm:p-5 md:p-5 lg:p-5 xl:p-5 text-blue-600"
+                    >
+                      <button @click="viewMore(entry)">view</button>
+                    </td>
+
+                    <div
+                      v-if="viewEntry"
+                      class="fixed w-full h-full top-0 left-0 flex justify-center items-center z-50"
+                    >
+                      <span
+                        @click="viewEntry = false"
+                        class="fixed top-0 left-0 bg-black w-full h-full opacity-[.3] flex"
+                      ></span>
+                      <div
+                        class="meeting-detail border bg-white p-4 shadow-md rounded-lg fixed w-[calc(100%-5%)] lg:w-1/2"
+                      >
+                        <h3 class="py-2 font-semibold text-gray-700 border-b">
+                          Entry Details
+                        </h3>
+                        <div class="border rounded-md my-2">
+                          <div class="px-2 py-2">
+                            <h2
+                              class="text-lg font-mono font-bold text-center border-b pb-2 mb-4"
+                            >
+                              {{ setEntry.particular }}
+                            </h2>
+                          </div>
+                          <div class="px-2">
+                            <div class="flex justify-between mb-2">
+                              <span class="text-xs text-gray-700 font-mono"
+                                >Date:</span
+                              ><span class="text-xs font-mono">{{
+                                getDate(setEntry.created_at)
+                              }}</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                              <span class="text-xs text-gray-700 font-mono"
+                                >Method:</span
+                              ><span class="text-xs font-mono">{{
+                                setEntry.method
+                              }}</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                              <span class="text-xs text-gray-700 font-mono"
+                                >Amount:</span
+                              ><span class="text-xs font-mono">{{
+                                setEntry.amount
+                              }}</span>
+                            </div>
+                            <div class="mb-2">
+                              <div class="text-xs text-gray-700 font-mono">
+                                Description:
+                              </div>
+                              <div class="text-xs font-mono">
+                                {{ setEntry.description }}
+                              </div>
+                            </div>
+
+                            <div class="border-t border-gray-300 my-2"></div>
+                          </div>
+                        </div>
+                        <h4
+                          class="font-normal mt-4 mb-2 text-gray-700 border-b"
+                        ></h4>
+                      </div>
+                    </div>
                   </tr>
                 </tbody>
               </table>
@@ -230,7 +343,7 @@ onMounted(async () => {
         </div>
         <div
           v-if="errorResponse"
-          class="flex items-center justify-center w-full h-[300px] "
+          class="flex items-center justify-center w-full h-[300px]"
         >
           <div class="text-center">
             <i class="fas fa-database text-[100px] text-gray-200"></i>
@@ -262,11 +375,11 @@ onMounted(async () => {
         @closeCashEntry="closeCashEntry"
         @refreshData="refreshData"
       />
-      <DeleteComponent
+      <!-- <DeleteComponent
         v-if="showDelete"
         @closeShowDelete="closeShowDelete"
         @refreshData="refreshData"
-      />
+      /> -->
     </main>
   </main>
 </template>

@@ -15,6 +15,7 @@ import {
   provide,
 } from "vue";
 import axios from "../axios";
+
 import { downloadIcons } from "../src/assets/svg/icons";
 
 const BottomComponent = defineAsyncComponent(() =>
@@ -23,10 +24,11 @@ const BottomComponent = defineAsyncComponent(() =>
 
 import { io } from "socket.io-client";
 import { decodeJWT } from "./stores/token";
+import { useToast } from "vue-toastification";
 
 const user = ref("");
 const store = useAuthStore();
-
+const toast =useToast();
 if (store) {
   user.value = decodeJWT(store.token);
 }
@@ -35,7 +37,7 @@ const refresh = ref(false);
 onMounted(() => {
   socket.on("announcement", (announcement) => {
     if (announcement.userid === user.value.id) {
-      alert(
+      toast.success(
         `New Announcement!\nTitle: ${announcement.title}\nDescription: ${announcement.description}`
       );
       refresh.value = true;
@@ -130,7 +132,7 @@ onMounted(() => {
     <!-- v-if="deferredPrompt" -->
 
     <button v-if="deferredPrompt" class="fixed left-0 top-1/3 z-50 bg-white border">
-      <div class="relative group">
+      <!-- <div class="relative group">
         <nav
           v-html="downloadIcons.closeDownload()"
           class="w-[45px] h-[45px] flex items-center justify-center"
@@ -140,7 +142,7 @@ onMounted(() => {
         >
           <button @click="deferredPrompt=true">Close</button>
         </div>
-      </div>
+      </div> -->
       <div class="relative group">
         <nav
           v-html="downloadIcons.download()"

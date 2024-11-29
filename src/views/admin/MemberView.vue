@@ -11,6 +11,8 @@ const hasMoreData = ref(true);
 const roles = ref([]); // List of roles from the API
 const isModalOpen = ref(false); // Modal visibility state
 const selectedUser = ref(null); // Currently selected user for role editing
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 // Fetch user data with role information
 const refreshData = async () => {
@@ -43,6 +45,7 @@ const refreshRole = async () => {
     console.log("Error fetching roles:", error);
   }
 };
+
 
 const nextPage = () => {
   if (hasMoreData.value) {
@@ -86,10 +89,32 @@ const saveRole = async () => {
   }
 };
 
+const activation = async (id, status) => {
+  console.log("eee");
+  const temp = ref(status == "active" ? "deactive" : "active");
+
+  try {
+    const response = await axios.put("/user/activation", {
+      id: id,
+      status: temp.value,
+    });
+
+    if (response.status === 200) {
+      toast.success(response.data.message || "Action successful!");
+      refreshData();
+    } else {
+      toast.error(response.data.error || "An error occurred");
+    }
+  } catch (error) {
+    toast.error(error.message || "An unexpected error occurred");
+  }
+};
+
 // Fetch data when the component is mounted
 onMounted(() => {
   refreshData();
   refreshRole();
+
 });
 
 // Watch for changes in currentPage or searchBy and refresh data
@@ -110,11 +135,12 @@ watch([currentPage, searchBy], refreshData);
           placeholder="Search by name or username"
           class="border border-gray-300 p-2 rounded w-full"
         />
-        
       </div>
-      <table class="w-full divide-y divide-gray-200 inline-block  max-h-[360px] overflow-y-auto element-with-horizontal-scroll">
-        <thead class="bg-gray-50 w-full inline-block ">
-          <tr class="w-full inline-block grid grid-cols-4">
+      <table
+        class="w-full divide-y divide-gray-200 inline-block max-h-[360px] overflow-y-auto element-with-horizontal-scroll"
+      >
+        <thead class="bg-gray-50 w-full inline-block">
+          <tr class="w-full inline-block grid grid-cols-3">
             <th
               scope="col"
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -134,17 +160,14 @@ watch([currentPage, searchBy], refreshData);
             >
               Role
             </th>
-
-            <th
-              scope="col"
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Actions
-            </th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200 w-full inline-block ">
-          <tr v-for="user in users" :key="user.id" class="w-full inline-block grid grid-cols-4">
+        <tbody class="bg-white divide-y divide-gray-200 w-full inline-block">
+          <tr
+            v-for="(user, index) in users"
+            :key="index"
+            class="w-full inline-block grid grid-cols-3"
+          >
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="flex items-center">
                 <div class="flex-shrink-0 h-10 w-10">
@@ -155,8 +178,41 @@ watch([currentPage, searchBy], refreshData);
                   />
                 </div>
                 <div class="ml-4">
-                  <div class="text-sm font-medium text-gray-900">
-                    {{ user.fullname }}
+                  <div class="text-sm font-medium text-gray-900 flex">
+                    <div
+                      class="w-fit px-2 rounded-full flex sm:hidden"
+                      :class="
+                        users[index].status == 'active'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-red-100 text-red-800'
+                      "
+                    >
+                      {{ user.fullname }}
+                    </div>
+                    <div
+                      class="flex sm:hidden"
+                      @click="activation(user.id, users[index].status)"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-4 mx-2 cursor-pointer z-10"
+                        :class="
+                          users[index].status == 'active'
+                            ? ' text-red-800'
+                            : ' text-green-800'
+                        "
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                        />
+                      </svg>
+                    </div>
                   </div>
                   <div class="text-sm text-gray-500">
                     {{ user.username }}
@@ -166,30 +222,81 @@ watch([currentPage, searchBy], refreshData);
             </td>
 
             <td class="px-6 py-4 whitespace-nowrap">
-              <span
-                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-              >
-                Active
+              <span class="flex items-center h-full">
+                <span
+                  class="px-2 hidden sm:inline-flex text-xs leading-5 font-semibold rounded-full capitalize"
+                  :class="
+                    users[index].status == 'active'
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-red-100 text-red-800'
+                  "
+                >
+                  {{ users[index].status }}
+                </span>
+                <div class="group hidden sm:flex">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-4 mx-2 cursor-pointer"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                    />
+                  </svg>
+                  <span class="relative hidden group-hover:block">
+                    <div
+                      class="absolute border rounded-md bg-white p-3 text-gray-600"
+                    >
+                      <div
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md capitalize cursor-pointer w-full"
+                        :class="
+                          users[index].status == 'active'
+                            ? 'hover:bg-gray-50  p-2'
+                            : 'hover:bg-gray-50 p-2'
+                        "
+                        @click="activation(user.id, users[index].status)"
+                      >
+                        {{
+                          users[index].status == "active"
+                            ? "Deactivate"
+                            : "Activate"
+                        }}
+                      </div>
+                      <div
+                        class="px-2 text-xs leading-5 font-semibold rounded-md capitalize opacity-[.7]"
+                      >
+                        {{
+                          users[index].status != "active"
+                            ? "Deactivate"
+                            : "Activate"
+                        }}
+                      </div>
+                    </div>
+                  </span>
+                </div>
               </span>
             </td>
+
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
               <select
                 v-model="user.role"
                 @change="openModal(user)"
                 class="border border-gray-300 p-2 rounded"
               >
-                <!-- Loop through available roles to populate dropdown -->
-                <option v-for="role in roles" :key="role.id" :value="role.role">
+                <option
+                  v-for="role in roles"
+                  :key="role.id"
+                  :value="role.role"
+                  v-show="role.role !== 'admin'"
+                >
                   {{ role.role }}
-                  <!-- Display the role name -->
                 </option>
               </select>
-            </td>
-
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900"
-                >Edit status</a
-              >
             </td>
           </tr>
         </tbody>

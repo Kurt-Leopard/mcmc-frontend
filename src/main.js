@@ -8,6 +8,10 @@ import router from './router'
 import Toast, { POSITION } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
+import VCalendar from 'v-calendar';
+import 'v-calendar/style.css';
+
+
 const app = createApp(App)
 app.use(Toast, {
     position: POSITION.TOP_RIGHT,
@@ -15,6 +19,7 @@ app.use(Toast, {
     closeOnClick: true,
     pauseOnHover: true,
 })
+app.use(VCalendar, {})
 app.use(createPinia())
 app.use(router)
 

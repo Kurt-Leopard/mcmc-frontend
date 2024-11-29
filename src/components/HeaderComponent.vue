@@ -12,7 +12,8 @@ import axios from "../../axios";
 import { relativeTime } from "../composables/relativeTime";
 
 import { useRoute } from "vue-router";
-
+import { useToast } from "vue-toastification";
+const toast =useToast();
 const route = useRoute();
 const currentPath = ref(route.path);
 
@@ -94,7 +95,7 @@ const logout = async () => {
     }
   } catch (error) {
     if (error.response) {
-      alert(error.response.data.data);
+      toast.error(error.response.data.data);
     }
   }
 };
@@ -202,20 +203,38 @@ const refreshData = async () => {
     if (response.status === 200) {
       notify.value = response.data.data;
 
-      unreadCount.value = notify.value.filter((n) => n.is_read === 0).length;
+      unreadCount.value = notify.value.filter((n) => n.is_read === 0 && n.statusRead!==1).length;
     }
   } catch (error) {
     console.log(response.data.message);
   }
 };
 
-const goTo = async (type, notification_id) => {
+const goTo = async (type, notification_id, user_1) => {
   if (type === "events") {
     localStorage.removeItem("access");
     router.push({ path: "/view/events" });
     try {
       const response = await axios.put(
         `/api/notification-update/${notification_id}`
+      );
+
+      if (response.status === 200) {
+        refreshData();
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data.message);
+      } else {
+        console.log("Error:", error.message);
+      }
+    }
+  } else if(type==='event announcement'){
+     localStorage.removeItem("access");
+     router.push({ path: "/view/events" });
+     try {
+      const response = await axios.post(
+        `/api/notification-read/${notification_id}`,{userId:store.user.id}
       );
 
       if (response.status === 200) {
@@ -321,7 +340,7 @@ onMounted(async () => {
           }`"
           >CONTACT</RouterLink
         >
-        <RouterLink
+        <RouterLink  v-if="store.getToken()"
           :to="store.getToken() ? '/view/gallery' : '/gallery'"
            :class="`text-xs  font-bold ${currentPath === '/gallery' || currentPath === '/view/gallery'
               ? 'text-[#D98757]'
@@ -380,7 +399,7 @@ onMounted(async () => {
               Notifications
             </h1>
             <section
-              @click="goTo(notification.type, notification.notification_id)"
+              @click="goTo(notification.type, notification.notification_id, notification.user_1)"
               class="inline-block p-2 hover:bg-gray-50 cursor-pointer flex items-center justify-center w-full gap-4"
               v-for="(notification, index) in notify"
               :key="index"
@@ -394,17 +413,18 @@ onMounted(async () => {
               />
               <div class="w-full">
                 <div class="italic text-gray-500 text-xs">
-                  {{ notification.user_2_username }} replied to your comment.
+                  {{ notification.user_2_username }} {{ notification.type==='event announcement'? 'posted a new event schedule':'replied to your comment.'}}
                 </div>
                 <div class="flex items-center justify-between">
-                  <small class="italic">{{ notification.heading }} Events</small
+                  <small class="italic">{{ notification.heading }}  {{ notification.type==='event announcement'? 'posted a new event schedule':'Events.'}}</small
                   ><small class="italic text-xs text-gray-500">{{
                     relativeTime(notification.created_at)
                   }}</small>
-                  <small
-                    v-if="notification.is_read === 0"
+                   <small
+                    v-if="notification.is_read === 0 && notification.statusRead!==1"
                     class="p-1 bg-green-500 rounded-full"
                   ></small>
+               
                 </div>
               </div>
             </section>
@@ -587,7 +607,7 @@ onMounted(async () => {
           ></i>
           <a class="text-xs font-semibold subtext text-gray-600">CONTACT</a>
         </div>
-        <div
+        <div v-if="store.getToken()"
           class="block px-4 py-3 navhover cursor-pointer"
           @click="routeTo(store.getToken(), 'gallery')"
         >

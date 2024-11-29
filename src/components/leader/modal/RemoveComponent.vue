@@ -42,6 +42,7 @@
 </template>
 <script setup>
 import { inject } from "vue";
+import { useToast } from "vue-toastification";
 import axios from "../../../../axios";
 const emit = defineEmits(["closeShowDelete", "refreshData"]);
 const id = inject("id");
@@ -49,7 +50,7 @@ const closeShowDelete = () => {
   id.value = "";
   emit("closeShowDelete");
 };
-
+const toast=useToast();
 const submitDelete = async () => {
   try {
     const response = await axios.put(`/api/entry/delete/${id.value}`);
@@ -59,7 +60,7 @@ const submitDelete = async () => {
     }
   } catch (error) {
     if (error.response) {
-      alert("Error submitting inflow:", error.response.message);
+      toast.error("Error submitting inflow:", error.response.message);
     }
   }
 };

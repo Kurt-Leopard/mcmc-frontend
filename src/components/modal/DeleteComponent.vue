@@ -26,7 +26,7 @@ const submitDelete = async () => {
       emit("cancelButtonShowDeleteModal",'GalleryDelete');
       emit("refreshData");
     } else {
-      alert("Try again!");
+      toast.error("Try again!");
     }
   }else if(props.sendBy==="event"){
      const response = await axios.put(`/events/${props.id}/delete`);
@@ -35,7 +35,7 @@ const submitDelete = async () => {
       emit("cancelButtonShowDeleteModal");
       emit("refreshData");
     } else {
-      alert("Try again!");
+      toast.error("Try again!");
     }
   }else if(props.sendBy==="devotional"){
     console.log(props.id)
@@ -45,7 +45,7 @@ const submitDelete = async () => {
       emit("cancelButtonShowDeleteModal",'DevotionalDelete');
       emit("refreshData");
     } else {
-      alert("Try again!");
+      toast.error("Try again!");
     }
   }else if(props.sendBy==="deleteComment"){
      const response = await axios.put(`/api/comment/${props.id}/delete`);
@@ -54,7 +54,7 @@ const submitDelete = async () => {
       emit("cancelButtonShowDeleteModal");
       emit("refreshData");
     } else {
-      alert("Try again!");
+      toast.error("Try again!");
     }
   }
 };
