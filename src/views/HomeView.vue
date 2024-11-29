@@ -561,28 +561,28 @@ const submitForm = async () => {
             </svg>
           </p>
           <img
-            v-if="count === 0"
+            v-if="count === 1"
             src="../assets/gallery1.png"
             :alt="'gallery' + (index + 1)"
             class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px] object-cover"
             loading="lazy"
           />
           <img
-            v-if="count === 1"
+            v-if="count === 2"
             src="../assets/gallery2.png"
             :alt="'gallery' + (index + 1)"
             class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px] object-cover"
             loading="lazy"
           />
           <img
-            v-if="count === 2"
+            v-if="count === 3"
             src="../assets/gallery3.png"
             :alt="'gallery' + (index + 1)"
             class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px] object-cover"
             loading="lazy"
           />
           <img
-            v-if="count === 3"
+            v-if="count === 4"
             src="../assets/gallery4.png"
             :alt="'gallery' + (index + 1)"
             class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px] object-cover"
