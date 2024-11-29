@@ -8,11 +8,13 @@ import { accessRole, fetchUser } from "../composables/user";
 import SwitchLoaderComponent from "./leader/LoaderComponent.vue";
 import { io } from "socket.io-client";
 import { decodeJWT } from "../stores/token";
+import { useToast } from "vue-toastification";
 const store = useAuthStore();
 const user = ref("");
 if (store) {
   user.value = decodeJWT(store.token);
 }
+const toast = useToast();
 const role = ref("");
 const router = useRouter();
 let unreadCount = ref(0);
@@ -31,7 +33,7 @@ const logout = async () => {
     }
   } catch (error) {
     if (error.response) {
-      alert(error.response.data.data);
+      toast.error(error.response.data.data);
     }
   }
 };

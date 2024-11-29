@@ -3,7 +3,7 @@ import { ref } from "vue";
 import axios from "../../axios.js";
 import { useRouter } from "vue-router";
 import { arrowRightButton } from "../assets/svg/button";
-
+import ChangePasswordComponent from "../components/modal/ChangePasswordComponent.vue";
 const router = useRouter();
 const emit = defineEmits(["hide", "openRegister"]);
 const hide = () => {
@@ -17,7 +17,7 @@ const data = ref({
   username: "",
   password: "",
 });
-
+const showPasswordModal =ref(false);
 const isErrorResponseDisplay = ref();
 const isErrorResponseDisplayHide = ref();
 const isValidationSuccess = ref();
@@ -95,6 +95,13 @@ const loginUser = async () => {
     loginButtonText.value = "Login";
   }
 };
+
+const closePasswordModal=()=>{
+  showPasswordModal.value=false;
+}
+const forgotPassword =()=>{
+  showPasswordModal.value=true;
+}
 </script>
 <template>
   <section class="flex items-center justify-center bg-white h-screen">
@@ -187,8 +194,8 @@ const loginUser = async () => {
           >
           <div>
             <div class="flex items-center justify-end">
-              <RouterLink to="/" class="text-gray-600 hover:text-gray-600">
-                Forgot password?</RouterLink
+              <span @click="forgotPassword" class="text-gray-600 hover:text-gray-600 cursor-pointer">
+                Forgot password?</span
               >
             </div>
             <div
@@ -318,5 +325,6 @@ const loginUser = async () => {
 
       <p class="mt-2 text-sm text-red-700">{{ errorResponseMessage }}</p>
     </div>
+      <ChangePasswordComponent v-if="showPasswordModal" @closePasswordModal="closePasswordModal"/>
   </section>
 </template>

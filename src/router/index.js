@@ -151,13 +151,25 @@ const router = createRouter({
       component: () => import('../views/admin/InboxView.vue'),
       meta: { requiresAuth: 'admin' }
     },
-
     {
-      path: '/view/page/manage/inbox',
-      name: 'AdminInbox',
-      component: () => import('../views/admin/InboxView.vue'),
+      path: '/view/page/manage/meeting',
+      name: 'AdminMeeting',
+      component: () => import('../views/admin/MeetingView.vue'),
       meta: { requiresAuth: 'admin' }
     },
+    {
+      path: '/view/page/manage/Profile',
+      name: 'AdminProfile',
+      component: () => import('../views/admin/ProfileView.vue'),
+      meta: { requiresAuth: 'admin' }
+    },
+
+    // {
+    //   path: '/view/page/manage/inbox',
+    //   name: 'AdminInbox',
+    //   component: () => import('../views/admin/InboxView.vue'),
+    //   meta: { requiresAuth: 'admin' }
+    // },
     {
       path: '/view/page/manage/gallery',
       name: 'AdminGallery',
@@ -176,12 +188,12 @@ router.beforeEach(async (to, from, next) => {
   await accessRole();
   const token = useAuthStore();
   const isToken = token.getToken();
-  let accessToken='';
-  if(localStorage.getItem("access")){
+  let accessToken = '';
+  if (localStorage.getItem("access")) {
     accessToken = decodeJWT(localStorage.getItem("access"));
   }
   const switching = accessToken.role || 'member';
-  const role = token.getRole().role==='leader'? {role:switching}:token.getRole();
+  const role = token.getRole().role === 'leader' ? { role: switching } : token.getRole();
 
 
   if (to.meta.requiresAuth) {

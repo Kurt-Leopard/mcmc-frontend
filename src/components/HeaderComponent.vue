@@ -12,7 +12,8 @@ import axios from "../../axios";
 import { relativeTime } from "../composables/relativeTime";
 
 import { useRoute } from "vue-router";
-
+import { useToast } from "vue-toastification";
+const toast =useToast();
 const route = useRoute();
 const currentPath = ref(route.path);
 
@@ -94,7 +95,7 @@ const logout = async () => {
     }
   } catch (error) {
     if (error.response) {
-      alert(error.response.data.data);
+      toast.error(error.response.data.data);
     }
   }
 };
@@ -339,7 +340,7 @@ onMounted(async () => {
           }`"
           >CONTACT</RouterLink
         >
-        <RouterLink
+        <RouterLink  v-if="store.getToken()"
           :to="store.getToken() ? '/view/gallery' : '/gallery'"
            :class="`text-xs  font-bold ${currentPath === '/gallery' || currentPath === '/view/gallery'
               ? 'text-[#D98757]'
@@ -606,7 +607,7 @@ onMounted(async () => {
           ></i>
           <a class="text-xs font-semibold subtext text-gray-600">CONTACT</a>
         </div>
-        <div
+        <div v-if="store.getToken()"
           class="block px-4 py-3 navhover cursor-pointer"
           @click="routeTo(store.getToken(), 'gallery')"
         >

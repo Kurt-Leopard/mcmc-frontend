@@ -89,7 +89,7 @@ watch([currentPage, searchBy], refreshData);
   <main>
     <HeaderComponent />
 
-    <div class="pb-3 px-4">
+    <div class="pb-3 px-4 mt-5">
       <h1 class="text-2xl font-semibold mb-4">Devotional / Bible Verses</h1>
 
       <div class="mb-4">
@@ -101,7 +101,7 @@ watch([currentPage, searchBy], refreshData);
         />
       </div>
 
-      <div v-for="user in groupedDevotionals" :key="user.userId" class="mb-6">
+      <div  class="mb-6">
         <table class="w-full divide-gray-200 mt-4">
           <thead class="bg-gray-50">
             <tr>
@@ -129,7 +129,7 @@ watch([currentPage, searchBy], refreshData);
               </th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-gray-200">
+          <tbody class="bg-white divide-gray-200" v-for="user in groupedDevotionals" :key="user.userId">
             <tr v-for="entry in user.entries" :key="entry.id">
               <td class="px-6 py-4">{{ user.fullname }}</td>
             

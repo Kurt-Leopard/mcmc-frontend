@@ -4,11 +4,16 @@
       v-if="!success"
       class="min-h-screen bg-gray-100 flex items-center justify-center fixed top-0 left-0 border w-full z-30"
     >
-    <span class="w-screen h-screen fixed top-0 left-0 bg-gray-100" @click="cancel"></span>
+      <span
+        class="w-screen h-screen fixed top-0 left-0 bg-gray-100"
+        @click="cancel"
+      ></span>
       <div
         class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-md w-full z-40"
       >
-        <h1 class="text-center text-2xl font-bold mb-6">Change Password</h1>
+        <h1 class="text-center text-2xl font-bold mb-6">
+          {{type==='changepass'? 'Do you want to your password?':'Forgot your password?'}}
+        </h1>
         <form @submit.prevent="submitChangePassword">
           <div class="mb-4">
             <label class="block text-gray-700 font-bold mb-2" for="email">
@@ -23,7 +28,12 @@
             />
           </div>
           <button
-            :disabled="resetPassword === 'Sending...' ? true : false" :class="access? 'text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2':'bg-[#D98757]'"
+            :disabled="resetPassword === 'Sending...' ? true : false"
+            :class="
+              access
+                ? 'text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2'
+                : 'bg-[#D98757]'
+            "
             class="flex items-center justify-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
             type="submit"
           >
@@ -57,8 +67,18 @@
         <div class="w-full">
           <!-- button -->
           <span v-html="arrowRightButton()" @click="closePasswordModal"></span>
-          <img src="../../assets/logo.png" alt="logo" class="mx-auto mb-6" v-if="!access" />
-          <img src="../../assets/cashflow.png" alt="logo" class="h-24 w-24 mx-auto mb-6" v-else />
+          <img
+            src="../../assets/logo.png"
+            alt="logo"
+            class="mx-auto mb-6"
+            v-if="!access"
+          />
+          <img
+            src="../../assets/cashflow.png"
+            alt="logo"
+            class="h-24 w-24 mx-auto mb-6"
+            v-else
+          />
           <form class="space-y-6" @submit.prevent="submitChange">
             <div class="flex items-center justify-between w-full">
               <input
@@ -133,7 +153,7 @@
                       viewBox="0 0 482 512"
                       fill="currentColor"
                       class="h-9 w-9 px-2 rounded-md"
-                       :class="access? 'text-gray-500':'text-[#D98757]'"
+                      :class="access ? 'text-gray-500' : 'text-[#D98757]'"
                     >
                       <path
                         d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z"
@@ -161,8 +181,8 @@
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 482 512"
                       fill="currentColor"
-                      class="h-9 w-9 px-2  rounded-md"
-                      :class="access? 'text-gray-500':'text-[#D98757]'"
+                      class="h-9 w-9 px-2 rounded-md"
+                      :class="access ? 'text-gray-500' : 'text-[#D98757]'"
                     >
                       <path
                         d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z"
@@ -182,9 +202,14 @@
 
             <div>
               <button
-                :disabled="savingPassword === 'Saving...' ? true : false" :class="access? 'text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2':'bg-[#D98757]'"
+                :disabled="savingPassword === 'Saving...' ? true : false"
+                :class="
+                  access
+                    ? 'text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2'
+                    : 'bg-[#D98757]'
+                "
                 type="submit"
-                class="flex items-center w-full justify-center rounded-md  px-4 py-4 font-bold leading-6 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                class="flex items-center w-full justify-center rounded-md px-4 py-4 font-bold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 <svg
                   v-show="savingPassword == 'Saving...'"
@@ -215,13 +240,13 @@
 </template>
 <script setup>
 import { arrowRightButton } from "../../assets/svg/button";
-import { onMounted, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 import axios from "../../../axios";
 import { useAuthStore } from "../../stores/store";
 import DangerComponent from "../toast/DangerComponent.vue";
 import { fetchUser } from "../../composables/user";
 import { routerKey } from "vue-router";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 
@@ -251,6 +276,8 @@ const email = ref("");
 const password = ref("");
 const newpassword = ref("");
 
+const type=inject("type");
+const userInfo=ref(null);
 const resetPassword = ref("Reset Password");
 const savingPassword = ref("Save");
 const submitChangePassword = async () => {
@@ -261,9 +288,10 @@ const submitChangePassword = async () => {
     });
 
     if (response.status === 200) {
+      userInfo.value =response.data.user[0].id;
       const data = {
         responseStatus: response.status,
-        responseMessage: response.data.message,
+        responseMessage:"Submitted SuccessFully!"||  response.data.message,
       };
       resetPassword.value = "Reset Password";
       success.value = true;
@@ -276,6 +304,7 @@ const submitChangePassword = async () => {
       responseStatus.value = error.response.status;
       responseMessage.value = error.response.data.message;
       resetPassword.value = "Reset Password";
+
     } else if (error.request) {
       responseStatus.value = 500;
       responseMessage.value =
@@ -296,33 +325,49 @@ const submitChangePassword = async () => {
 const submitChange = async () => {
   savingPassword.value = "Saving...";
   try {
-    const pin = `${first.value}${second.value}${third.value}${fourth.value}${fifth.value}${sixth.value}`;
-    const oneTimePassword = parseInt(pin);
-    if (password.value === newpassword.value) {
+    if (password.value === "" && newpassword.value === "") {
       const data = {
-        password: password.value,
-        pin: oneTimePassword,
+        responseStatus: 404,
+        responseMessage: "Password must required!",
       };
 
-      const response = await axios.post(
-        `/user/submit-change-password/${store.user.id}`,
-        data
-      );
-
-      if (response.status === 200) {
-        const data = {
-          responseStatus: response.status,
-          responseMessage: response.data.message,
-        };
-        savingPassword.value = "Save";
-        setTimeout(() => {
-          store.setToastSuccess(data);
-        }, 500);
-      }
+      savingPassword.value = "Save";
+      setTimeout(() => {
+        store.setToastSuccess(data);
+        emit("closePasswordModal");
+      }, 500);
     } else {
-      responseStatus.value = "500";
-      responseMessage.value = "Password doesn't match";
-      savingPassword.value = "Saving...";
+      const pin = `${first.value}${second.value}${third.value}${fourth.value}${fifth.value}${sixth.value}`;
+      const oneTimePassword = parseInt(pin);
+      if (password.value === newpassword.value) {
+        const data = {
+          password: password.value,
+          pin: oneTimePassword,
+        };
+
+        const response = await axios.post(
+          `/user/submit-change-password/${userInfo.value}`,
+          data
+        );
+
+        if (response.status === 200) {
+          const data = {
+            responseStatus: response.status,
+            responseMessage:response.data.message,
+          };
+          savingPassword.value = "Save";
+          userInfo.value=null;
+          setTimeout(() => {
+            store.setToastSuccess(data);
+            emit("closePasswordModal");
+          }, 500);
+        }
+      } else {
+          userInfo.value=null;
+        responseStatus.value = "500";
+        responseMessage.value = "Password doesn't match";
+        savingPassword.value = "Saving...";
+      }
     }
   } catch (error) {
     if (error.response) {
@@ -346,9 +391,9 @@ const submitChange = async () => {
   }
 };
 
-const cancel =()=>{
-    router.push("/");
-}
+const cancel = () => {
+  emit("closePasswordModal");
+};
 onMounted(async () => {
   await fetchUser();
 });

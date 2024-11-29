@@ -62,6 +62,12 @@ export const useAuthStore = defineStore("auth", {
         getAllocation() {
             return this.allocation;  // Return the stored function
         },
+        setShowmenuAdmin(data) {
+            this.showmenuAdmin = data;
+        },
+        getShowmenuAdmin() {
+            return this.showmenuAdmin;  // Return the stored function
+        },
 
 
     },

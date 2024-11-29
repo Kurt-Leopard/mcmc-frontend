@@ -279,45 +279,36 @@ onMounted(() => {
           </div>
         </div>
 
-        <div class="grid grid-cols-2">
-          <div class="text-gray-700 mb-2">
-            <div class="font-semibold">Savings Deduction (10%)</div>
-            <div class="">
-              Tithes of Thites:
-              <span v-for="(balance, index) in allocation_balance" :key="index">
-                {{
-                  (
-                    (balance.balance ?? 0).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    }) * 0.1
-                  ).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })
-                }}
-              </span>
-            </div>
-            <div>
-              Restricted Funds:
-              <span v-for="(balance, index) in allocation_balance" :key="index">
-                {{
-                  (balance.balance -
-                    (
-                      (balance.balance ?? 0).toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }) * 0.1
-                    ).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })) *
-                  0.1
-                }}
-              </span>
-            </div>
-          </div>
-        </div>
+       <div class="grid grid-cols-2 gap-4">
+  <div class="text-gray-700 mb-2">
+    <div class="font-semibold">Savings Deduction (10%)</div>
+    <div>
+      Tithes of Tithes:
+      <span v-for="(balance, index) in allocation_balance" :key="index">
+        {{
+          ((balance.balance ?? 0) * 0.1).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })
+        }}
+      </span>
+    </div>
+  </div>
+
+  <div class="text-gray-700 mb-2">
+    <div class="font-semibold">Restricted Funds Deduction (10%)</div>
+    <div>
+      <span v-for="(balance, index) in allocation_balance" :key="index">
+        {{
+          ((balance.balance ?? 0) * 0.1).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })
+        }}
+      </span>
+    </div>
+  </div>
+</div>
       </div>
       <div class="uppercase py-2">Contingency</div>
       <table class="w-full text-left">

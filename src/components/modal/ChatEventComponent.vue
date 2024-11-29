@@ -106,7 +106,8 @@ import { relativeTime } from "../../composables/relativeTime";
 import DeleteComponent from "../../components/modal/DeleteComponent.vue";
 import { useAuthStore } from "../../stores/store";
 import { fetchUser } from "../../composables/user";
-
+import { useToast } from "vue-toastification";
+const toast=useToast()
 const store = useAuthStore();
 
 const emit = defineEmits(["buttonHideshowModalComment"]);
@@ -206,7 +207,7 @@ const buttonSendComment = async (event_id, user_id) => {
         comment.value = "";
       }
     } catch (error) {
-      alert(error.response);
+      toast.error(error.response);
     }
   } else {
     const data = {
@@ -224,7 +225,7 @@ const buttonSendComment = async (event_id, user_id) => {
         type.value = "";
       }
     } catch (error) {
-      alert(error.response);
+      toast.error(error.response);
     }
   }
 };

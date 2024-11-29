@@ -44,10 +44,7 @@ const closeRequest = () => {
   getBalance();
   getChange();
 };
-// store.getMethod().then(() => {
-//    alert("ahah");
-//    refreshAllocation();
-// });
+
 
 const expenseLog = ref([]);
 const isExpenseLog = ref(false);
@@ -150,6 +147,7 @@ const previousPage = () => {
 };
 
 const nextPage = () => {
+
   currentPage.value++;
   refreshData();
 };
@@ -167,7 +165,6 @@ const getBalance = async () => {
     console.error(error.response);
   }
 };
-
 
 const totalChange = ref([]);
 const getChange = async () => {
@@ -198,9 +195,9 @@ onMounted(async () => {
 
 <template>
   <main
-    class="py-3 px-4 lg:px-[50px] xl:px-32 mb-12 mt-[115px] lg:mt-32 xl:mt-32 flex justify-center"
+    :class="store.getRole().role!=='admin'?'py-3 px-4 lg:px-[50px] xl:px-32 mb-12 mt-[115px] lg:mt-32 xl:mt-32 flex justify-center':'px-4'"
   >
-    <div class="my-6 w-full">
+    <div class="my-6 w-full" :class="store.getRole().role==='admin'? 'lg:h-[80vh] xl:h-[80vh]  overflow-y-auto lg:px-2 xl:px-2 element-with-horizontal-scroll':''">
       <!--  -->
 
       <div
@@ -234,7 +231,7 @@ onMounted(async () => {
       <div v-if="isBoxShow">
         <div>
           <div
-            class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4"
+            class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 "
           >
             <div
               class="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-6 rounded-xl mb-2 shadow-lg"
@@ -395,7 +392,7 @@ onMounted(async () => {
           <a
             class="text-gray-500 flex items-center justify-center hover:text-gray-700 relative"
           >
-            <button
+            <button v-if="store.getRole().role!=='admin'"
               @click="viewRequest"
               class="py-2.5 px-4 rounded-lg bg-gray-100"
             >
