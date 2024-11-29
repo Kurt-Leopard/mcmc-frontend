@@ -72,7 +72,7 @@ const startAutoplay = () => {
 
 onMounted(() => {
   startAutoplay();
-   window.scrollTo(0, 0);
+  window.scrollTo(0, 0);
 });
 
 // image view fullscreen
@@ -90,7 +90,8 @@ const hideImg = (index) => {
     showImages.value[index] = false;
   }, 300);
 };
-
+const images = import.meta.glob("../assets/gallery*.png", { eager: true });
+const imageUrls = Object.values(images);
 // contact
 
 // Form data
@@ -370,7 +371,7 @@ const submitForm = async () => {
             <div class="mt-4 flex justify-end">
               <button
                 @click="closeVision"
-                class="modal-close px-4 bg-gray-100 p-3 rounded-lg text-black hover:bg-gray-200 cursor-pointer "
+                class="modal-close px-4 bg-gray-100 p-3 rounded-lg text-black hover:bg-gray-200 cursor-pointer"
               >
                 Cancel
               </button>
@@ -448,9 +449,7 @@ const submitForm = async () => {
         <h1 class="text-2xl lg:text-3xl xl:text-3xl font-bold text-[#D98757]">
           Gallery
         </h1>
-        <p
-          class="hidden max-w-screen-sm text-gray-500  md:block"
-        >
+        <p class="hidden max-w-screen-sm text-gray-500 md:block">
           This section highlights key moments from the Christian Mission
           Church’s ministry. See images of our outreach, service events, and
           worship activities, reflecting our dedication to faith and community.
@@ -463,7 +462,7 @@ const submitForm = async () => {
         </RouterLink>
       </div>
       <section class="bg-white bg-white">
-        <div class="py-4  sm:py-4">
+        <div class="py-4 sm:py-4">
           <div
             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 h-full"
           >
@@ -477,7 +476,7 @@ const submitForm = async () => {
                 <img
                   src="../assets/gallery1.png"
                   alt=""
-                  class="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out "
+                  class="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
                 />
                 <div
                   class="absolute inset-0 bg-gradient-to-b from-gray-900/25 to-gray-900/5"
@@ -562,7 +561,7 @@ const submitForm = async () => {
             </svg>
           </p>
           <img
-            :src="'../../gallery' + (index + 1) + '.png'"
+            :src="imageUrls[index]"
             :alt="'gallery' + (index + 1)"
             class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px] object-cover"
             loading="lazy"
@@ -630,7 +629,7 @@ const submitForm = async () => {
         </div>
       </div>
     </section>
-  <Footer-Component/>
+    <Footer-Component />
     <Danger-Component
       :errors="[responseStatus, responseMessage]"
       @closeToast="closeToast"
