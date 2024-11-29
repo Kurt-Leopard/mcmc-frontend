@@ -78,8 +78,9 @@ onMounted(() => {
 // image view fullscreen
 const showImages = ref([false, false, false, false]);
 const hideImages = ref([false, false, false, false]);
-
+const count = ref("");
 const btnimg = (index) => {
+  count.value = index;
   hideImages.value[index - 1] = false;
   showImages.value[index - 1] = true;
 };
@@ -90,8 +91,7 @@ const hideImg = (index) => {
     showImages.value[index] = false;
   }, 300);
 };
-const images = import.meta.glob('../assets/gallery*.png', { eager: true });
-const imageUrls = Object.values(images);
+
 // contact
 
 // Form data
@@ -534,40 +534,62 @@ const submitForm = async () => {
         </div>
       </section>
 
-       <div
-      v-for="(show, index) in showImages"
-      :key="index"
-      v-show="show"
-      :class="hideImages[index] ? 'animate-slide-out-view-screen' : ''"
-      class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black animate-slide-view-screen"
-      style="z-index: 102"
-    >
-      <div class="p-4">
-        <p class="flex justify-end">
-          <svg
-            @click="hideImg(index)"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-8 w-8 my-4 text-white hover:text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            ></path>
-          </svg>
-        </p>
-        <img
-          :src="imageUrls[index]"
-          :alt="'gallery' + (index + 1)"
-          class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px] object-cover"
-          loading="lazy"
-        />
+      <div
+        v-for="(show, index) in showImages"
+        :key="index"
+        v-show="show"
+        :class="hideImages[index] ? 'animate-slide-out-view-screen' : ''"
+        class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black animate-slide-view-screen"
+        style="z-index: 102"
+      >
+        <div class="p-4">
+          <p class="flex justify-end">
+            <svg
+              @click="hideImg(index)"
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 my-4 text-white hover:text-gray-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </p>
+          <img
+            v-if="count === 0"
+            src="../assets/gallery1.png"
+            :alt="'gallery' + (index + 1)"
+            class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px] object-cover"
+            loading="lazy"
+          />
+          <img
+            v-if="count === 1"
+            src="../assets/gallery2.png"
+            :alt="'gallery' + (index + 1)"
+            class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px] object-cover"
+            loading="lazy"
+          />
+          <img
+            v-if="count === 2"
+            src="../assets/gallery3.png"
+            :alt="'gallery' + (index + 1)"
+            class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px] object-cover"
+            loading="lazy"
+          />
+          <img
+            v-if="count === 3"
+            src="../assets/gallery4.png"
+            :alt="'gallery' + (index + 1)"
+            class="px-1 w-[800px] h-[300px] lg:h-[500px] xl:h-[500px] object-cover"
+            loading="lazy"
+          />
+        </div>
       </div>
-    </div>
     </section>
 
     <section>
