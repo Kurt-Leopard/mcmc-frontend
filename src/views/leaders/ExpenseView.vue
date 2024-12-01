@@ -45,7 +45,6 @@ const closeRequest = () => {
   getChange();
 };
 
-
 const expenseLog = ref([]);
 const isExpenseLog = ref(false);
 const changeLog = (expense) => {
@@ -147,7 +146,6 @@ const previousPage = () => {
 };
 
 const nextPage = () => {
-
   currentPage.value++;
   refreshData();
 };
@@ -195,9 +193,20 @@ onMounted(async () => {
 
 <template>
   <main
-    :class="store.getRole().role!=='admin'?'py-3 px-4 lg:px-[50px] xl:px-32 mb-12 mt-[115px] lg:mt-32 xl:mt-32 flex justify-center':'px-4'"
+    :class="
+      store.getRole().role !== 'admin'
+        ? 'py-3 px-4 lg:px-[50px] xl:px-32 mb-12 mt-[115px] lg:mt-32 xl:mt-32 flex justify-center'
+        : 'px-4'
+    "
   >
-    <div class="my-6 w-full" :class="store.getRole().role==='admin'? 'lg:h-[80vh] xl:h-[80vh]  overflow-y-auto lg:px-2 xl:px-2 element-with-horizontal-scroll':''">
+    <div
+      class="my-6 w-full"
+      :class="
+        store.getRole().role === 'admin'
+          ? 'lg:h-[80vh] xl:h-[80vh]  overflow-y-auto lg:px-2 xl:px-2 element-with-horizontal-scroll'
+          : ''
+      "
+    >
       <!--  -->
 
       <div
@@ -231,7 +240,7 @@ onMounted(async () => {
       <div v-if="isBoxShow">
         <div>
           <div
-            class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 "
+            class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4"
           >
             <div
               class="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-6 rounded-xl mb-2 shadow-lg"
@@ -392,7 +401,8 @@ onMounted(async () => {
           <a
             class="text-gray-500 flex items-center justify-center hover:text-gray-700 relative"
           >
-            <button v-if="store.getRole().role!=='admin'"
+            <button
+              v-if="store.getRole().role !== 'admin'"
               @click="viewRequest"
               class="py-2.5 px-4 rounded-lg bg-gray-100"
             >
@@ -436,9 +446,9 @@ onMounted(async () => {
               MCMC Allocation Receipt
             </h2>
           </div>
-          <div class="px-2">
+          <div class="px-2" >
             <div class="flex justify-between mb-4">
-              <span class="text-xs text-gray-700 font-mono">Date:</span>
+              <span class="text-xs text-gray-700 font-mono">Date: </span>
               <span class="text-xs font-mono">{{
                 getDate(expense.created_at)
               }}</span>
@@ -498,7 +508,6 @@ onMounted(async () => {
                 >Change: {{ expense.spent }}</span
               >
               <button
-                v-if="expense.spent === null"
                 @click="changeLog(expense)"
                 type="button"
                 class="border w-1/3 p-1 px-1 text-center hover:border-gray-500 rounded-md text-sm font-bold font-mono"

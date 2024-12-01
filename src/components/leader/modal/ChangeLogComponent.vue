@@ -169,7 +169,7 @@ const imagePreviews = ref([]);
 
 const expense = ref({
   expenseId: expenseLog.value.id,
-  amount: expenseLog.value.amount,
+  amount:expenseLog.value.total_change? expenseLog.value.total_change: expenseLog.value.amount,
   spent: "",
 });
 

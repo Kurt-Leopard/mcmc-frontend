@@ -97,32 +97,32 @@ onBeforeUnmount(() => {
   window.removeEventListener("storage", updateSwitching);
 });
 
-const deferredPrompt = ref(null); // Store the beforeinstallprompt event
+const deferredPrompt = ref(null); 
 
-// Function to trigger the PWA install prompt
+
 const installPWA = () => {
   if (deferredPrompt.value) {
-    // Show the install prompt
+
     deferredPrompt.value.prompt();
 
-    // Wait for the user to respond to the prompt
+
     deferredPrompt.value.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === "accepted") {
         console.log("User accepted the install prompt");
       } else {
         console.log("User dismissed the install prompt");
       }
-      // Reset the deferred prompt variable
+ 
       deferredPrompt.value = null;
     });
   }
 };
 
-// Setup the beforeinstallprompt event listener
+
 onMounted(() => {
   window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault(); // Prevent the default mini-infobar
-    deferredPrompt.value = e; // Store the event to use later
+    e.preventDefault();
+    deferredPrompt.value = e; 
   });
 });
 </script>
