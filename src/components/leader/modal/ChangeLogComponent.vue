@@ -166,7 +166,7 @@ const expenseLog = inject("expenseLog");
 
 const images = ref([]);
 const imagePreviews = ref([]);
-
+console.log("expenseLog", expenseLog.value)
 const expense = ref({
   expenseId: expenseLog.value.id,
   amount:expenseLog.value.total_change? expenseLog.value.total_change: expenseLog.value.amount,
