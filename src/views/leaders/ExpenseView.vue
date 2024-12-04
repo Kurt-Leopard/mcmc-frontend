@@ -1,10 +1,10 @@
 <script setup>
 import axios from "../../../axios";
-import { onMounted, ref, watch, provide, watchEffect } from "vue";
+import { onMounted, ref, watch, provide, watchEffect, computed } from "vue";
 import PostComponent from "../../components/leader/modal/PostComponent.vue";
 import RequestComponent from "../../components/leader/modal/RequestComponent.vue";
 import ChangeLogComponent from "../../components/leader/modal/ChangeLogComponent.vue";
-import { getDate } from "../../composables/date";
+import { getDate, getDateTime } from "../../composables/date";
 import { useAuthStore } from "../../stores/store";
 import { decodeJWT } from "../../stores/token";
 import { accessControl } from "../../composables/user";
@@ -45,11 +45,12 @@ const closeRequest = () => {
   getChange();
 };
 
-
 const expenseLog = ref([]);
 const isExpenseLog = ref(false);
+const indexBtn = ref([]);
 const changeLog = (expense) => {
   isExpenseLog.value = true;
+  console.log("expense ni", expense);
   expenseLog.value = expense;
 };
 
@@ -83,28 +84,42 @@ const refreshAllocation = async () => {
     }
   }
 };
-const expenses = ref([]);
-const refreshData = async () => {
-  try {
-    const response = await axios.get(
-      `/api/expense/${typeOfExpense.value}?page=${currentPage.value}&limit=${itemsPerPage.value}&searchBy=${searchBy.value}&searchByDate=${searchByDate.value}`
-    );
 
-    if (response.status === 200) {
-      expenses.value = response.data.results;
-      errorResponse.value = false;
+const expandedIds = ref([]);
+
+// Group expenses by `id` and keep only the latest
+const latestExpenses = computed(() => {
+  const groups = expenses.value.reduce((acc, expense) => {
+    if (
+      !acc[expense.id] ||
+      new Date(expense.created_at) > new Date(acc[expense.id].created_at)
+    ) {
+      acc[expense.id] = expense;
     }
-  } catch (error) {
-    if (error.response) {
-      if (error.response.status === 404) {
-        errorResponse.value = true;
-      } else {
-        console.log(error.response.message);
-      }
-    }
+    return acc;
+  }, {});
+  return Object.values(groups);
+});
+
+// Get all expenses for a specific `id`
+const getAllExpensesById = (id) =>
+  expenses.value.filter((expense) => expense.id === id);
+
+// Toggle group visibility
+const toggleExpand = (id, index) => {
+  if (!indexBtn.value.includes(index)) {
+    indexBtn.value.push(index);
+  } else {
+    indexBtn.value = indexBtn.value.filter((item) => item !== index);
+  }
+  if (expandedIds.value.includes(id)) {
+    expandedIds.value = expandedIds.value.filter(
+      (expandedId) => expandedId !== id
+    );
+  } else {
+    expandedIds.value.push(id);
   }
 };
-
 watch(
   () => store.getMethod(), // Source: the reactive data or function to watch
   (methodResult) => {
@@ -118,6 +133,31 @@ watch(
     }
   }
 );
+
+const expenses = ref([]);
+const refreshData = async () => {
+  try {
+    const response = await axios.get(
+      `/api/expense/${typeOfExpense.value}?page=${currentPage.value}&limit=${itemsPerPage.value}&searchBy=${searchBy.value}&searchByDate=${searchByDate.value}`
+    );
+
+    if (response.status === 200) {
+      expenses.value = response.data.results;
+      errorResponse.value = false;
+    } else {
+      expenses.value = [];
+    }
+  } catch (error) {
+    expenses.value = [];
+    if (error.response) {
+      if (error.response.status === 404) {
+        errorResponse.value = true;
+      } else {
+        console.log(error.response.message);
+      }
+    }
+  }
+};
 
 watch([currentPage, searchBy, searchByDate, typeOfExpense], refreshData);
 const errorResponse = ref(false);
@@ -147,7 +187,6 @@ const previousPage = () => {
 };
 
 const nextPage = () => {
-
   currentPage.value++;
   refreshData();
 };
@@ -178,7 +217,9 @@ const getChange = async () => {
     console.error(error.response);
   }
 };
-
+const getTotalSum = (total) => {
+  return total.reduce((sum, expense) => sum + expense.spent, 0);
+};
 onMounted(async () => {
   refreshAllocation();
   refreshData();
@@ -195,9 +236,20 @@ onMounted(async () => {
 
 <template>
   <main
-    :class="store.getRole().role!=='admin'?'py-3 px-4 lg:px-[50px] xl:px-32 mb-12 mt-[115px] lg:mt-32 xl:mt-32 flex justify-center':'px-4'"
+    :class="
+      store.getRole().role !== 'admin'
+        ? 'py-3 px-4 lg:px-[50px] xl:px-32 mb-12 mt-[115px] lg:mt-32 xl:mt-32 flex justify-center'
+        : 'px-4'
+    "
   >
-    <div class="my-6 w-full" :class="store.getRole().role==='admin'? 'lg:h-[80vh] xl:h-[80vh]  overflow-y-auto lg:px-2 xl:px-2 element-with-horizontal-scroll':''">
+    <div
+      class="my-6 w-full"
+      :class="
+        store.getRole().role === 'admin'
+          ? 'lg:h-[80vh] xl:h-[80vh]  overflow-y-auto lg:px-2 xl:px-2 element-with-horizontal-scroll'
+          : ''
+      "
+    >
       <!--  -->
 
       <div
@@ -231,7 +283,7 @@ onMounted(async () => {
       <div v-if="isBoxShow">
         <div>
           <div
-            class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 "
+            class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4"
           >
             <div
               class="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-6 rounded-xl mb-2 shadow-lg"
@@ -392,7 +444,8 @@ onMounted(async () => {
           <a
             class="text-gray-500 flex items-center justify-center hover:text-gray-700 relative"
           >
-            <button v-if="store.getRole().role!=='admin'"
+            <button
+              v-if="store.getRole().role !== 'admin'"
               @click="viewRequest"
               class="py-2.5 px-4 rounded-lg bg-gray-100"
             >
@@ -424,10 +477,11 @@ onMounted(async () => {
           </div>
         </div>
         <div
-          v-show="!errorResponse"
-          class="w-full border border-gray-300 p-6"
-          v-for="(expense, index) in expenses"
-          :key="index"
+          expenses.value="response.data.results;"
+          v-for="(expense, index) in latestExpenses"
+          :key="expense.id"
+          class="w-full border border-gray-300 p-6 mb-4"
+          :class="indexBtn.includes(index) ? '' : 'max-h-[400px]'"
         >
           <div class="px-2 py-2">
             <h2
@@ -440,7 +494,7 @@ onMounted(async () => {
             <div class="flex justify-between mb-4">
               <span class="text-xs text-gray-700 font-mono">Date:</span>
               <span class="text-xs font-mono">{{
-                getDate(expense.created_at)
+                getDateTime(expense.created_at)
               }}</span>
             </div>
             <div class="flex justify-between mb-4">
@@ -449,62 +503,109 @@ onMounted(async () => {
             </div>
             <div class="flex justify-between mb-4">
               <span class="text-xs text-gray-700 font-mono">Amount:</span>
-              <span class="text-xs font-mono">{{
-                (expense.amount ?? 0).toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })
-              }}</span>
-            </div>
-            <div class="flex justify-between mb-4">
-              <span class="text-xs text-gray-700 font-mono">Particular:</span>
-              <span class="text-xs font-mono">{{ expense.particular }}</span>
-            </div>
-            <div class="flex justify-between mb-4">
-              <span class="text-xs text-gray-700 font-mono">total Spent:</span>
               <span class="text-xs font-mono">
                 {{
-                  (expense.spent ?? 0).toLocaleString(undefined, {
+                  (expense.amount ?? 0).toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })
-                }}</span
-              >
+                }}
+              </span>
             </div>
             <div class="flex justify-between mb-4">
-              <span class="text-xs text-gray-700 font-mono">total Change:</span>
+              <span class="text-xs text-gray-700 font-mono"
+                >Total Change:
+              </span>
               <span
-                :class="
-                  expense.spent !== null
-                    ? ' bg-green-100 rounded-md p-1 text-xs font-mono'
-                    : 'text-xs font-mono'
-                "
-                >{{
-                  (expense.total_change ?? 0).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }) || "0.00"
-                }}</span
+                class="text-xs font-mono"
+                v-for="exp in getAllExpensesById(expense.id)"
+                :key="exp.created_at"
+                v-show="exp.row_num === getAllExpensesById(expense.id).length"
               >
+                {{
+                  getTotalSum(getAllExpensesById(expense.id)) === expense.amount
+                    ? "0.00"
+                    : exp.total_change
+                }}
+              </span>
             </div>
-            <div class="border-t border-gray-300 my-3"></div>
+            <div class="flex justify-between mb-4">
+              <span class="text-xs text-gray-700 font-mono">Particular: </span>
+              <span class="text-xs font-mono">
+                {{
+                 expense.particular
+                }}
+              </span>
+            </div>
+             <div class="flex-col justify-between mb-4">
+              <div class="text-xs text-gray-700 font-mono">Particular: </div>
+              <div class="text-xs font-mono my-1">
+                {{
+                 expense.particular?expense.particular:'N/A'
+                }}
+              </div>
+            </div>
+
             <div
               class="flex justify-between items-center w-full"
               v-if="access_control === 'Bookkeeper'"
             >
-              <span
+              <!-- <span
                 class="text-sm font-bold font-mono"
                 v-if="expense.spent === null"
                 >Change: {{ expense.spent }}</span
-              >
-              <button
-                v-if="expense.spent === null"
-                @click="changeLog(expense)"
+              > -->
+
+              <button  :disabled="getTotalSum(getAllExpensesById(expense.id)) === expense.amount"
+                v-for="exp in getAllExpensesById(expense.id)"
+                :class="
+                  getTotalSum(getAllExpensesById(expense.id)) === expense.amount
+                    ? 'w-full'
+                    : 'border w-1/3'
+                "
+                :key="exp.created_at"
+                v-show="exp.row_num === getAllExpensesById(expense.id).length"
+                @click="changeLog(exp)"
                 type="button"
-                class="border w-1/3 p-1 px-1 text-center hover:border-gray-500 rounded-md text-sm font-bold font-mono"
+                class="p-1 px-1 text-center hover:border-gray-500 rounded-md text-sm font-bold font-mono"
               >
-                o.oo
+                {{getTotalSum(getAllExpensesById(expense.id)) === expense.amount? 'Full Expense Utilization':'Add'}}
               </button>
+            </div>
+            <!-- Button to toggle visibility of all entries for the same id -->
+            <button
+              @click="toggleExpand(expense.id, index)"
+              class="border w-full p-2 rounded-md text-sm font-bold font-mono mt-2"
+            >
+              {{ expandedIds.includes(expense.id) ? "Hide All" : "Show All" }}
+            </button>
+
+            <!-- Show all expenses for the current id when expanded -->
+            <div v-if="expandedIds.includes(expense.id)" class="mt-4">
+              <h3 class="text-sm font-bold font-mono border-b mb-2">Entries</h3>
+              <div
+                v-for="exp in getAllExpensesById(expense.id)"
+                :key="exp.created_at"
+                class="mb-2"
+              >
+                <div class="flex justify-between">
+                  <span class="text-xs text-gray-700 font-mono">Date:</span>
+                  <span class="text-xs font-mono">{{
+                    getDateTime(exp.created_at)
+                  }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-xs text-gray-700 font-mono">Amount:</span>
+                  <span class="text-xs font-mono">
+                    {{
+                      (exp.spent ?? 0).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })
+                    }}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
