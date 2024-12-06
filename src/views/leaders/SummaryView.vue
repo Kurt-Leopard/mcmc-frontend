@@ -1,13 +1,15 @@
 <script setup>
 import axios from "../../../axios";
-import { onMounted, ref } from "vue";
+import { onMounted, ref ,watch} from "vue";
 import { getDate } from "../../composables/date";
 import html2pdf from "html2pdf.js";
 import * as XLSX from "xlsx";
 const allocation = ref([]);
+
+const selectedDate = ref(null);
 const refreshAllocation = async () => {
   try {
-    const response = await axios.get("/api/allocation");
+    const response = await axios.get(`/api/allocation-summary/${formatDateToMySQL(selectedDate.value)}`);
 
     if (response.status === 200) {
       allocation.value = response.data.results;
@@ -19,11 +21,25 @@ const refreshAllocation = async () => {
     }
   }
 };
+const allocation_summary_date = ref([]);
+const refreshAllocation_summary_date = async () => {
+  try {
+    const response = await axios.get("/api/allocation-summary");
+
+    if (response.status === 200) {
+      allocation_summary_date.value = response.data.results;
+    }
+  } catch (error) {
+    if (error.response) {
+      console.log(error.response.message);
+    }
+  }
+};
 
 const allocation_balance = ref([]);
 const getBalance = async () => {
   try {
-    const response = await axios.get("/api/allocation-balance");
+    const response = await axios.get(`/api/allocation-balance/${formatDateToMySQL(selectedDate.value)}`);
     if (response.status === 200) {
       allocation_balance.value = response.data.results;
     }
@@ -44,11 +60,11 @@ const getChange = async () => {
     console.error(error.response);
   }
 };
-
+const selectedExpenseDate =ref(null)
 const expenses = ref([]);
 const getExpenses = async () => {
   try {
-    const response = await axios.get("/api/get-expense-summary");
+    const response = await axios.get(`/api/get-expense-summary/${formatDateToMySQL(selectedExpenseDate.value)}`);
     if (response.status === 200) {
       expenses.value = response.data.results;
     }
@@ -61,7 +77,7 @@ const getExpenses = async () => {
 const otherExpenses = ref([]);
 const getOtherExpenses = async () => {
   try {
-    const response = await axios.get("/api/other-expense");
+    const response = await axios.get(`/api/other-expense/${formatDateToMySQL(selectedExpenseDate.value)}`);
     if (response.status === 200) {
       otherExpenses.value = response.data.results;
     }
@@ -131,12 +147,40 @@ const exportWord = () => {
   }, 0);
 };
 
+// function formatDateToMySQL(dateString) {
+//     const date = new Date(dateString);
+//     return date.toISOString().slice(0, 19).replace('T', ' ');
+// }
+
+// Function to format the date
+function formatDateToMySQL(isoDate) {
+  const date = new Date(isoDate);
+  
+  // Format the date as YYYY-MM-DD HH:MM:SS
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // months are 0-based
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+watch(selectedDate, (newDate) => {
+selectedExpenseDate.value=formatDateToMySQL(newDate);
+  getExpenses();
+  refreshAllocation();
+  getBalance();
+  getOtherExpenses();
+});
 onMounted(() => {
   refreshAllocation();
   getBalance();
   getExpenses();
   getOtherExpenses();
   getsummaryIncome();
+  refreshAllocation_summary_date();
+
 });
 </script>
 <template>
@@ -167,7 +211,7 @@ onMounted(() => {
               <h1
                 class="lg:text-sm text-gray-600 hover:text-gray-800 font-bold tracking-[7px]"
               >
-                MCM-CHURCH
+                MCM-CHURCH 
               </h1>
               <h3 class="text-xs text-gray-600 hover:text-gray-800">
                 Steward-Trust-Manage-Sustain
@@ -176,7 +220,15 @@ onMounted(() => {
           </section>
         </div>
         <div class="text-gray-700 mt-5">
-          <div>Date: 01/05/2023</div>
+          <div>Date: <select v-model="selectedDate"  className="py-2 px-3 rounded-md border">
+                  <option
+                    v-for="(record, index) in allocation_summary_date"
+                    :key="index"
+                    :value="record.created_at"
+                  >
+                    {{ getDate(record.created_at) }}
+                  </option>
+                </select></div>
           <div>Invoice #: INV12345</div>
         </div>
       </div>
@@ -279,36 +331,36 @@ onMounted(() => {
           </div>
         </div>
 
-       <div class="grid grid-cols-2 gap-4">
-  <div class="text-gray-700 mb-2">
-    <div class="font-semibold">Savings Deduction (10%)</div>
-    <div>
-      Tithes of Tithes:
-      <span v-for="(balance, index) in allocation_balance" :key="index">
-        {{
-          ((balance.balance ?? 0) * 0.1).toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })
-        }}
-      </span>
-    </div>
-  </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="text-gray-700 mb-2">
+            <div class="font-semibold">Savings Deduction (10%)</div>
+            <div>
+              Tithes of Tithes:
+              <span v-for="(balance, index) in allocation_balance" :key="index">
+                {{
+                  ((balance.balance ?? 0) * 0.1).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
+              </span>
+            </div>
+          </div>
 
-  <div class="text-gray-700 mb-2">
-    <div class="font-semibold">Restricted Funds Deduction (10%)</div>
-    <div>
-      <span v-for="(balance, index) in allocation_balance" :key="index">
-        {{
-          ((balance.balance ?? 0) * 0.1).toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })
-        }}
-      </span>
-    </div>
-  </div>
-</div>
+          <div class="text-gray-700 mb-2">
+            <div class="font-semibold">Restricted Funds Deduction (10%)</div>
+            <div>
+              <span v-for="(balance, index) in allocation_balance" :key="index">
+                {{
+                  ((balance.balance ?? 0) * 0.1).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="uppercase py-2">Contingency</div>
       <table class="w-full text-left">
