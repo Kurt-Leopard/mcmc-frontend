@@ -89,14 +89,14 @@ const saveRole = async () => {
   }
 };
 
-const activation = async (id, status) => {
-  console.log("eee");
-  const temp = ref(status == "active" ? "deactive" : "active");
-
+const activation = async (id, status,email) => {
+  const temp = ref(status == "active" ? "inactive" : "active");
+  console.log(email);
   try {
     const response = await axios.put("/user/activation", {
       id: id,
       status: temp.value,
+      email: email
     });
 
     if (response.status === 200) {
@@ -252,14 +252,30 @@ watch([currentPage, searchBy], refreshData);
                     <div
                       class="absolute border rounded-md bg-white p-3 text-gray-600"
                     >
-                      <div
+
+                     <div v-if="users[index].status == 'pending'"
                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md capitalize cursor-pointer w-full"
                         :class="
                           users[index].status == 'active'
                             ? 'hover:bg-gray-50  p-2'
                             : 'hover:bg-gray-50 p-2'
                         "
-                        @click="activation(user.id, users[index].status)"
+                        @click="activation(user.id, users[index].status,users[index].username)"
+                      >
+                        {{
+                          users[index].status == "pending"
+                            ? "Approve"
+                            : ""
+                        }}
+                      </div>
+                      <div v-if="users[index].status != 'pending'"
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-md capitalize cursor-pointer w-full"
+                        :class="
+                          users[index].status == 'active'
+                            ? 'hover:bg-gray-50  p-2'
+                            : 'hover:bg-gray-50 p-2'
+                        "
+                        @click="activation(user.id, users[index].status,users[index].username)"
                       >
                         {{
                           users[index].status == "active"
@@ -267,7 +283,7 @@ watch([currentPage, searchBy], refreshData);
                             : "Activate"
                         }}
                       </div>
-                      <div
+                      <div v-if="users[index].status != 'pending'"
                         class="px-2 text-xs leading-5 font-semibold rounded-md capitalize opacity-[.7]"
                       >
                         {{

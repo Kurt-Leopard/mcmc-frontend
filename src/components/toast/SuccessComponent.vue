@@ -25,7 +25,7 @@
       <span class="sr-only">Check icon</span>
     </div>
     <div class="ml-3 text-sm font-normal">
-      <small class="font-semibold">Status: {{ props.errors[0] }}</small>
+      <!-- <small class="font-semibold">Status: {{ props.errors[0] }}</small> -->
       <p>{{ props.errors[1] }}</p>
     </div>
     <button

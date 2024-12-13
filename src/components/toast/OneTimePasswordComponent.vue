@@ -138,7 +138,7 @@ const sendOneTimePasswordButton = async () => {
     if (response.status === 200) {
       const data = {
         responseStatus: response.status,
-        responseMessage: response.data.message,
+        responseMessage:'Thank you for registering! Your account is under review and will be approved shortly.',
       };
       emit("goBackToRegister", true);
       setTimeout(() => {

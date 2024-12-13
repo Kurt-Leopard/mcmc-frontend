@@ -5,13 +5,14 @@ import { getDate } from "../composables/date";
 import { useAuthStore } from "../stores/store";
 import { decodeJWT } from "../stores/token";
 import FooterComponent from "../components/FooterComponent.vue";
+import GalleryLoader from "../components/loader/GalleryLoader.vue";
 const store = useAuthStore();
 const userID = ref();
 if (store) {
   const id = decodeJWT(store.token);
   userID.value = id.id;
 }
-
+const isFetchLoader =ref(false);
 const galleries = ref([]);
 const index1 = ref(null); // Changed to null initially
 const currentImageIndex = ref(0);
@@ -39,8 +40,8 @@ const refreshData = async () => {
         `/gallery/images/${userID.value}?page=${page.value}&limit=${limit.value}`
       );
       if (response.status === 200) {
+        isFetchLoader.value=true;
         galleries.value = response.data.gallery;
-        
       }
     }
   } catch (error) {
@@ -64,7 +65,6 @@ const showPrevImage = () => {
 };
 
 const nextPage = () => {
-
   if (galleries.value.length > 1) {
     page.value++;
     refreshData();
@@ -83,7 +83,8 @@ onMounted(refreshData);
 </script>
 
 <template>
-  <div class="py-3 px-4 lg:px-[50px] xl:px-32 mt-24">
+  <GalleryLoader v-if="!isFetchLoader"/>
+  <div v-else class="py-3 px-4 lg:px-[50px] xl:px-32 mt-24">
     <div class="border-b mb-5 flex justify-between text-sm">
       <div
         class="text-[#D98757] flex items-center pb-2 pr-2 border-b-2 border-[#D98757] uppercase"
@@ -93,7 +94,6 @@ onMounted(refreshData);
           store.token ? "Your Gallery" : "Church Gallery"
         }}</a>
       </div>
-  
     </div>
     <div class="grid grid-cols-2 md:grid-cols-3 gap-5">
       <div
@@ -176,7 +176,7 @@ onMounted(refreshData);
     </div>
 
     <footer>
-      <Footer-Component v-if="galleries.length > 3"/>
+      <Footer-Component v-if="galleries.length > 3" />
     </footer>
   </div>
 </template>

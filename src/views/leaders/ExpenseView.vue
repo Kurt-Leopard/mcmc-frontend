@@ -4,7 +4,7 @@ import { onMounted, ref, watch, provide, watchEffect, computed } from "vue";
 import PostComponent from "../../components/leader/modal/PostComponent.vue";
 import RequestComponent from "../../components/leader/modal/RequestComponent.vue";
 import ChangeLogComponent from "../../components/leader/modal/ChangeLogComponent.vue";
-import { getDate, getDateTime } from "../../composables/date";
+import {getDateTime } from "../../composables/date";
 import { useAuthStore } from "../../stores/store";
 import { decodeJWT } from "../../stores/token";
 import { accessControl } from "../../composables/user";
@@ -195,7 +195,7 @@ const nextPage = () => {
 const allocation_balance = ref([]);
 const getBalance = async () => {
   try {
-    const response = await axios.get("/api/allocation-balance");
+    const response = await axios.get("/api/allocation-in-expense-balance");
     if (response.status === 200) {
       allocation_balance.value = response.data.results;
     }

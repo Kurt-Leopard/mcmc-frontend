@@ -11,21 +11,6 @@ const toast = useToast();
 const emit = defineEmits(["closeRequest"]);
 const store = useAuthStore();
 const user = ref("");
-const operationalIncome = ref([]);
-
-const getsummaryIncome = async () => {
-  try {
-    const response = await axios.get("/api/summary-savings-income");
-    if (response.status === 200) {
-      operationalIncome.value = response.data.results[0].amount;
-      console.log(operationalIncome.value);
-    }
-  } catch (error) {
-    totalChange.value = { total_change_sum: 0.0 };
-    console.error(error.response);
-  }
-};
-
 const expensesRequest = inject("expensesRequest");
 if (store) {
   user.value = decodeJWT(store.token);
@@ -36,37 +21,26 @@ const closeRequest = () => {
 const request = inject("request");
 const acknowledge = async (id, amount, typeOfExpense) => {
   try {
-    if (typeOfExpense == "Others") {
-      if (amount > operationalIncome.value) {
-        return toast.error("Insufficient funds");
-      }
-    }
     const response = await axios.put(`/api/expense/request/${id}`, {
       amount: amount,
       typeOfExpense: typeOfExpense,
     });
     if (response.status === 200) {
       toast.success(response.data.message);
-      emit("closeRequest");
+       emit("closeRequest");
     }
   } catch (error) {
     if (error.response) {
       if (error.response.status === 400) {
         toast.error(error.response.data.message);
-        emit("closeRequest");
+         emit("closeRequest");
       } else {
         toast.error(error.response.message);
-        emit("closeRequest");
+         emit("closeRequest");
       }
     }
   }
 };
-
-// console.log("ee",expensesRequest.value)
-
-onMounted(() => {
-  getsummaryIncome();
-});
 </script>
 <template>
   <main
@@ -76,9 +50,7 @@ onMounted(() => {
     <div
       class="w-full lg:w-1/2 xl:w-1/2 h-full bg-white p-6 border max-h-full overflow-y-auto element-with-horizontal-scroll"
     >
-      <button @click="closeRequest" class="border px-3.5 py-2 rounded-lg">
-        <i class="fas fa-arrow-left"></i>
-      </button>
+      <button @click="closeRequest" class="border px-3.5 py-2 rounded-lg"><i class="fas fa-arrow-left"></i></button>
       <div
         class="w-full h-full flex items-center justify-center"
         v-if="expensesRequest.length === 0"
@@ -97,7 +69,7 @@ onMounted(() => {
           <h2
             class="text-lg font-mono font-bold text-center border-b pb-2 mb-4"
           >
-            MCMC Allocation Receipt - {{ expense.type_of_expense }}
+            MCMC Allocation Receipt
           </h2>
         </div>
         <div class="px-2">
@@ -119,6 +91,7 @@ onMounted(() => {
             <span class="text-xs text-gray-700 font-mono">Particular: </span>
             <span class="text-xs font-mono">{{ expense.particular }}</span>
           </div>
+
           <div class="border-t border-gray-300 my-3"></div>
           <div class="flex justify-center items-center w-full">
             <button
