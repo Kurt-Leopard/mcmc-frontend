@@ -11,6 +11,7 @@ import ChatEventComponent from "../components/modal/ChatEventComponent.vue";
 import DeleteComponent from "../components/modal/DeleteComponent.vue";
 import { relativeTime } from "../composables/relativeTime";
 import FooterComponent from "../components/FooterComponent.vue";
+import CardLoader from "../components/loader/CardLoader.vue";
 
 const store = useAuthStore();
 const access_control = ref();
@@ -18,6 +19,8 @@ const tokenId = ref();
 if (store.token) {
   tokenId.value = decodeJWT(store.token);
 }
+
+const isFetchLoader = ref(false);
 
 const user_id = ref();
 const events = ref([]);
@@ -44,6 +47,7 @@ const refreshData = async () => {
   try {
     if (response.data.success) {
       events.value = response.data.events;
+      isFetchLoader.value = true;
     } else {
       console.log(response.data.message);
     }
@@ -53,7 +57,6 @@ const refreshData = async () => {
 };
 
 const nextPage = () => {
- 
   if (events.value.length > 1) {
     currentPage.value++;
     refreshData();
@@ -85,7 +88,6 @@ const buttonShowEventModal = (methodEvent, sendByEvent, event, eventID) => {
 
 const buttonHideModal = () => {
   isModalShow.value = false;
-
 };
 
 // wiew event modal
@@ -134,15 +136,14 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div class="py-3 px-4 lg:px-[50px] xl:px-32 mt-24">
+  <CardLoader v-if="!isFetchLoader" />
+  <div v-else class="py-3 px-4 lg:px-[50px] xl:px-32 my-24">
     <div class="border-b mb-5 flex justify-between text-sm">
       <div
         class="text-[#D98757] flex items-center pb-2 pr-2 border-b-2 border-[#D98757] uppercase"
       >
         <i class="fas fa-calendar-alt text-lg mr-2"></i>
-        <a class="font-semibold inline-block"
-          >CHURCH EVENTS</a
-        >
+        <a class="font-semibold inline-block">CHURCH EVENTS</a>
       </div>
       <div
         class="text-gray-600 flex items-center pb-2 uppercase"
@@ -150,7 +151,7 @@ onMounted(async () => {
       >
         <a
           @click="buttonShowEventModal('post', 'event')"
-          class="text-gray-600 hover:text-gray-800  font-bold flex items-center ursor-pointer"
+          class="text-gray-600 hover:text-gray-800 font-bold flex items-center ursor-pointer"
           ><i class="fas fa-plus p-2 bg-gray-100 text-lg rounded-lg"></i
         ></a>
       </div>
@@ -312,7 +313,7 @@ onMounted(async () => {
                 </g>
               </g>
             </svg>
-            <span class="ml-1">{{relativeTime(event.posted_at)}}</span>
+            <span class="ml-1">{{ relativeTime(event.posted_at) }}</span>
           </span>
 
           <span
@@ -337,7 +338,9 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <div class="flex justify-center items-center text-gray-500 space-x-4 my-4 mb-24">
+    <div
+      class="flex justify-center items-center text-gray-500 space-x-4 my-4 mb-24"
+    >
       <small @click="prevPage" class="hover:text-gray-800 cursor-pointer">
         Prev
       </small>
@@ -345,12 +348,10 @@ onMounted(async () => {
       <small @click="nextPage" class="hover:text-gray-800 cursor-pointer">
         Next
       </small>
-      
     </div>
 
-      <footer>
-        <Footer-Component v-if="events.length>3" />
-    
+    <footer>
+      <Footer-Component v-if="events.length > 3" />
     </footer>
     <Delete-Component
       :isDeleteModalShow="isDeleteModalShow"

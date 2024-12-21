@@ -15,8 +15,11 @@ import PostContent from "../../components/slot/PostContent.vue";
 import PostPaginate from "../../components/slot/PostPaginate.vue";
 import DevotionalContent from "../../components/slot/DevotionalContent.vue";
 import DevotionalPaginate from "../../components/slot/DevotionalPaginate.vue";
+import HomePostLoader from "../../components/loader/HomePostLoader.vue";
 import { fetchUser } from "../../composables/user";
 
+
+const isFetchLoader =ref(false);
 const store = useAuthStore();
 const storeID = ref();
 if (store.token) {
@@ -79,10 +82,12 @@ watch(searchBy, (newVal, oldVal) => {
 });
 // fetch
 const refreshData = async () => {
+   isFetchLoader.value=true;
   const response = await axios.get(
     `/gallery?page=${currentPage.value}&limit=${itemsPerPage}&searchBy=${searchBy.value}`
   );
   if (response.data.success) {
+    isFetchLoader.value=false;
     galleries.value = response.data.gallery;
   } else {
     console.log(response.data.message);
@@ -90,10 +95,12 @@ const refreshData = async () => {
 };
 
 const refreshDataDevotional = async () => {
+   isFetchLoader.value=true;
   const responseDevitional = await axios.get(
     `/devotional?page=${devoCurrentPage.value}&limit=${devoItemsPerPage}`
   );
   if (responseDevitional.data.success) {
+      isFetchLoader.value=false;
     devotional.value = responseDevitional.data.devotional;
   } else {
     console.log(response.data.message);
@@ -277,7 +284,8 @@ onMounted(async () => {
 
 <template>
   <!-- container -->
-  <div class="py-3 px-4 lg:px-[50px] xl:px-32 mt-[60px] lg:mt-24 xl:mt-24">
+  <HomePostLoader  v-if="isFetchLoader"/>
+  <div v-else class="py-3 px-4 lg:px-[50px] xl:px-32 mt-[60px] lg:mt-24 xl:mt-24">
     <!-- main wrap -> contain L&R sidebar -->
     <main class="flex w-full mb-24">
       <Left-Sidebar>
