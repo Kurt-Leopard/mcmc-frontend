@@ -82,11 +82,12 @@ watch(searchBy, (newVal, oldVal) => {
 });
 // fetch
 const refreshData = async () => {
+   isFetchLoader.value=true;
   const response = await axios.get(
     `/gallery?page=${currentPage.value}&limit=${itemsPerPage}&searchBy=${searchBy.value}`
   );
   if (response.data.success) {
-    isFetchLoader.value=true;
+    isFetchLoader.value=false;
     galleries.value = response.data.gallery;
   } else {
     console.log(response.data.message);
@@ -94,11 +95,12 @@ const refreshData = async () => {
 };
 
 const refreshDataDevotional = async () => {
+   isFetchLoader.value=true;
   const responseDevitional = await axios.get(
     `/devotional?page=${devoCurrentPage.value}&limit=${devoItemsPerPage}`
   );
   if (responseDevitional.data.success) {
-      isFetchLoader.value=true;
+      isFetchLoader.value=false;
     devotional.value = responseDevitional.data.devotional;
   } else {
     console.log(response.data.message);

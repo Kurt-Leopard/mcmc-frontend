@@ -102,9 +102,9 @@ const latestExpenses = computed(() => {
 });
 
 // Get all expenses for a specific `id`
-const getAllExpensesById = (id) =>
-  expenses.value.filter((expense) => expense.id === id);
-
+const getAllExpensesById = (id) =>{
+  return expenses.value.filter((expense) => expense.id === id);
+}
 // Toggle group visibility
 const toggleExpand = (id, index) => {
   if (!indexBtn.value.includes(index)) {
@@ -191,6 +191,13 @@ const nextPage = () => {
   refreshData();
 };
 
+
+const getExpenseWithLeastChange = (expenses) => {
+  if (!expenses || expenses.length === 0) return null; // Handle empty or invalid array
+  return expenses.reduce((min, current) =>
+    current.total_change < min.total_change ? current : min
+  );
+};
 // allocation balance
 const allocation_balance = ref([]);
 const getBalance = async () => {
@@ -208,15 +215,26 @@ const getBalance = async () => {
 const totalChange = ref([]);
 const getChange = async () => {
   try {
-    const response = await axios.get("/api/total-change");
+    const response = await axios.get(`/api/total-change/${allocation.value[0].id}`);
     if (response.status === 200) {
       totalChange.value = response.data.results;
+
     }
   } catch (error) {
     totalChange.value = { total_change_sum: 0.0 };
     console.error(error.response);
   }
 };
+
+watch(
+  () => allocation.value,
+  async (newValue) => {
+    if (newValue && newValue.length > 0) {
+      await getChange();
+    }
+  },
+  { immediate: true } 
+);
 const getTotalSum = (total) => {
   return total.reduce((sum, expense) => sum + expense.spent, 0);
 };
@@ -302,7 +320,7 @@ onMounted(async () => {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })
-                }}
+                }} 
               </div>
             </div>
 
@@ -344,7 +362,7 @@ onMounted(async () => {
                 :key="index"
               >
                 {{
-                  (totalChange.total_change_sum ?? 0).toLocaleString(
+                  (totalChange.totalSpent ?? 0).toLocaleString(
                     undefined,
                     {
                       minimumFractionDigits: 2,
@@ -514,29 +532,30 @@ onMounted(async () => {
             </div>
             <div class="flex justify-between mb-4">
               <span class="text-xs text-gray-700 font-mono"
-                >Total Change:
+                >Total Change: 
+                 <!-- {{getAllExpensesById(expense.id)}} {{getAllExpensesById(expense.id).length}} -->
               </span>
               <span
                 class="text-xs font-mono"
-                v-for="exp in getAllExpensesById(expense.id)"
-                :key="exp.created_at"
-                v-show="exp.row_num === getAllExpensesById(expense.id).length"
+                v-for="(exp, index) in getAllExpensesById(expense.id)"
+                :key="index"
+                v-show="index+1== getAllExpensesById(expense.id).length"
               >
                 {{
                   getTotalSum(getAllExpensesById(expense.id)) === expense.amount
                     ? "0.00"
-                    : exp.total_change
+                    :  getExpenseWithLeastChange(getAllExpensesById(expense.id)).total_change ||"N/A"
                 }}
               </span>
             </div>
-            <div class="flex justify-between mb-4">
+            <!-- <div class="flex justify-between mb-4">
               <span class="text-xs text-gray-700 font-mono">Particular: </span>
               <span class="text-xs font-mono">
                 {{
                  expense.particular
                 }}
               </span>
-            </div>
+            </div> -->
              <div class="flex-col justify-between mb-4">
               <div class="text-xs text-gray-700 font-mono">Particular: </div>
               <div class="text-xs font-mono my-1">
@@ -557,15 +576,15 @@ onMounted(async () => {
               > -->
 
               <button  :disabled="getTotalSum(getAllExpensesById(expense.id)) === expense.amount"
-                v-for="exp in getAllExpensesById(expense.id)"
+                v-for="(exp, index) in getAllExpensesById(expense.id)"
                 :class="
                   getTotalSum(getAllExpensesById(expense.id)) === expense.amount
                     ? 'w-full'
                     : 'border w-1/3'
                 "
                 :key="exp.created_at"
-                v-show="exp.row_num === getAllExpensesById(expense.id).length"
-                @click="changeLog(exp)"
+                v-show="index+1 === getAllExpensesById(expense.id).length"
+                @click="changeLog(getExpenseWithLeastChange(getAllExpensesById(expense.id)))"
                 type="button"
                 class="p-1 px-1 text-center hover:border-gray-500 rounded-md text-sm font-bold font-mono"
               >

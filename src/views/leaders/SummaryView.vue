@@ -362,7 +362,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="uppercase py-2">Contingency</div>
+      <!-- <div class="uppercase py-2">Contingency</div>
       <table class="w-full text-left">
         <thead>
           <tr class="text-xs">
@@ -405,7 +405,7 @@ onMounted(() => {
             </div>
           </tr>
         </tbody>
-      </table>
+      </table> -->
 
       <div class="border-t-2 border-gray-300 pt-8 mb-8">
         <div class="text-gray-700 mb-2">
